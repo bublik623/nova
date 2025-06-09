@@ -1,0 +1,9 @@
+/* tw v4 uncomment next line
+@import "@/assets/css/tailwind.css"; */
+.section {
+  @apply flex flex-col gap-4 py-8;
+}
+
+.card {
+  @apply max-w-xl relative flex size-full flex-1 justify-center p-10 ring-2 ring-neutral-60 rounded-lg flex-col gap-8 min-h-32;
+}

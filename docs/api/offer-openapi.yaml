@@ -1,0 +1,3220 @@
+openapi: 3.0.2
+
+info:
+  title: Offer Experience Offer Service
+  description: API to get and set information about Experiences
+  version: 1.0.0
+
+  termsOfService: 'http://tui-dx.com/terms/'
+  contact:
+    name: TUI Musement offer team
+    url: https://runway.devops.tui/catalog/default/group/tui-musement-offer
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: https://nova-api-gateway.prod.tui-mm.com/offer-experience
+    description: Nova | Prod environment
+  - url: https://nova-api-gateway.pre.tui-mm.com/offer-experience
+    description: Nova | Pre prod environment
+  - url: https://nova-api-gateway.int.tui-mm.com/offer-experience
+    description: Nova | Int environment
+  - url: https://nova-api-gateway.test.tui-mm.com/offer-experience
+    description: Nova | Test environment
+  - url: https://sep-api-gateway.prod.tui-mm.com/offer-experience
+    description: Business Platform | Prod environment
+  - url: https://sep-api-gateway.pre.tui-mm.com/offer-experience
+    description: Business Platform | Pre prod environment
+  - url: https://sep-api-gateway.test.tui-mm.com/offer-experience
+    description: Business Platform | Test environment
+
+security:
+  - bearerAuth: [ ]
+
+tags:
+  - name: Experience
+  - name: RefundPolicy
+  - name: Pricing
+  - name: Option
+  - name: OpenTicket
+  - name: DateTicket
+  - name: DatetimeTicket
+  - name: ExperiencePax
+  - name: ExperienceZone
+  - name: ExperienceLanguage
+  - name: OptionLanguage
+  - name: OptionZone
+  - name: Allotment
+  - name: InternalPricing
+  - name: Release
+  - name: StopSale
+
+paths:
+  /experiences:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2V3'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getExperienceCollection
+      tags:
+        - Experience
+      summary: 'Retrieves the collection of Experience resources.'
+      description: 'Retrieves the collection of Experience resources.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/experienceV3'
+                    - $ref: '#/components/schemas/experience'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postExperienceCollection
+      tags:
+        - Experience
+      summary: 'Creates a Experience resource.'
+      description: 'Creates a Experience resource. With accept version 3 it should be used the experienceV3 model.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/experiencePostV3'
+                - $ref: '#/components/schemas/experiencePost'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /experiences/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2V3'
+      - $ref: '#/components/parameters/traceId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getExperienceItem
+      tags:
+        - Experience
+      summary: 'Retrieves a Experience resource.'
+      description: 'Retrieves a Experience resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/experienceV3'
+                  - $ref: '#/components/schemas/experience'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putExperienceItem
+      tags:
+        - Experience
+      summary: 'Replaces the Experience resource.'
+      description: 'Replaces the Experience resource. With the accept version 3 it should be used the experienceV3 model.'
+      requestBody:
+        description: 'The updated Experience resource'
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/experienceV3'
+                - $ref: '#/components/schemas/experience'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /refund-policies:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getRefundPolicyCollection
+      tags:
+        - RefundPolicy
+      summary: 'Retrieves the collection of RefundPolicy resources.'
+      description: 'Retrieves the collection of RefundPolicy resources.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - name: experience
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter by Experience ID'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/refund_policy'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postRefundPolicyCollection
+      tags:
+        - RefundPolicy
+      summary: 'Creates a RefundPolicy resource.'
+      description: 'Creates a RefundPolicy resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/refund_policy'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /refund-policies/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getRefundPolicyItem
+      tags:
+        - RefundPolicy
+      summary: 'Retrieves a RefundPolicy resource.'
+      description: 'Retrieves a RefundPolicy resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/refund_policy'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putRefundPolicyItem
+      tags:
+        - RefundPolicy
+      summary: 'Replaces the RefundPolicy resource.'
+      description: 'Replaces the RefundPolicy resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/refund_policy'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteRefundPolicyItem
+      tags:
+        - RefundPolicy
+      summary: 'Removes the RefundPolicy resource.'
+      description: 'Removes the RefundPolicy resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /pricings:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getPricingCollection
+      tags:
+        - Pricing
+      summary: 'Retrieves the collection of Pricing resources.'
+      description: 'Retrieves the collection of Pricing resources.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - name: experience
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter by Experience ID'
+        - $ref: '#/components/parameters/optionParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pricing'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postPricingCollection
+      tags:
+        - Pricing
+      summary: 'Creates a Pricing resource.'
+      description: 'Creates a Pricing resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pricing'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /pricings/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getPricingItem
+      tags:
+        - Pricing
+      summary: 'Retrieves a Pricing resource.'
+      description: 'Retrieves a Pricing resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pricing'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putPricingItem
+      tags:
+        - Pricing
+      summary: 'Replaces the Pricing resource.'
+      description: 'Replaces the Pricing resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pricing'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deletePricingItem
+      tags:
+        - Pricing
+      summary: 'Removes the Pricing resource.'
+      description: 'Removes the Pricing resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /options:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getOptionCollection
+      tags:
+        - Option
+      summary: 'Retrieves the collection of Option resources.'
+      description: 'Retrieves the collection of Option resources.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - name: experience
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter by Experience ID'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/option'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postOptionCollection
+      tags:
+        - Option
+      summary: 'Creates a Option resource.'
+      description: 'Creates a Option resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/option'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /options/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getOptionItem
+      tags:
+        - Option
+      summary: 'Retrieves a Option resource.'
+      description: 'Retrieves a Option resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/option'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putOptionItem
+      tags:
+        - Option
+      summary: 'Replaces the Option resource.'
+      description: 'Replaces the Option resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/option'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteOptionItem
+      tags:
+        - Option
+      summary: 'Removes the Option resource.'
+      description: 'Removes the Option resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /options/{id}/option-zones:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getOptionZones
+      tags:
+        - OptionZone
+      summary: Retrieves the option zones resource.
+      description: Retrieves the list of zone codes for the given option.
+      responses:
+        '200':
+          description: OK - The request was successful and returns the option zones.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/option_zones'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateOptionZones
+      tags:
+        - OptionZone
+      summary: Replaces the option zones resource.
+      description: Replaces the existing option zones with the provided list.
+      requestBody:
+        description: Option zones payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/option_zones'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+  /options/{id}/option-paxes:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getOptionPaxes
+      tags:
+        - OptionPax
+      summary: Retrieves the option paxes for an option.
+      description: Retrieves the list of pax codes associated with the given option.
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putOptionPaxes
+      tags:
+        - OptionPax
+      summary: Replaces the option paxes for an option.
+      description: Replaces the existing option paxes with the provided list.
+      requestBody:
+        description: Option paxes payload.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/option_paxes'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+  /open-tickets:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getOpenTicketCollection
+      tags:
+        - OpenTicket
+      summary: 'Retrieves the collection of OpenTicket resources.'
+      description: 'Retrieves the collection of OpenTicket resources.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/optionParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/open_ticket_expiration_date'
+                    - $ref: '#/components/schemas/open_ticket_expiration_days'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postOpenTicketCollection
+      tags:
+        - OpenTicket
+      summary: 'Creates a OpenTicket resource.'
+      description: 'Creates a OpenTicket resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/open_ticket_expiration_date'
+                - $ref: '#/components/schemas/open_ticket_expiration_days'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /open-tickets/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getOpenTicketItem
+      tags:
+        - OpenTicket
+      summary: 'Retrieves a OpenTicket resource.'
+      description: 'Retrieves a OpenTicket resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/open_ticket_expiration_date'
+                  - $ref: '#/components/schemas/open_ticket_expiration_days'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putOpenTicketItem
+      tags:
+        - OpenTicket
+      summary: 'Replaces the OpenTicket resource.'
+      description: 'Replaces the OpenTicket resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/open_ticket_expiration_date'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteOpenTicketItem
+      tags:
+        - OpenTicket
+      summary: 'Removes the OpenTicket resource.'
+      description: 'Removes the OpenTicket resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /date-tickets:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getDateTicketCollection
+      tags:
+        - DateTicket
+      summary: 'Retrieves the collection of DateTicket resources.'
+      description: 'Retrieves the collection of DateTicket resources.'
+      parameters:
+
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/optionParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/date_ticket'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postDateTicketCollection
+      tags:
+        - DateTicket
+      summary: 'Creates a DateTicket resource.'
+      description: 'Creates a DateTicket resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/date_ticket'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /date-tickets/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getDateTicketItem
+      tags:
+        - DateTicket
+      summary: 'Retrieves a DateTicket resource.'
+      description: 'Retrieves a DateTicket resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/date_ticket'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putDateTicketItem
+      tags:
+        - DateTicket
+      summary: 'Replaces the DateTicket resource.'
+      description: 'Replaces the DateTicket resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/date_ticket'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteDateTicketItem
+      tags:
+        - DateTicket
+      summary: 'Removes the DateTicket resource.'
+      description: 'Removes the DateTicket resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /datetime-tickets:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getDatetimeTicketCollection
+      tags:
+        - DatetimeTicket
+      summary: 'Retrieves the collection of DatetimeTicket resources.'
+      description: 'Retrieves the collection of DatetimeTicket resources.'
+      parameters:
+
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/optionParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/datetime_ticket'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postDatetimeTicketCollection
+      tags:
+        - DatetimeTicket
+      summary: 'Creates a DatetimeTicket resource.'
+      description: 'Creates a DatetimeTicket resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/datetime_ticket'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /datetime-tickets/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getDatetimeTicketItem
+      tags:
+        - DatetimeTicket
+      summary: 'Retrieves a DatetimeTicket resource.'
+      description: 'Retrieves a DatetimeTicket resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/datetime_ticket'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putDatetimeTicketItem
+      tags:
+        - DatetimeTicket
+      summary: 'Replaces the DatetimeTicket resource.'
+      description: 'Replaces the DatetimeTicket resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/datetime_ticket'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteDatetimeTicketItem
+      tags:
+        - DatetimeTicket
+      summary: 'Removes the DatetimeTicket resource.'
+      description: 'Removes the DatetimeTicket resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /experiences/{id}/experience-paxes:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getExperiencePaxes
+      tags:
+        - ExperiencePax
+      summary: 'Retrieves a ExperiencePaxes resource.'
+      description: 'Retrieves a ExperiencePaxes resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experience_paxes'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateExperiencePaxes
+      tags:
+        - ExperiencePax
+      summary: 'Replaces the ExperiencePax resources'
+      description: 'Replaces the ExperiencePax resources'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experience_paxes'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /experiences/{id}/experience-zones:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getExperienceZones
+      tags:
+        - ExperienceZone
+      summary: 'Retrieves a ExperienceZones resource.'
+      description: 'Retrieves a ExperienceZones resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experience_zones'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putExperienceZone
+      tags:
+        - ExperienceZone
+      summary: 'Replaces the ExperienceZone resources'
+      description: 'Replaces the ExperienceZone resources'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experience_zones'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /experiences/{id}/experience-languages:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getExperienceLanguages
+      tags:
+        - ExperienceLanguage
+      summary: 'Retrieves a ExperienceLanguages resource.'
+      description: 'Retrieves a ExperienceLanguages resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experience_languages'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putExperienceLanguages
+      tags:
+        - ExperienceLanguage
+      summary: 'Replaces the ExperienceLanguages resources'
+      description: 'Replaces the ExperienceLanguages resources'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experience_languages'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /options/{id}/option-languages:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getOptionLanguages
+      tags:
+        - OptionLanguage
+      summary: 'Retrieves a OptionLanguage resource.'
+      description: 'Retrieves a OptionLanguage resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/option_languages'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateOptionLanguages
+      tags:
+        - OptionLanguage
+      summary: 'Replaces the OptionLanguage resources'
+      description: 'Replaces the OptionLanguage resources'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/option_languages'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /releases:
+    get:
+      tags:
+        - Release
+      summary: Get all the Releases
+      description: Retrieve a list of all Release records
+      operationId: getAllReleases
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Release'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+        - Release
+      summary: Create a new line of release
+      description: Create a new release
+      operationId: postReleaseCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Release'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /releases/{id}:
+    get:
+      tags:
+        - Release
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the release line
+          schema:
+            type: string
+            format: uuid
+      summary: Get a specific line of release
+      description: Get a specific line of release by its id
+      operationId: getReleaseById
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+        - Release
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the release line
+          schema:
+            type: string
+            format: uuid
+      summary: Updates the release
+      description: Updates the release settings
+      operationId: putRelease
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Release'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Release
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the release line
+          schema:
+            type: string
+            format: uuid
+      summary: Delete a specific release
+      description: Delete a specific release by its id
+      operationId: deleteReleaseById
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /stop-sales:
+    get:
+      tags:
+        - StopSale
+      summary: Get all the StopSales
+      description: Retrieve a list of all StopSale records
+      operationId: getAllStopSales
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StopSale'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+        - StopSale
+      summary: Create a new line of stopSale
+      description: Create a new stopSale
+      operationId: postStopSaleCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopSale'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /stop-sales/{id}:
+    get:
+      tags:
+        - StopSale
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the stopSale line
+          schema:
+            type: string
+            format: uuid
+      summary: Get a specific line of stopSale
+      description: Get a specific line of stopSale by its id
+      operationId: getStopSaleById
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopSale'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+        - StopSale
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the stopSale line
+          schema:
+            type: string
+            format: uuid
+      summary: Updates the stopSale
+      description: Updates the stopSale settings
+      operationId: putStopSale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopSale'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopSale'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - StopSale
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the stopSale line
+          schema:
+            type: string
+            format: uuid
+      summary: Delete a specific stopSale
+      description: Delete a specific stopSale by its id
+      operationId: deleteStopSaleById
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /allotments:
+    get:
+      tags:
+        - Allotment
+      summary: Get all the allotment
+      description: Retrieve a list of all allotment records
+      operationId: getAllAllotment
+      parameters:
+        - $ref: '#/components/parameters/experienceParam'
+        - $ref: '#/components/parameters/optionParam'
+        - $ref: '#/components/parameters/dateParam'
+        - $ref: '#/components/parameters/zonesParam'
+        - $ref: '#/components/parameters/languagesParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+        - Allotment
+      summary: Create a new line of allotment
+      description: Createa  new allotment
+      operationId: postAllotmentCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Allotment'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /allotments/{id}:
+    get:
+      tags:
+        - Allotment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the allotment line
+          schema:
+            type: string
+            format: uuid
+      summary: Get a specific line of allotment
+      description: Get a specific line of allotment by its id
+      operationId: getAllotmentById
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+        - Allotment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the allotment line
+          schema:
+            type: string
+            format: uuid
+      summary: Updates the allotment
+      description: Updates the allotment settings on a specific date
+      operationId: putAllotment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Allotment'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteAllotment
+      tags:
+        - Allotment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the allotment line
+          schema:
+            type: string
+            format: uuid
+      summary: 'Removes the Allotment resource.'
+      description: 'Removes the Allotment resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /internal-product/pricings:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+    get:
+      operationId: getInternalPricingCollection
+      tags:
+        - InternalPricing
+      summary: 'Retrieves the collection of Pricing resources.'
+      description: 'Retrieves the collection of Pricing resources.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/internal_pricing'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postInternalPricingItem
+      tags:
+        - InternalPricing
+      summary: 'Creates a Pricing resource.'
+      description: 'Creates a Pricing resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_pricing'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  /internal-product/pricings/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParamV2'
+      - $ref: '#/components/parameters/traceId'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getInternalPricingItem
+      tags:
+        - InternalPricing
+      summary: 'Retrieves a Pricing resource.'
+      description: 'Retrieves a Pricing resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_pricing'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: putInternalPricingItem
+      tags:
+        - InternalPricing
+      summary: 'Replaces the Pricing resource.'
+      description: 'Replaces the Pricing resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/internal_pricing'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteInternalPricingItem
+      tags:
+        - InternalPricing
+      summary: 'Removes the Pricing resource.'
+      description: 'Removes the Pricing resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+components:
+  headers:
+    trace-id:
+      description: Operation trace identifier
+      schema:
+        type: string
+        example: "95a56db71f007f49"
+    Location:
+      description: Booking URI
+      schema:
+        type: string
+        example: "/experience/UUID"
+  parameters:
+    acceptVersionParamV2:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [vnd.offer-experience-offer-service.v2]
+      example: vnd.offer-experience-offer-service.v2
+    acceptVersionParamV2V3:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [vnd.offer-experience-offer-service.v2, vnd.offer-experience-offer-service.v3]
+      example: vnd.offer-experience-offer-service.v2
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    traceId:
+      name: Trace-Id
+      in: header
+      description: Trace id received from other service
+      schema:
+        type: string
+      example: 73306c019b9271a0
+    limitParam:
+      name: limit
+      in: query
+      description: number items to
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset of items
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 10
+    optionParam:
+      name: option
+      in: query
+      description: Id of the option
+      required: false
+      schema:
+        type: string
+        format: uuid
+      example: "f6ff3750-339a-4ce8-a71e-06ed37166aca"
+    experienceParam:
+      name: experience
+      in: query
+      description: Id of the experience
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: "f6ff3750-339a-4ce8-a71e-06ed37166aca"
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customise the response recovering only the fields needed. It's a list of fields separated by commas without spaces between them
+      required: false
+      schema:
+        type: string
+      example: 'experience_id'
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: 'id==1f9d2c62-535a-11ec-bf63-0242ac130002;name==NAME'
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+      example: "-time"
+    dateParam:
+      name: date
+      in: query
+      description: Date within the allotment range
+      required: false
+      schema:
+        type: string
+        format: date
+      example: "2024-01-01"
+    zonesParam:
+      name: zones
+      in: query
+      description: zones allowed
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example: ["PALMA", "ARENAL"]
+    languagesParam:
+      name: languages
+      in: query
+      description: languages allowed
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      explode: false
+      example: ["en","es"]
+  schemas:
+    error:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          example: OFFER-ERROR-000500
+        message:
+          type: string
+          example: Error message description
+
+    experience:
+      type: object
+      deprecated: true
+      required:
+        - uuid
+        - type
+        - confirmation_time
+        - cutoff_time
+        - supplier
+        - currency
+        - incoming_office
+      properties:
+        uuid:
+          type: string
+          description: Core Experience.UUID
+          format: uuid
+        type:
+          type: string
+          enum:
+            - CALENDAR-TIMESLOTS
+            - CALENDAR-NO-TIMESLOTS
+            - NO-CALENDAR-FIXED-END
+            - NO-CALENDAR-FIXED-VALIDITY
+          description: Supported experience types (values taken from Core)
+          example: CALENDAR-TIMESLOTS
+        confirmation_time:
+          description: time the supplier has to manually confirm a booking, before it gets cancelled. Format ISO_8601
+          type: string
+          format: duration
+          example: P10DT2H30M
+        cutoff_time:
+          description: time in advance needed to accept the booking before the start of the activity. Format ISO_8601
+          type: string
+          format: duration
+          example: P10DT2H30M
+        supplier:
+          type: string
+          format: uuid
+          description: Supplier Code
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - PUBLISHED
+          description: >
+            Supported experience states:
+              * DRAFT
+              * PUBLISHED
+            
+            Purpose of state field is to know if Experience was PUBLISHED or is still
+            (or again) in DRAFT mode.
+        currency:
+          type: string
+          description: Currency code following ISO 4217 standard
+          example: EUR
+        experience_source:
+          type: string
+          enum:
+            - NOVA
+            - SP
+            - SIP
+            - ASX
+            - NOVANET
+            - INTERNAL
+          example: NOVA
+          readOnly: true
+
+    experiencePost:
+      allOf:
+        - $ref: '#/components/schemas/experience'
+        - type: object
+          properties:
+            experience_source:
+              type: string
+              enum:
+                - NOVA
+                - SP
+                - SIP
+                - ASX
+                - NOVANET
+                - INTERNAL
+              example: NOVA
+              readOnly: false
+
+    experienceV3:
+      type: object
+      required:
+        - id
+        - type
+        - confirmation_time
+        - cutoff_time
+        - supplier
+        - currency
+      properties:
+        id:
+          type: string
+          description: Core Experience.UUID
+          format: uuid
+        type:
+          type: string
+          enum:
+            - CALENDAR-TIMESLOTS
+            - CALENDAR-NO-TIMESLOTS
+            - NO-CALENDAR-FIXED-END
+            - NO-CALENDAR-FIXED-VALIDITY
+          description: Supported experience types (values taken from Core)
+          example: CALENDAR-TIMESLOTS
+        confirmation_time:
+          description: time the supplier has to manually confirm a booking, before it gets cancelled. Format ISO_8601
+          type: string
+          format: duration
+          example: P10DT2H30M
+        cutoff_time:
+          description: time in advance needed to accept the booking before the start of the activity. Format ISO_8601
+          type: string
+          format: duration
+          example: P10DT2H30M
+        supplier:
+          type: string
+          format: uuid
+          description: Supplier Code
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - PUBLISHED
+          description: >
+            Supported experience states:
+              * DRAFT
+              * PUBLISHED
+            
+            Purpose of state field is to know if Experience was PUBLISHED or is still
+            (or again) in DRAFT mode.
+        currency:
+          type: string
+          description: Currency code following ISO 4217 standard
+          example: EUR
+        experience_source:
+          type: string
+          enum:
+            - NOVA
+            - SP
+            - SIP
+            - ASX
+            - NOVANET
+            - INTERNAL
+          example: NOVA
+          readOnly: true
+        code:
+          type: string
+          example: PMI401
+        incoming_office:
+          type: string
+          readOnly: true
+          example: PMI
+
+    experiencePostV3:
+      allOf:
+        - $ref: '#/components/schemas/experienceV3'
+        - type: object
+          properties:
+            experience_source:
+              type: string
+              enum:
+                - NOVA
+                - SP
+                - SIP
+                - ASX
+                - NOVANET
+                - INTERNAL
+              example: NOVA
+              readOnly: false
+            incoming_office:
+              type: string
+              readOnly: false
+              example: PMI
+
+    refund_policy:
+      type: object
+      required:
+        - experience
+        - period
+        - refund_type_code
+        - value
+      properties:
+        id:
+          readOnly: true
+          type: string
+          format: uuid
+        experience:
+          type: string
+          format: uuid
+        period:
+          type: string
+          format: duration
+          example: P5D
+        refund_type_code:
+          type: string
+          example: PERCENTAGE
+        value:
+          type: number
+          example: 15.0
+    pricing:
+      type: object
+      required:
+        - name
+        - holder
+        - price
+        - option
+        - tiers
+
+      properties:
+        id:
+          readOnly: true
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: My pricing name
+        holder:
+          type: string
+          description: >
+            Supported holder types:
+              * adult
+              * caregiver
+              * child
+              * disabled
+              * eu-citizen
+              * eu-teacher
+              * infant
+              * military
+              * participant
+              * senior
+              * student
+              * youth
+              * group
+              * vehicle
+              * bike
+              * car
+              * van
+              * bus
+              * boat
+              * school-group
+            
+            This list will be provided by Master Data service. Holder values are depends on pricing_type value.
+          example: adult
+        option_id:
+          type: string
+          format: uuid
+        age_range:
+          type: object
+          required:
+            - from
+            - to
+          properties:
+            from:
+              type: integer
+              minimum: 0
+              maximum: 99
+              example: 0
+            to:
+              type: integer
+              minimum: 0
+              maximum: 99
+              example: 99
+        tiers:
+          $ref: "#/components/schemas/tiers"
+        pricing_type:
+          type: string
+          enum:
+            - person
+            - group
+    option:
+      required:
+        - name
+        - multilanguage
+        - capacity_type
+        - experience
+      type: object
+      properties:
+        id:
+          readOnly: true
+          type: string
+          format: uuid
+        name:
+          description: The "feature" in mm, this will appear in the front-end. this is something like "tour", "guided tour", "skip the line ticket"
+          type: string
+          example: My option name
+        duration:
+          description: Duration of the experience. Used only by "datetime" experiences. Format ISO_8601
+          type: string
+          format: duration
+          example: P10DT2H30M
+        valid_for:
+          description: Validity period after the ticket activation. Used only by "open ticket" experiences. Format ISO_8601
+          type: string
+          format: duration
+          example: P1D
+        multilanguage:
+          description: the option is offered in different languages or no
+          type: boolean
+        capacity_type:
+          type: string
+          enum:
+            - unlimited
+            - shared
+            - pax
+            - language
+          description: Supported capacity types
+          example: unlimited
+        status:
+          type: string
+          description: Master data
+        code:
+          type: string
+          description: Option's code. Free text user input to easily identify the option.
+        allowed_languages:
+          type: array
+          description: List of allowed languages for this option
+          items:
+            $ref: '#/components/schemas/option_language'
+        experience:
+          type: string
+          format: uuid
+        pricing_type_allowed:
+          type: string
+          enum:
+            - person
+            - group
+
+    option_language:
+      type: object
+      properties:
+        language:
+          type: string
+          description: Allowed language for this option
+          example: en
+    option_zones:
+      type: object
+      required:
+        - zone_codes
+      properties:
+        option_id:
+          type: string
+          format: uuid
+          readOnly: true
+        zone_codes:
+          $ref: '#/components/schemas/zone_codes'
+    option_paxes:
+      type: object
+      required:
+        - pax_list
+      properties:
+        option_id:
+          type: string
+          format: uuid
+          readOnly: true
+        pax_list:
+          type: array
+          description: List of paxes for the option
+          items:
+            $ref: '#/components/schemas/option_pax'
+    option_pax:
+      type: object
+      required:
+        - pax_code
+      properties:
+        pax_code:
+          type: string
+          description: Pax code for the option
+          example: "Adult"
+    dates_range:
+      type: object
+      description: Range of dates
+      properties:
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+    tiers:
+      type: array
+      items:
+        $ref: '#/components/schemas/tier_item'
+    tier_item:
+      type: object
+      required:
+        - retail_price
+        - commission
+        - net_price
+
+      properties:
+        # name:
+        #   type: string
+        #   example: "Little groups"
+        #   description: "Tier pricing alias"
+        from:
+          type: integer
+          example: 1
+          description: "Tier pricing lower limit of participants to enjoy the price"
+        to:
+          type: integer
+          example: 10
+          description: "Tier pricing upper limit of participants to enjoy de price"
+        retail_price:
+          type: number
+          example: 18.75
+        commission:
+          type: number
+          example: 5
+        net_price:
+          type: number
+          example: 17.75
+    ticket:
+      type: object
+      required:
+        - name
+        - pricings
+      properties:
+        name:
+          type: string
+        pricings:
+          type: array
+          items:
+            type: object
+            required:
+              - pricing_id
+            properties:
+              pricing_id:
+                type: string
+                format: uuid
+              capacity:
+                type: integer
+                nullable: true
+        languages:
+          type: array
+          items:
+            type: object
+            required:
+              - language
+            properties:
+              language:
+                type: string
+              capacity:
+                type: integer
+                nullable: true
+          nullable: true
+        capacity:
+          type: integer
+          nullable: true
+    timed_ticket:
+      allOf:
+        - type: object
+          required:
+            - time
+          properties:
+            time:
+              type: string
+              format: time
+        - $ref: '#/components/schemas/ticket'
+    open_ticket_expiration_date:
+      allOf:
+        - type: object
+          required:
+            - option_id
+            - expiration_date
+          properties:
+            id:
+              readOnly: true
+              type: string
+            option_id:
+              type: string
+              format: uuid
+            expiration_date:
+              type: string
+              format: date
+        - $ref: '#/components/schemas/ticket'
+    open_ticket_expiration_days:
+      allOf:
+        - type: object
+          required:
+            - option_id
+            - expiration_days
+          properties:
+            id:
+              readOnly: true
+              type: string
+            option_id:
+              type: string
+              format: uuid
+            expiration_days:
+              type: integer
+              format: number
+              example: 30
+        - $ref: '#/components/schemas/ticket'
+    date_ticket:
+      type: object
+      required:
+        - option_id
+        - name
+        - date_range
+      properties:
+        id:
+          readOnly: true
+          type: string
+        option_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        date_range:
+          $ref: '#/components/schemas/dates_range'
+        days:
+          type: object
+          nullable: true
+          description: Keys are the days of week. Format 8601 (date-wday = DIGIT; 1-7; 1 is Monday, 7 is Sunday)
+          properties:
+            '1':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+            '2':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+            '3':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+            '4':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+            '5':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+            '6':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+            '7':
+              allOf:
+                - nullable: true
+                - $ref: '#/components/schemas/ticket'
+    datetime_ticket:
+      type: object
+      required:
+        - option_id
+        - date_range
+        - name
+        - days
+      properties:
+        id:
+          readOnly: true
+          type: string
+        option_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        date_range:
+          $ref: '#/components/schemas/dates_range'
+        days:
+          type: object
+          nullable: false
+          description: Keys are the days of week. Format 8601 (date-wday = DIGIT; 1-7; 1 is Monday, 7 is Sunday)
+          properties:
+            '1':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+            '2':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+            '3':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+            '4':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+            '5':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+            '6':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+            '7':
+              type: array
+              items:
+                $ref: '#/components/schemas/timed_ticket'
+              nullable: true
+    pax:
+      required:
+        - pax_type
+        - pax_code
+        - all_ages
+        - free_of_charge
+      type: object
+      properties:
+        pax_type:
+          type: string
+          enum:
+            - PERSON
+            - GROUP
+          description: Supported pax types
+          example: PERSON
+        pax_code:
+          description: Pax code
+          type: string
+          example: Adult
+        all_ages:
+          type: boolean
+          description: "All ages or age required"
+          example: false
+        age_from:
+          description: "Age from"
+          type: integer
+          minimum: 0
+          maximum: 99
+          example: 18
+        age_to:
+          description: "Age to"
+          type: integer
+          minimum: 0
+          maximum: 99
+          example: 60
+        free_of_charge:
+          type: boolean
+          description: "Free of charge or no"
+          example: false
+    experience_paxes:
+      required:
+        - experience_id
+      type: object
+      properties:
+        experience_id:
+          type: string
+          format: uuid
+          readOnly: true
+        pax_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/pax'
+    experience_zones:
+      required:
+        - zone_codes
+      type: object
+      properties:
+        experience_id:
+          type: string
+          format: uuid
+          readOnly: true
+        zone_codes:
+          $ref: '#/components/schemas/zone_codes'
+    experience_languages:
+      required:
+        - languages
+      type: object
+      properties:
+        experience_id:
+          type: string
+          format: uuid
+          readOnly: true
+        languages:
+          $ref: '#/components/schemas/language_codes'
+    option_languages:
+      required:
+        - language_codes
+        - option_id
+      type: object
+      properties:
+        option_id:
+          type: string
+          format: uuid
+          readOnly: true
+        language_codes:
+          $ref: '#/components/schemas/language_codes'
+    zone_codes:
+      type: array
+      items:
+        type: string
+        example: palma
+    language_codes:
+      type: array
+      items:
+        type: string
+        example: en
+
+    Release:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        experience_id:
+          type: string
+          format: uuid
+        option_id:
+          type: string
+          format: uuid
+        cutoff_time:
+          description: time in advance needed to accept the booking before the start of the activity. Format ISO_8601
+          type: string
+          format: duration
+          example: P10DT2H30M
+        days:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/day'
+      required:
+        - days
+        - cutoff_time
+        - experience_id
+
+    StopSale:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        experience_id:
+          type: string
+          format: uuid
+        option_id:
+          type: string
+          format: uuid
+        date_from:
+          type: string
+          format: date
+        date_to:
+          type: string
+          format: date
+        languages:
+          type: array
+          items:
+            type: string
+          example: [ "en" ]
+        zones:
+          type: array
+          items:
+            type: string
+          example: [ "PMI" ]
+        paxes:
+          type: array
+          items:
+            type: string
+          example: [ "Adult" ]
+        days:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/day'
+      required:
+        - days
+        - date_from
+        - date_to
+        - experience_id
+
+    Allotment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        experience_id:
+          type: string
+          format: uuid
+        option_id:
+          type: string
+          format: uuid
+        date_from:
+          type: string
+          format: date
+        date_to:
+          type: string
+          format: date
+        languages:
+          type: array
+          items:
+            type: string
+          example: [ "en" ]
+        zones:
+          type: array
+          items:
+            type: string
+          example: [ "PMI" ]
+        paxes:
+          type: array
+          items:
+            type: string
+          example: [ "Adult" ]
+        monday:
+          type: integer
+          minimum: 0
+        tuesday:
+          type: integer
+          minimum: 0
+        saturday:
+          type: integer
+          minimum: 0
+        sunday:
+          type: integer
+          minimum: 0
+        wednesday:
+          type: integer
+          minimum: 0
+        thursday:
+          type: integer
+          minimum: 0
+        friday:
+          type: integer
+          minimum: 0
+        is_locked:
+          type: boolean
+          default: false
+          readOnly: true
+      required:
+        - date_from
+        - date_to
+        - experience_id
+    internal_pricing:
+      type: object
+      required:
+        - days
+        - currency
+        - date_from
+        - date_to
+        - prices
+
+      properties:
+        id:
+          readOnly: true
+          type: string
+          format: uuid
+        languages:
+          type: array
+          items:
+            type: string
+            example: en
+        zones:
+          type: array
+          items:
+            type: string
+            example: palma
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/day'
+        currency:
+          type: string
+          description: Currency code following ISO 4217 standard
+          example: EUR
+        date_from:
+          type: string
+          format: date
+        date_to:
+          type: string
+          format: date
+        option_id:
+          type: string
+          format: uuid
+        prices:
+          type: array
+          items:
+            $ref: "#/components/schemas/price"
+    price:
+      type: object
+      required:
+        - pax
+        - cost
+        - suggested
+        - initial
+      properties:
+        pax:
+          type: string
+          example: Adult
+        cost:
+          type: number
+          example: 18.75
+        suggested:
+          type: number
+          example: 18.75
+        initial:
+          type: number
+          example: 18.75
+    day:
+      type: string
+      enum:
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
+        - SUNDAY
+
+  responses:
+    '200':
+      description: Ok - The request was successful and the response body contains the representation requested.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '201':
+      description: Created - The request was successful and the response body contains the representation requested.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/Location'
+    '204':
+      description: >-
+        No Content The server successfully processed the request and is not returning any content
+    '400':
+      description: >-
+        Bad Request - The data given in the PUT failed validation. Inspect the
+        response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '401':
+      description: >-
+        Unauthorized - The supplied credentials, if any, are not sufficient to
+        access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '403':
+      description: >-
+        Forbidden - You don't have permission to access this resource
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+    '404':
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '406':
+      description: >-
+        Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '409':
+      description: >-
+        Conflct - The request could not be processed due to a conflict with the current state of the target resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    '500':
+      description: >-
+        Internal Server Error - An unexpected error occurred on the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "zixuanchen.vitest-explorer",
+        "stylelint.vscode-stylelint",
+        "sonarsource.sonarlint-vscode",
+        "esbenp.prettier-vscode",
+        "vue.volar",
+        "streetsidesoftware.code-spell-checker",
+        "vivaxy.vscode-conventional-commits",
+        "gitlab.gitlab-workflow",
+        "redhat.vscode-yaml",
+        "mhutchie.git-graph",
+        "eamodio.gitlens"
+    ]
+}

@@ -1,0 +1,1 @@
+export const MAX_CANCELLATION_POLICIES = 4;

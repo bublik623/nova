@@ -1,0 +1,1137 @@
+openapi: 3.0.2
+info:
+  title: Geo Master Data Offer Service
+  description: Geo Master Data Service API definition
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+    
+servers:
+  - url: https://geo-master-data-offer.tui-mm.com
+    description: Prod server
+  - url: https://geo-master-data-offer.pre.tui-mm.com
+    description: Pre-Prod server
+  - url: https://geo-master-data-offer.test.tui-mm.com
+    description: Test server
+security:
+  - bearerAuth: []
+tags:
+  - name: Cities
+    description: Cities operations
+  - name: Countries
+    description: Countries operations
+  - name: Time zones
+    description: Time zones operations
+  - name: Administrative divisions
+    description: Administrative divisions operations
+  - name: Airports
+    description: Airports operations
+paths:
+  /countries:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Countries
+      summary: Retrieves the countries.
+      description: Retrieves the countries.
+      operationId: getCountriesCollection
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK, countries successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/country'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postCountry
+      tags:
+        - Countries
+      summary: Creates a Country.
+      description: Creates a Country.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/country'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /countries/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Countries
+      summary: Get the country by its id.
+      description: Get a country by its id.
+      operationId: retrieveCountryByID
+      responses:
+        '200':
+          description: OK - Country successfully retrieved response.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/country'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteCountry
+      tags:
+        - Countries
+      summary: Removes the country.
+      description: Removes the country.
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateCountry
+      tags:
+        - Countries
+      summary: Updates the country.
+      description: Updates the country.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/country'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /cities:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Cities
+      summary: Retrieves the cities.
+      description: Retrieves the cities.
+      operationId: getCitiesCollection
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Cities successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/city'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postCity
+      tags:
+        - Cities
+      summary: Creates a city.
+      description: Creates a city.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/city'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /cities/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Cities
+      summary: Get the city by its id.
+      description: Get a city by its id.
+      operationId: retrieveCityByID
+      responses:
+        '200':
+          description: OK - City successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/city'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteCity
+      tags:
+        - Cities
+      summary: Removes the city.
+      description: Removes the city.
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateCity
+      tags:
+        - Cities
+      summary: Updates the city.
+      description: Updates the city.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/city'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /time-zones:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Time zones
+      summary: Retrieves the time zones.
+      description: Retrieves the time zones.
+      operationId: getTimeZonesCollection
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Time zones successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/time_zone'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postTimeZone
+      tags:
+        - Time zones
+      summary: Creates a time zone.
+      description: Creates a time zone.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/time_zone'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /time-zones/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Time zones
+      summary: Get the time zone by its id.
+      description: Get a time zone by its id.
+      operationId: retrieveTimeZoneByID
+      responses:
+        '200':
+          description: OK - Time zone successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time_zone'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteTimeZone
+      tags:
+        - Time zones
+      summary: Removes the time zone.
+      description: Removes the time zone.
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateTimeZone
+      tags:
+        - Time zones
+      summary: Updates the time zone.
+      description: Updates the time zone.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/time_zone'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /administrative-divisions:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Administrative divisions
+      summary: Retrieves the administrative divisions.
+      description: Retrieves the administrative divisions.
+      operationId: getAdministrativeDivisionCollection
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Administrative divisions successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/administrative_division'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postAdministrativeDivision
+      tags:
+        - Administrative divisions
+      summary: Creates an administrative division.
+      description: Creates an administrative division.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/administrative_division'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /administrative-divisions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Administrative divisions
+      summary: Get the administrative division by its id.
+      description: Get the administrative division by its id.
+      operationId: retrieveAdministrativeDivisionByID
+      responses:
+        '200':
+          description: OK - Administrative division successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/administrative_division'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteAdministrativeDivision
+      tags:
+        - Administrative divisions
+      summary: Removes the administrative division.
+      description: Removes the administrative division.
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateAdministrativeDivision
+      tags:
+        - Administrative divisions
+      summary: Updates the administrative division.
+      description: Updates the administrative division.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/administrative_division'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /airports:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Airports
+      summary: Retrieves Airports.
+      description: Retrieves Airports.
+      operationId: getAirportCollection
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Airports successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/airport'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postAirport
+      tags:
+        - Airports
+      summary: Creates an airport.
+      description: Creates an airport.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/airport'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /airports/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Airports
+      summary: Get the airport by its id.
+      description: Get the airport by its id.
+      operationId: retrieveAirportByID
+      responses:
+        '200':
+          description: OK - Airport successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/airport'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteAirport
+      tags:
+        - Airports
+      summary: Removes the airport.
+      description: Removes the airport.
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateAirport
+      tags:
+        - Airports
+      summary: Updates the airport.
+      description: Updates the airport.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/airport'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /airports/coordinates:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+          description: Latitude coordinate
+          example: 30.99881
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+          description: Longitude coordinate
+          example: 2.73881
+      tags:
+        - Airports
+      summary: Get the airport close to latitude and longitude coordinates.
+      description: Get the airport close to latitude and longitude coordinates.
+      operationId: getAirportByCoordinates
+      responses:
+        '200':
+          description: OK - Airport successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/airport'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+components:
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    country:
+      type: object
+      required:
+        - iso_code_alpha2
+        - iso_code_alpha3
+        - iso_code_numeric
+        - name
+        - language_code
+        - country_calling_codes
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-geo-countries.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Universally Unique IDentifier
+          example: 2dbb4da1-3bf3-4e54-875e-1e66c615903c
+        iso_code_alpha2:
+          type: string
+          description: ISO 3166 alpha-2 code
+          example: ES
+        iso_code_alpha3:
+          type: string
+          description: ISO 3166 alpha-3 code
+          example: ESP
+        iso_code_numeric:
+          type: number
+          description: ISO 3166 numeric code
+          example: 724
+        name:
+          type: string
+          description: Name
+          example: Spain
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          type: string
+          description: Description
+          example: Spain
+        country_calling_codes:
+          type: array
+          items:
+            type: number
+            description: Telephone country codes
+            example: 34
+    administrative_division:
+      type: object
+      required:
+        - code
+        - name
+        - country_code_alpha2
+        - language_code
+        - description
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-geo-administrative-division.json
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Universally Unique IDentifier
+          example: 2dbb4da1-3bf3-4e54-875e-1e66c615903c
+        code:
+          type: string
+          description: Code, see ref. [ISO_3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)
+          example: IT-MI
+        name:
+          type: string
+          description: Name
+          example: Milan
+        country_code_alpha2:
+          type: string
+          description: ISO 3166 alpha-2 country code
+          example: ES
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          type: string
+          description: Description
+          example: Milan
+        sub_administrative_divisions:
+          type: array
+          description: List of sub administrative divisions.
+          items:
+            type: string
+    city:
+      type: object
+      required:
+        - code
+        - name
+        - country_code_alpha2
+        - language_code
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-geo-cities.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Universally Unique IDentifier
+          example: 2dbb4da1-3bf3-4e54-875e-1e66c615903c
+        code:
+          type: string
+          description: Code
+          example: PMI
+        name:
+          type: string
+          description: Name
+          example: Majorca
+        country_code_alpha2:
+          type: string
+          description: ISO 3166 alpha-2 country code
+          example: ES
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          type: string
+          description: Description
+          example: Majorca
+        core_code:
+          description: Mapping code for the core
+          type: number
+          example: 1234
+        olp_code:
+          description: Mapping code for the olp
+          type: string
+          example: 'MAJ'
+    time_zone:
+      type: object
+      required:
+        - code
+        - name
+        - country_code
+        - language_code
+        - location
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-geo-time-zone.json
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Universally Unique IDentifier
+          example: 2dbb4da1-3bf3-4e54-875e-1e66c615903c
+        code:
+          type: string
+          description: Code, see ref. [List_of_tz_database_time_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+          example: CET
+        name:
+          type: string
+          description: Name
+          example: Central European Time
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          type: string
+          description: Description
+          example: Central European Time
+        location:
+          type: string
+          description: Location
+          example: Europe
+    airport:
+      type: object
+      required:
+        - iata_code
+        - name
+        - latitude
+        - longitude
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Universally Unique IDentifier
+          example: 2dbb4da1-3bf3-4e54-875e-1e66c615903c
+        iata_code:
+          type: string
+          description: Airport IATA Code
+          example: LEPA
+        icao_code:
+          type: string
+          description: Airport ICAO Code
+          example: PMI
+        name:
+          type: string
+          description: Airport Name
+          example: Palma de Mallorca Airport
+        latitude:
+          type: number
+          format: double
+          description: Airport Latitude
+          example: 39.5517
+        longitude:
+          type: number
+          format: double
+          description: Airport Longitude
+          example: 2.73881
+        ratio:
+          type: number
+          format: double
+          description: Airport ratio in km
+          default: 1.0
+          example: 1.0
+
+  parameters:
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.geo-master-data-offer-service.v1 ]
+      example: vnd.geo-master-data-offer-service.v1
+    languageCodeParam:
+      name: language_code
+      in: query
+      description: Language code
+      required: true
+      schema:
+        type: string
+      example: 'es'
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customize the response recovering only the fields needed. It's a comma-separated list of fields without spaces between them
+      required: false
+      schema:
+        type: string
+      example: 'id,name'
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: 'id==1f9d2c62-535a-11ec-bf63-0242ac130002;name==NAME'
+    limitParam:
+      name: limit
+      in: query
+      description: Number to limit the results by
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: Offset for the items to retrieve
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    sortParam:
+      name: sort
+      in: query
+      description: Allows sorting results by a single or multiple fields (comma-separated). Prefix the field with `-` to get a descending order
+      required: false
+      schema:
+        type: string
+      example: 'id,-name'
+
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: "Conflict - The request could not be processed because of conflict in the request"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '415':
+      description: "Unsupported media type"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  headers:
+    trace-id:
+      description: Used to track the request
+      style: simple
+      schema:
+        type: string
+    location:
+      description: Slot URI
+      schema:
+        type: string
+        example: "/cities/8ed31c48-09a9-431e-bf32-06c1295ce119"

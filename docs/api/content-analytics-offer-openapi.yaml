@@ -1,0 +1,226 @@
+openapi: 3.0.2
+info:
+  title: Content Analytics Service
+  description: Content Analytics Service
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://content-analytics-offer.tui-mm.com
+    description: Generated server url
+tags:
+  - name: content analytics
+    description: Content Analytics Service
+paths:
+  /change-logs:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getChangeLogsStream
+      tags:
+        - content analytics
+      summary: 'Get change logs stream'
+      description: 'Get change logs stream'
+      parameters:
+        - $ref: '#/components/parameters/experienceIdParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/startDateParam'
+        - $ref: '#/components/parameters/endDateParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/changeLog'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+components:
+  # SCHEMAS -------------------------------------------------
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+
+    changeLog:
+      type: object
+      required:
+        - experienceId
+        - languageCode
+      properties:
+        experienceId:
+          $ref: "#/components/schemas/experienceId"
+        flowCode:
+          $ref: "#/components/schemas/flowCode"
+        languageCode:
+          $ref: "#/components/schemas/languageCode"
+        logs:
+          type: array
+          items:
+            $ref: "#/components/schemas/log"
+    log:
+      type: object
+      required:
+        - id
+        - field
+        - entity
+        - action
+        - user
+        - action_date
+      properties:
+        id:
+          type: string
+          description: "Internal entity identifier"
+          format: uuid
+          example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+        field:
+          type: string
+          description: "Field affected by the change"
+          example: "title"
+        entity:
+          type: string
+          description: "Entity affected by the change"
+          example: "experienceTranslation"
+        action:
+          type: string
+          enum:
+            - created
+            - updated
+            - deleted
+          description: "Type of action executed"
+          example: "created"
+        user:
+          type: string
+          format: uuid
+          description: "User who did the action"
+          example: "6ef573e9-e0fc-4185-886b-1b28a64381e9"
+        action_date:
+          type: string
+          format: date-time
+          description: Start date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+          example: "2022-07-03T13:10:00Z"
+
+    experienceId:
+      type: string
+      description: "Experience id to which the entity belongs"
+      format: uuid
+      example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+
+    languageCode:
+      type: string
+      description: Language code
+      example: en
+
+    flowCode:
+      type: string
+      description: Flow internal unique code associated with content type
+      example: MANUAL
+
+  # PARAMETERS -------------------------------------------------
+  parameters:
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.content-analytics-offer-service.v1 ]
+        example: vnd.content-analytics-offer-service.v1
+
+    experienceIdParam:
+      name: experience_id
+      in: query
+      description: Experience ID
+      required: true
+      schema:
+        $ref: "#/components/schemas/experienceId"
+
+    languageCodeParam:
+      name: language_code
+      in: query
+      description: Language code
+      required: true
+      schema:
+        $ref: "#/components/schemas/languageCode"
+
+    startDateParam:
+      name: start_date
+      in: query
+      description: Start date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: "2022-07-03T00:00:00Z"
+
+    endDateParam:
+      name: end_date
+      in: query
+      description: End date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: "2022-07-04T00:00:00Z"
+
+  # RESPONSES -------------------------------------------------
+  responses:
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '406':
+      description: Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+
+  # HEADERS -------------------------------------------------
+  headers:
+    traceId:
+      description: Used to track the request
+      style: simple
+      schema:
+        type: string

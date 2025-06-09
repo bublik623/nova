@@ -1,0 +1,31 @@
+{
+  "name": "NOVA ",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "v18.14.0"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "stylelint.vscode-stylelint",
+        "SonarSource.sonarlint-vscode",
+        "esbenp.prettier-vscode",
+        "Vue.volar",
+        "streetsidesoftware.code-spell-checker",
+        "vivaxy.vscode-conventional-commits",
+        "GitLab.gitlab-workflow",
+        "redhat.vscode-yaml",
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "dbaeumer.vscode-eslint",
+        "vitest.explorer"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install && npx playwright install --with-deps chromium",
+  "remoteUser": "root",
+  "mounts": ["source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/root/.ssh,type=bind"]
+}

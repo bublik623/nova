@@ -1,0 +1,4217 @@
+openapi: 3.0.2
+
+info:
+  title: Experience Master Data Offer Service
+  description: API to get and set Experiences Master Data
+  version: 1.0.0
+
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Susana Pont
+    email: susana.pont@tui.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: "https://nova-api-gateway.tui-mm.com/experience-master-data-offer"
+    description: Prod server
+  - url: "https://nova-api-gateway.pre.tui-mm.com/experience-mater-data-offer"
+    description: Pre-prod server
+  - url: "https://nova-api-gateway.test.tui-mm.com/experience-master-data-offer"
+    description: Test server
+
+security:
+  - bearerAuth: [ ]
+
+tags:
+  - name: experience-statuses
+  - name: experience-types
+  - name: capacity-types
+  - name: option-statuses
+  - name: holders
+  - name: pax
+  - name: option-languages
+  - name: category-group-types
+  - name: categories
+  - name: category-types
+  - name: interests
+  - name: highlights
+  - name: included
+  - name: important-information
+  - name: additional-services
+  - name: functional-group
+  - name: hierarchical-groups
+  - name: option-names
+  - name: pricing-types
+  - name: groups
+  - name: markets
+
+paths:
+  /experience-statuses:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getExperienceStatusCollection
+      tags:
+        - experience-statuses
+      summary: 'Retrieves the stream of experience status resources'
+      description: 'Retrieves the stream of experience status resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceStatus'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createExperienceStatus
+      tags:
+        - experience-statuses
+      summary: 'Create an experience status'
+      description: 'Create an experience status, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceStatus'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /experience-statuses/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getExperienceStatus
+      tags:
+        - experience-statuses
+      summary: 'Get experience status'
+      description: 'Get experience status'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceStatus'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateExperienceStatus
+      tags:
+        - experience-statuses
+      summary: 'Update the experience status resource'
+      description: 'Update the experience status resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceStatus'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteExperienceStatus
+      tags:
+        - experience-statuses
+      summary: 'Remove the experience status resource'
+      description: 'Remove the experience status resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /experience-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getExperienceTypeCollection
+      tags:
+        - experience-types
+      summary: 'Retrieves the stream of experience type resources'
+      description: 'Retrieves the stream of experience type resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceType'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createExperienceType
+      tags:
+        - experience-types
+      summary: 'Create an experience type resource'
+      description: 'Create an experience type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceType'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /experience-types/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getExperienceType
+      tags:
+        - experience-types
+      summary: 'Get experience type resource'
+      description: 'Get experience type resource'
+      responses:
+        '200':
+          description: OK - The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceType'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateExperienceType
+      tags:
+        - experience-types
+      summary: 'Update the experience type resource'
+      description: 'Update the experience type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceType'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteExperienceType
+      tags:
+        - experience-types
+      summary: 'Remove the experience type resource'
+      description: 'Remove the experience type resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /capacity-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getCapacityTypeCollection
+      tags:
+        - capacity-types
+      summary: 'Retrieves the stream of capacity type resources'
+      description: 'Retrieves the stream of capacity type resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/capacityType'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createCapacityType
+      tags:
+        - capacity-types
+      summary: 'Create a capacity type resource'
+      description: 'Create a capacity type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/capacityType'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /capacity-types/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getCapacityType
+      tags:
+        - capacity-types
+      summary: 'Get capacity type resource'
+      description: 'Get capacity type resource'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/capacityType'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateCapacityType
+      tags:
+        - capacity-types
+      summary: 'Update the capacity type resource'
+      description: 'Update the capacity type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/capacityType'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteCapacityType
+      tags:
+        - capacity-types
+      summary: 'Remove the capacity type resource'
+      description: 'Remove the capacity type resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /option-statuses:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getOptionStatusCollection
+      tags:
+        - option-statuses
+      summary: 'Retrieves the stream of option status resources'
+      description: 'Retrieves the stream of option status resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/optionStatus'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createOptionStatus
+      tags:
+        - option-statuses
+      summary: 'Create an option status resource'
+      description: 'Create an option status resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionStatus'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /option-statuses/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getOptionStatus
+      tags:
+        - option-statuses
+      summary: 'Get option status resource'
+      description: 'Get option status resource'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/optionStatus'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateOptionStatus
+      tags:
+        - option-statuses
+      summary: 'Update the option status resource'
+      description: 'Update the option status resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionStatus'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteOptionStatus
+      tags:
+        - option-statuses
+      summary: 'Remove the option status resource'
+      description: 'Remove the option status resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /holders:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getHolderCollection
+      tags:
+        - holders
+      summary: 'Retrieves the stream of holder resources'
+      description: 'Retrieves the stream of holder resources, deprecated, use /pax endpoint instead'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/holder'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      deprecated: true
+      operationId: createHolder
+      tags:
+        - holders
+      summary: 'Create a holder resource'
+      description: 'Create a holder resource, also send an event to Kafka topic about changes, deprecated, use /pax endpoint instead'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/holder'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /holders/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getHolder
+      tags:
+        - holders
+      summary: 'Get holder'
+      description: 'Get holder, deprecated, use /pax endpoint instead'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/holder'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      deprecated: true
+      operationId: updateHolder
+      tags:
+        - holders
+      summary: 'Update the holder resource'
+      description: 'Update the holder resource, also send an event to Kafka topic about changes, deprecated, use /pax endpoint instead'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/holder'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      deprecated: true
+      operationId: deleteHolder
+      tags:
+        - holders
+      summary: 'Remove the holder resource'
+      description: 'Remove the holder resource, also send an event to Kafka topic about changes, deprecated, use /pax endpoint instead'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /pax:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getPaxCollection
+      tags:
+        - pax
+      summary: 'Retrieves the stream of pax resources'
+      description: 'Retrieves the stream of pax resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pax'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createPax
+      tags:
+        - pax
+      summary: 'Create a pax resource'
+      description: 'Create a pax resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pax'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+  /pax/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getPax
+      tags:
+        - pax
+      summary: 'Get pax'
+      description: 'Get pax'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pax'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updatePax
+      tags:
+        - pax
+      summary: 'Update the pax resource'
+      description: 'Update the pax resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pax'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deletePax
+      tags:
+        - pax
+      summary: 'Remove the pax resource'
+      description: 'Remove the pax resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+  /option-languages:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getOptionLanguageCollection
+      tags:
+        - option-languages
+      summary: 'Retrieves the stream of option language resources'
+      description: 'Retrieves the stream of option language resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/optionLanguage'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createOptionLanguage
+      tags:
+        - option-languages
+      summary: 'Create an option language resource'
+      description: 'Create an option language resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionLanguage'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /option-languages/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getOptionLanguage
+      tags:
+        - option-languages
+      summary: 'Get option language resource'
+      description: 'Get option language resource'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/optionLanguage'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateOptionLanguage
+      tags:
+        - option-languages
+      summary: 'Update the option language resource'
+      description: 'Update the option language resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionLanguage'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteOptionLanguage
+      tags:
+        - option-languages
+      summary: 'Remove the option language resource'
+      description: 'Remove the option language resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /category-group-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getCategoryGroupTypeCollection
+      tags:
+        - category-group-types
+      summary: 'Get category groups stream'
+      description: 'Get category groups stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/category'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      deprecated: true
+      operationId: createCategoryGroupType
+      tags:
+        - category-group-types
+      summary: 'Create category group type'
+      description: 'Create category group type, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/category'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /category-group-types/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getCategoryGroupType
+      tags:
+        - category-group-types
+      summary: 'Get category group type resource by id'
+      description: 'Get category group type resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      deprecated: true
+      operationId: updateCategoryGroupType
+      tags:
+        - category-group-types
+      summary: 'Category group type'
+      description: 'Update category group type, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/category'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      deprecated: true
+      operationId: deleteCategoryGroupType
+      tags:
+        - category-group-types
+      summary: 'Delete category group type'
+      description: 'Delete category group type, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /categories:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getCategoryCollection
+      tags:
+        - categories
+      summary: 'Get categories stream'
+      description: 'Get categories stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/category'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createCategory
+      tags:
+        - categories
+      summary: 'Create category'
+      description: 'Create category, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/category'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /categories/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getCategory
+      tags:
+        - categories
+      summary: 'Get category resource by id'
+      description: 'Get category resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/category'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateCategory
+      tags:
+        - categories
+      summary: 'Update category'
+      description: 'Update category, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/category'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteCategory
+      tags:
+        - categories
+      summary: 'Delete category'
+      description: 'Delete category, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /important-information:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getImportInformationCollection
+      tags:
+        - important-information
+      summary: 'Get important information stream'
+      description: 'Get important information stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/importantInformation'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createImportantInformation
+      tags:
+        - important-information
+      summary: 'Create important information'
+      description: 'Create important information, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/importantInformationRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /important-information/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getImportantInformation
+      tags:
+        - important-information
+      summary: 'Get important information resource by id'
+      description: 'Get important information resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/importantInformation'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateImportantInformation
+      tags:
+        - important-information
+      summary: 'Update important information'
+      description: 'Update important information, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/importantInformation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteImportantInformation
+      tags:
+        - important-information
+      summary: 'Delete important information'
+      description: 'Delete important information, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /included:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getIncludedCollection
+      tags:
+        - included
+      summary: 'Get included stream'
+      description: 'Get included stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/included'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createIncluded
+      tags:
+        - included
+      summary: 'Create included'
+      description: 'Create included, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/includedRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /included/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getIncluded
+      tags:
+        - included
+      summary: 'Get included resource by id'
+      description: 'Get included resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/included'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateIncluded
+      tags:
+        - included
+      summary: 'Update include'
+      description: 'Update include, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/included'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteIncluded
+      tags:
+        - included
+      summary: 'Delete include'
+      description: 'Delete include, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /highlights:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getHighlightsCollection
+      tags:
+        - highlights
+      summary: 'Get highlights stream'
+      description: 'Get highlights stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/highlights'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createHighlight
+      tags:
+        - highlights
+      summary: 'Create highlight'
+      description: 'Create highlight, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/highlightsRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /highlights/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getHighlights
+      tags:
+        - highlights
+      summary: 'Get highlights resource by id'
+      description: 'Get highlights resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/highlights'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateHighlights
+      tags:
+        - highlights
+      summary: 'Update highlight'
+      description: 'Update highlight, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/highlights'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteHighlights
+      tags:
+        - highlights
+      summary: 'Delete highlights'
+      description: 'Delete highlights, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /category-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getCategoryTypeCollection
+      tags:
+        - category-types
+      summary: 'Get category types stream'
+      description: 'Get category types stream'
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/interest'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      deprecated: true
+      operationId: createCategoryType
+      tags:
+        - category-types
+      summary: 'Create category type'
+      description: 'Create a category type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /category-types/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getCategoryType
+      tags:
+        - category-types
+      summary: 'Get category type by id'
+      description: 'Get category type by id'
+      responses:
+        '200':
+          description: OK - The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/interest'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      deprecated: true
+      operationId: updateCategoryType
+      tags:
+        - category-types
+      summary: 'Update category type'
+      description: 'Update the category type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interest'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      deprecated: true
+      operationId: deleteCategoryType
+      tags:
+        - category-types
+      summary: 'Delete category type'
+      description: 'Delete the category type resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /interests:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getInterestCollection
+      tags:
+        - interests
+      summary: 'Get interests stream'
+      description: 'Get interests stream'
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/interest'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createInterest
+      tags:
+        - interests
+      summary: 'Create interest'
+      description: 'Create a interest resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /interests/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getInterest
+      tags:
+        - interests
+      summary: 'Get interest by id'
+      description: 'Get interest by id'
+      responses:
+        '200':
+          description: OK - The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/interest'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateInterest
+      tags:
+        - interests
+      summary: 'Update interest'
+      description: 'Update the interest, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interest'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteInterest
+      tags:
+        - interests
+      summary: 'Delete interest'
+      description: 'Delete the interest resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /additional-services:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getAdditionalServiceCollection
+      tags:
+        - additional-services
+      summary: 'Get Additional Service stream'
+      description: 'Get Additional Service stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/additionalService'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createAdditionalService
+      tags:
+        - additional-services
+      summary: 'Create additional service'
+      description: 'Create additional service, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/additionalService'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /additional-services/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getAdditionalService
+      tags:
+        - additional-services
+      summary: 'Get additional service resource by id'
+      description: 'Get additional service resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/additionalService'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateAdditionalService
+      tags:
+        - additional-services
+      summary: 'Update additional service'
+      description: 'Update additional service, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/additionalService'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteAdditionalService
+      tags:
+        - additional-services
+      summary: 'Delete additional service'
+      description: 'Delete additional service, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /functional-groups:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getFunctionalGroupCollection
+      tags:
+        - functional-group
+      summary: 'Get functional group stream'
+      description: 'Get functional group stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/hierarchicalGroup'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      deprecated: true
+      operationId: createFunctionalGroup
+      tags:
+        - functional-group
+      summary: 'Create functional group'
+      description: 'Create functional group, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hierarchicalGroup'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /functional-groups/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getFunctionalGroup
+      tags:
+        - functional-group
+      summary: 'Get functional group resource by id'
+      description: 'Get functional group resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hierarchicalGroup'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      deprecated: true
+      operationId: updateFunctionalGroup
+      tags:
+        - functional-group
+      summary: 'Update functional group'
+      description: 'Update functional group, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hierarchicalGroup'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      deprecated: true
+      operationId: deleteFunctionalGroup
+      tags:
+        - functional-group
+      summary: 'Delete functional group'
+      description: 'Delete functional group, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /hierarchical-groups:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getHierarchicalGroupCollection
+      tags:
+        - hierarchical-groups
+      summary: 'Get hierarchical group stream'
+      description: 'Get hierarchical group stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/hierarchicalGroup'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createHierarchicalGroup
+      tags:
+        - hierarchical-groups
+      summary: 'Create hierarchical group'
+      description: 'Create hierarchical group, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hierarchicalGroup'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /hierarchical-groups/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getHierarchicalGroup
+      tags:
+        - hierarchical-groups
+      summary: 'Get hierarchical group resource by id'
+      description: 'Get hierarchical group resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hierarchicalGroup'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateHierarchicalGroup
+      tags:
+        - hierarchical-groups
+      summary: 'Update hierarchical group'
+      description: 'Update hierarchical group, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hierarchicalGroup'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteHierarchicalGroup
+      tags:
+        - hierarchical-groups
+      summary: 'Delete hierarchical group'
+      description: 'Delete hierarchical group, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /option-names:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getOptionNameCollection
+      tags:
+        - option-names
+      summary: 'Retrieves the stream of option name resources'
+      description: 'Retrieves the stream of option name resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/optionName'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createOptionName
+      tags:
+        - option-names
+      summary: 'Create an option name resource'
+      description: 'Create an option name resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionName'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /option-names/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getOptionName
+      tags:
+        - option-names
+      summary: 'Get option name resource'
+      description: 'Get option name resource'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/optionName'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateOptionName
+      tags:
+        - option-names
+      summary: 'Update the option name resource'
+      description: 'Update the option name resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionName'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteOptionName
+      tags:
+        - option-names
+      summary: 'Remove the option name resource'
+      description: 'Remove the option name resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /pricing-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getPricingTypeCollection
+      tags:
+        - pricing-types
+      summary: 'Retrieves the stream of PricingType resources'
+      description: 'Retrieves the stream of PricingType resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pricingType'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createPricingType
+      tags:
+        - pricing-types
+      summary: 'Create a PricingType resource'
+      description: 'Create a PricingType resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pricingType'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /pricing-types/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getPricingType
+      tags:
+        - pricing-types
+      summary: 'Get PricingType resource'
+      description: 'Get PricingType resource'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pricingType'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updatePricingType
+      tags:
+        - pricing-types
+      summary: 'Update the PricingType resource'
+      description: 'Update the PricingType resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pricingType'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deletePricingType
+      tags:
+        - pricing-types
+      summary: 'Remove the PricingType resource'
+      description: 'Remove the PricingType resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /groups:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      deprecated: true
+      operationId: getGroupCollection
+      tags:
+        - groups
+      summary: 'Retrieves the stream of Group resources'
+      description: 'Retrieves the stream of Group resources, deprecated, use /pax endpoint instead'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/group'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      deprecated: true
+      operationId: createGroup
+      tags:
+        - groups
+      summary: 'Create a Group resource'
+      description: 'Create a Group resource, also send an event to Kafka topic about changes, deprecated, use /pax endpoint instead'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /groups/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getGroup
+      deprecated: true
+      tags:
+        - groups
+      summary: 'Get Group resource'
+      description: 'Get Group resource, deprecated, use /pax endpoint instead'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateGroup
+      deprecated: true
+      tags:
+        - groups
+      summary: 'Update the Group resource'
+      description: 'Update the Group resource, also send an event to Kafka topic about changes, deprecated, use /pax endpoint instead'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteGroup
+      deprecated: true
+      tags:
+        - groups
+      summary: 'Remove the Group resource'
+      description: 'Remove the Group resource, also send an event to Kafka topic about changes, deprecated, use /pax endpoint instead'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /markets:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getMarketCollection
+      tags:
+        - markets
+      summary: 'Get markets stream'
+      description: 'Get markets stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/market'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createMarket
+      tags:
+        - markets
+      summary: 'Create market'
+      description: 'Create market'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/market'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /markets/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getMarket
+      tags:
+        - markets
+      summary: 'Get market resource by id'
+      description: 'Get market resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateMarket
+      tags:
+        - markets
+      summary: 'Update market'
+      description: 'Update market'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/market'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteMarket
+      tags:
+        - markets
+      summary: 'Delete market'
+      description: 'Delete market'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /highlights/translate:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      operationId: createHighLightsTranslation
+      tags:
+        - highlights
+      summary: 'Create highlight translation/s'
+      description: 'Create highlight tranlation/s'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/preMadeTranslation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /important-information/translate:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      operationId: createImportantInformationTranslation
+      tags:
+        - important-information
+      summary: 'Create important information translation/s'
+      description: 'Create important information tranlation/s'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/preMadeTranslation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /included/translate:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      operationId: createIncludedTranslation
+      tags:
+        - included
+      summary: 'Create included translation/s'
+      description: 'Create included translation/s'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/preMadeTranslation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+  /booking-questions:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+      - $ref: '#/components/parameters/acceptEncoding'
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+    get:
+      operationId: getQuestionsCollection
+      tags:
+        - booking-questions
+      summary: 'Retrieves the stream of question resources'
+      description: 'Retrieves the stream of question resources'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bookingQuestion'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/accessControlAllowOrigin'
+            Content-Encoding:
+              $ref: '#/components/headers/contentEncoding'
+        '400':
+          $ref: '#/components/responses/400'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createQuestion
+      tags:
+        - booking-questions
+      summary: 'Create a question'
+      description: 'Create a question, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bookingQuestion'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /booking-questions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: '1f9d2c62-535a-11ec-bf63-0242ac130002'
+      - $ref: '#/components/parameters/acceptVersionParam'
+      - $ref: '#/components/parameters/acceptEncoding'
+    options:
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+            Access-Control-Max-Age:
+              schema:
+                type: "string"
+    get:
+      operationId: getQuestion
+      tags:
+        - booking-questions
+      summary: 'Get question detail '
+      description: 'Get question detail'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookingQuestion'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/accessControlAllowOrigin'
+            Content-Encoding:
+              $ref: '#/components/headers/contentEncoding'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateQuestion
+      tags:
+        - booking-questions
+      summary: 'Update the question resource'
+      description: 'Update the question resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bookingQuestion'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteQuestion
+      summary: 'Delete the question resource'
+      tags:
+        - booking-questions
+      description: 'Remove the question resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  headers:
+    trace-id:
+      description: Operation trace identifier
+      schema:
+        type: string
+        example: "95a56db71f007f49"
+    location:
+      description: URI for operation
+      schema:
+        type: string
+        example: "/holders/f9a1e5c3-d35c-4c9b-b708-1661770da5ed"
+    accessControlAllowOrigin:
+      description: Access Control Allow Origin
+      schema:
+        type: string
+    contentEncoding:
+      description: Content Encoding
+      schema:
+        type: string
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Entity id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.experience-master-data-offer-service.v1, vnd.experience-master-data-offer-service.v2 ]
+      example: vnd.experience-master-data-offer-service.v1
+    languageCodeParam:
+      deprecated: true
+      name: language_code
+      in: query
+      description: Language code
+      schema:
+        type: string
+      example: 'es'
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customize the response recovering only the fields needed. It's a list of fields separated by commas without spaces between them
+      required: false
+      schema:
+        type: string
+      example: 'id,name'
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: 'id==1f9d2c62-535a-11ec-bf63-0242ac130002;name==NAME'
+    limitParam:
+      name: limit
+      in: query
+      description: number items to
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset of items
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 10
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+    acceptEncoding:
+      name: Accept-Encoding
+      in: header
+      description: Accept Encoding
+      required: false
+      schema:
+        type: string
+  schemas:
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    category:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '2ef26af5-1cb9-4a96-8e78-178589878ccb'
+        code:
+          description: Internal group used to group categories
+          type: string
+          example: 'INTERNAL'
+        name:
+          description: Group name
+          type: string
+          example: 'Internal'
+        description:
+          description: Description about elements nature contained in the group
+          type: string
+          example: 'TUI groups'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        core_code:
+          type: string
+          description: Core Code
+          example: '999'
+    included:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '7c531efc-ec15-45e2-a9be-3e9a2fbe0864'
+        code:
+          description: Internal code for included or non included
+          type: string
+          example: 'ENTRANCEFEES'
+        hierarchical_group_code:
+          type: string
+          description: Hierarchical group code
+          example: 'FEATURE'
+        name:
+          description: Name of the included (or non)
+          type: string
+          example: 'Entrance fees'
+        description:
+          description: Description of the included (or non)
+          type: string
+          example: 'Description if it needs'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+    highlights:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 'e77ae4aa-5bbc-4007-afa7-680f76214269'
+        code:
+          description: Internal code used for highlights
+          type: string
+          example: 'LUNCHMENU'
+        hierarchical_group_code:
+          type: string
+          description: Hierarchical group code
+          example: 'FEATURE'
+        name:
+          description: Highlight's name
+          type: string
+          example: 'Lunch menu to keep you going all the day'
+        description:
+          description: Highlight's description
+          type: string
+          example: 'Description if it needs'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+    importantInformationRequest:
+      oneOf:
+        - $ref: "#/components/schemas/importantInformation"
+        - $ref: "#/components/schemas/commercialContentPreMade"
+    highlightsRequest:
+      oneOf:
+        - $ref: "#/components/schemas/highlights"
+        - $ref: "#/components/schemas/commercialContentPreMade"
+    includedRequest:
+      oneOf:
+        - $ref: "#/components/schemas/included"
+        - $ref: "#/components/schemas/commercialContentPreMade"
+    importantInformation:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '32d06ab9-dcd7-4cef-8ea3-cf989799f4a9'
+        code:
+          description: Internal code for "things to remember"
+          type: string
+          example: 'COPYPASS'
+        hierarchical_group_code:
+          type: string
+          description: Hierarchical group code
+          example: 'FEATURE'
+        name:
+          description: Important information's name
+          type: string
+          example: 'Copy of your password'
+        description:
+          description: Object's description
+          type: string
+          example: 'Description if it needs'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+    commercialContentPreMade:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: List of Pre Made items
+          items:
+            $ref: '#/components/schemas/commercialContentPreMadeItem'
+        manualLanguages:
+          type: array
+          description: Manual Languages
+          items:
+            type: string
+          example: [ "it" ]
+        automaticLanguages:
+          type: array
+          description: Automatic Languages
+          items:
+            type: string
+          example: [ "es", "en" ]
+    commercialContentPreMadeItem:
+      type: object
+      required:
+        - code
+        - name
+        - languageCode
+      properties:
+        code:
+          type: string
+          description: Internal code for "things to remember"
+          example: COPYPASS
+        hierarchicalGroupCode:
+          type: string
+          description: Hierarchical group code
+          example: FEATURE
+        name:
+          type: string
+          description: Important information's name
+          example: Copy of your password
+        description:
+          type: string
+          description: Object's description
+          example: Description if it needs
+        languageCode:
+          type: string
+          description: Language Code
+          example: en
+    interest:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          example: '521d8daa-5358-11ec-bf63-0242ac130002'
+        code:
+          description: Code of category type
+          type: string
+          example: 'RESTAURANT'
+        name:
+          description: Name of category type
+          type: string
+          example: 'Restaurant'
+        description:
+          description: Description of category type
+          type: string
+          example: 'Item to categorize restaurants'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        core_code:
+          description: Mapping code for the core
+          type: string
+          example: 'a0240464-535a-11ec-bf63-0242ac130002'
+        olp_code:
+          description: Mapping code for the olp
+          type: string
+          example: 'REST'
+    experienceStatus:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '2dbb4da1-3bf3-4e54-875e-1e66c615903c'
+        name:
+          description: Name of experience status
+          type: string
+          example: 'DRAFT'
+        description:
+          description: Description of experience status
+          type: string
+          example: 'Status for not published experience'
+    experienceType:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '521d8daa-5358-11ec-bf63-0242ac130002'
+        name:
+          description: Name of experience type
+          type: string
+          example: 'DATETIME'
+        description:
+          description: Description of experience type
+          type: string
+          example: 'Customers have to book a time and date'
+    capacityType:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '5a49ec3a-5358-11ec-bf63-0242ac130002'
+        name:
+          description: Name of capacity type
+          type: string
+          example: 'LIMITED_BY_PAX_TYPE'
+        description:
+          description: Description of capacity type
+          type: string
+          example: 'Capacity type for limited by pax type options'
+    optionStatus:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 'a0240464-535a-11ec-bf63-0242ac130002'
+        name:
+          description: Name of option status
+          type: string
+          example: 'Draft'
+        description:
+          description: Description of option status
+          type: string
+          example: 'Option status description'
+    holder:
+      type: object
+      required:
+        - id
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '61aa5fb4-5358-11ec-bf63-0242ac130002'
+        name:
+          description: Name of holder
+          type: string
+          example: 'ADULT'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          description: Description of holder
+          type: string
+          example: 'Adult holder type description'
+        isAgeRequired:
+          description: Indicates if the age is required when setting this holder
+          type: boolean
+          default: false
+    pax:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - language_code
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '61aa5fb4-5358-11ec-bf63-0242ac130002'
+        name:
+          description: Name of pax
+          type: string
+          example: 'adult'
+        type:
+          description: Pax type
+          type: string
+          enum: [ PERSON, GROUP ]
+          example: GROUP
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          description: Description of pax
+          type: string
+          example: 'Adult'
+        all_ages:
+          description: Indicates if pax is for all ages or only for range of ages
+          type: boolean
+          default: true
+        age_from:
+          type: integer
+          example: 0
+          description: "Age from, inclusive"
+          minimum: 0
+          maximum: 99
+        age_to:
+          type: integer
+          example: 99
+          description: "Age to, inclusive"
+          minimum: 0
+          maximum: 99
+        free_of_charge:
+          description: Indicates if the pax is free of charge
+          type: boolean
+          default: false
+    optionLanguage:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '68177cb0-5358-11ec-bf63-0242ac130002'
+        name:
+          description: Name of option language
+          type: string
+          example: 'en'
+        description:
+          description: Description of option language
+          type: string
+          example: 'English'
+    additionalService:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '7c531efc-ec15-45e2-a9be-3e9a2fbe0864'
+        code:
+          description: Internal code for additional service
+          type: string
+          example: 'FEE_CANCELLATION'
+        name:
+          description: Name of the additional service
+          type: string
+          example: 'Fee Cancellation'
+        description:
+          description: Description of the included (or non)
+          type: string
+          example: 'Description if it needs'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        functional_group_code:
+          type: string
+          description: Functional group code
+          example: 'FEATURE'
+          deprecated: true
+        hierarchical_group_code:
+          type: string
+          description: Hierarchical group code
+          example: 'FEATURE'
+        core_code:
+          description: Mapping code for the core
+          type: string
+          example: 'a0240464-535a-11ec-bf63-0242ac130002'
+        olp_code:
+          description: Mapping code for the olp
+          type: string
+          example: 'PAX_TYPE_LIMITED'
+        core_category:
+          description: Depending on the category, the entity on the core should be requested to a specific endpoint.
+          type: string
+          enum: [ flavour, feature, service ]
+          example: "flavour"
+    hierarchicalGroup:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '7c531efc-ec15-45e2-a9be-3e9a2fbe0864'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        code:
+          description: Hierarchical group code
+          type: string
+          example: 'FEATURE'
+        name:
+          description: Hierarchical group name
+          type: string
+          example: 'Features'
+        description:
+          description: Description of the hierarchical group
+          type: string
+          example: 'Please select the features that apply to your experience. These will appear as icons on the product page'
+        parent_code:
+          type: string
+          description: Parent hierarchical group id to allow multilevel grouping
+          example: 'PRODUCT_BRAND'
+    optionName:
+      type: object
+      required:
+        - id
+        - name
+        - language_code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 'a0240464-535a-11ec-bf63-0242ac130002'
+        name:
+          description: Name of option name
+          type: string
+          example: '1-day'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        description:
+          description: Description of option name
+          type: string
+          example: 'Option name description'
+    pricingType:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 'a0240464-535a-11ec-bf63-0242ac130002'
+        name:
+          description: Name of pricing type
+          type: string
+          example: 'group'
+        description:
+          description: Description of pricing type
+          type: string
+          example: 'Pricing for a group'
+    group:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 'a0240464-535a-11ec-bf63-0242ac130002'
+        name:
+          description: Name of Group
+          type: string
+          example: 'car'
+        description:
+          description: Description of Group
+          type: string
+          example: 'Group holder name for a car'
+    market:
+      type: object
+      required:
+        - id
+        - language_code
+        - code
+        - name
+        - category
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: '7c531efc-ec15-45e2-a9be-3e9a2fbe0864'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        code:
+          description: Market code
+          type: string
+          example: 'fr-2c'
+        name:
+          description: Market name
+          type: string
+          example: 'TUI B2C France'
+        description:
+          description: Description of the market
+          type: string
+          example: 'TUI B2C french market'
+        category:
+          type: string
+          description: Category to allow grouping
+          example: 'B2C Musement'
+    preMadeTranslation:
+      type: object
+      required:
+        - code
+        - languages
+      properties:
+        code:
+          description: Premade Code
+          type: string
+          example: 'FEATURE'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/translationLanguage'
+    translationLanguage:
+      type: object
+      required:
+        - language_code
+        - to_be_translated
+      properties:
+        language_code:
+          type: string
+          description: Language code on ISO_639-1 format. See specification [ISO_639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+          example: 'es'
+        to_be_translated:
+          type: boolean
+          description: Must the translation be automatically done?
+    bookingQuestion:
+      type: object
+      required:
+        - id
+        - question
+        - is_personal_information
+        - answer_type
+        - language_code
+        - apply_policy
+        - category
+        - code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          example: '521d8daa-5358-11ec-bf63-0242ac130002'
+        code:
+          type: string
+          example: ADDCOMM
+          description: Code of the question
+        question:
+          description: Statement of the question
+          type: string
+          example: 'Name'
+        is_personal_information:
+          description: Indicates if the question is related with personal data
+          type: boolean
+        placeholder:
+          description: Something that temporarily fills a place
+          type: string
+          example: 'dd/mm/AAAA'
+        answer_type:
+          description: Type of answer.
+          type: string
+          enum: [ TEXT, PARAGRAPH, RADIO, DATE, DROPDOWN, TIME, NUMBER ]
+          example: DROPDOWN
+        description:
+          description: Description or example to help the customer to understand the question
+          type: string
+          example: Select the pets you own
+        options:
+          type: array
+          items:
+            type: string
+            description: Set of available options to answer the question.
+            example: "cat, dog"
+        language_code:
+          type: string
+          description: Language Code on ISO 639-1
+          example: en
+        apply_policy:
+          description: Indicates the type of the policy to be applied.
+          type: string
+          enum: [ BOOKING, CONFIGURABLE, PARTICIPANT ]
+          example: BOOKING
+        category:
+          description: Category of the question
+          type: string
+          enum: [ MAIN, DATETIME, PERSONAL, TRAVEL, EXTRA ]
+          example: MAIN
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: 'Bad Request. Inspect the response body for details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '403':
+      description: 'Access denied. User is not authorized to access this resource with an explicit deny.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: 'Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+      headers:
+        trace-id:
+          $ref: "#/components/headers/trace-id"
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: 'Not Acceptable - Bad accept version header'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: 'Conflict - The request could not be processed because of conflict in the request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '415':
+      description: "Unsupported media type"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: 'Internal Server Error. Please try again.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

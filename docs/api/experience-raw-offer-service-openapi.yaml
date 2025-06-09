@@ -1,0 +1,3831 @@
+openapi: 3.0.2
+info:
+  title: Experience Raw Offer Service
+  description: |
+    Full management of experience raw offer
+
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://nova-api-gateway.tui-mm.com/experience-raw
+    description: Prod server
+  - url: https://nova-api-gateway.pre.tui-mm.com/experience-raw
+    description: Pre-Prod server
+  - url: https://nova-api-gateway.test.tui-mm.com/experience-raw
+    description: Test server
+security:
+  - bearerAuth: []
+tags:
+  - name: experience v3
+    description: Manage experience. New tag for merged experience-raw and distribution-content
+  - name: experience raw v3
+    description: Manage experience raw v3 new api.
+  - name: experience raw v2
+    description: Manage experience raw v2 current api.
+  - name: experience raw v1
+    description: Manage experience raw long time ago deprecated api
+  - name: distribution content v2
+    description: Manage distribution content v2 current api
+  - name: raw snapshot
+    description: Manage raw snapshot
+  - name: snapshot
+    description: Manage the snapshots with the editorial information
+  - name: import
+    description: Import Api
+  - name: download
+    description: Download Api
+  - name: ASX
+    description: API for managing ASX service codes
+  - name: experience external catalog
+    description: Manage external experiences.
+  - name: experience content
+    description: Manage experience content.
+paths:
+
+  /experience:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+    get:
+      operationId: getExperience
+      tags:
+        - experience v3
+      summary: 'Get  experience stream.'
+      description: 'Get  experience stream.'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experience'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createExperience
+      tags:
+        - experience v3
+      summary: 'Create  experience.'
+      description: 'Create a experience.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/experienceCreate"
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getExperienceById
+      tags:
+        - experience v3
+      summary: 'Get experience by id.'
+      description: 'Get  experience by id.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experience'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteExperience
+      tags:
+        - experience v3
+      summary: 'Delete experience'
+      description: 'Delete experience'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/metadata:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    patch:
+      operationId: patchExperienceMetadata
+      tags:
+        - experience v3
+      summary: 'Patch experience metadata'
+      description: 'Patch the metadata of the experience'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/metadataUpdate"
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/collectionCriteria:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    patch:
+      operationId: patchExperienceCollectionCriteria
+      tags:
+        - experience v3
+      summary: 'Patch the experience collection criteria'
+      description: 'Patch the experience collection criteria'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/collectionCriteria"
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/legacyAdapterInformation:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    put:
+      operationId: putExperienceLegacyAdapterInformation
+      tags:
+        - experience v3
+      summary: 'Update the legacy adapter information'
+      description: 'Update the legacy adapter information'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/legacyAdapterInformation"
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/raw/archive:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    post:
+      operationId: archiveExperienceV3
+      tags:
+        - experience raw v3
+      summary: 'Archive an experience raw by ID.'
+      description: 'Archives the specified raw experience. This operation changes the status to archived.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/raw/send-to-review:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    post:
+      operationId: sendToReviewExperienceRawV3
+      tags:
+        - experience raw v3
+      summary: 'Send to review an experience raw by ID.'
+      description: 'Sends to review specified raw experience. This operation changes the status to SENT_TO_REVIEW.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/raw'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/raw/functional:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    patch:
+      operationId: patchExperienceRawFunctional
+      tags:
+        - experience raw v3
+      summary: 'Update the raw functional'
+      description: 'Update the raw functional'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/functionalV3"
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience/{id}/raw/commercial:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam3'
+      - $ref: '#/components/parameters/id'
+    patch:
+      operationId: patchExperienceRawCommercial
+      tags:
+        - experience raw v3
+      summary: 'Update the raw commercial information'
+      description: 'Update the  raw commercial information'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/commercial"
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  # ----------------------------------------------------------------
+
+  /experience-raw:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam2'
+    get:
+      operationId: getRawExperiences
+      tags:
+        - experience raw v2
+      summary: 'Get  experience raw stream.'
+      description: 'Get  experience raw stream.'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createExperienceRaw
+      tags:
+        - experience raw v2
+      summary: 'Create  experience raw.'
+      description: 'Create experience raw, also send an event to Kafka topic about changes.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rawElement'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-raw/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    patch:
+      operationId: partialUpdateRaw
+      tags:
+        - experience raw v2
+      summary: 'Partial update experience raw'
+      description: 'Partial update experience raw, also send an event to Kafka topic about changes, accept-version: vnd.experience-raw-offer-service.v1 is deprecated'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam1and2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rawElement'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    get:
+      operationId: getRawById
+      tags:
+        - experience raw v2
+      summary: 'Get experience raw by id.'
+      description: 'Get  experience raw by id.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam2'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateRaw
+      tags:
+        - experience raw v2
+      summary: 'Update experience raw.'
+      description: 'Update experience raw, also send an event to Kafka topic about changes.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rawElement'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteExperienceRaw
+      tags:
+        - experience raw v2
+      summary: 'Delete experience raw'
+      description: 'Delete experience raw, also send an event to Kafka topic about changes'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam2'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-raw/{id}/archive:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    put:
+      deprecated: true
+      operationId: archiveExperienceRawDeprecated
+      tags:
+        - experience raw v1
+      summary: 'Archive an experience raw by ID.'
+      description: 'Archives the specified raw experience. This operation changes the status to archived.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam1'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: archiveExperienceRaw
+      tags:
+        - experience raw v2
+      summary: 'Archive an experience raw by ID.'
+      description: 'Archives the specified raw experience. This operation changes the status to archived.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam2'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-raw/{id}/send-to-review:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam2'
+      - $ref: '#/components/parameters/id'
+    post:
+      operationId: sendToReviewExperienceRaw
+      tags:
+        - experience raw v2
+      summary: 'Send to review an experience raw by ID.'
+      description: 'Sends to review specified raw experience. This operation changes the status to SENT_TO_REVIEW.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-raw/{id}/complete:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam2'
+    post:
+      operationId: markExperienceAsCompleted
+      tags:
+        - experience raw v2
+      summary: Update experience raw status
+      description: Marks the experience raw status as completed
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+
+# ----------------------------------------------------------------
+
+  /v2/experience-raw/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      deprecated: true
+      operationId: getRawByIdDeprecated
+      tags:
+        - experience raw v1
+      summary: 'Get experience raw by id.'
+      description: 'Get  experience raw by id.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      deprecated: true
+      operationId: updateRawDeprecated
+      tags:
+        - experience raw v1
+      summary: 'Update experience raw.'
+      description: 'Update experience raw, also send an event to Kafka topic about changes.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rawElement'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      deprecated: true
+      operationId: deleteExperienceRawDeprecated
+      tags:
+        - experience raw v1
+      summary: 'Delete experience raw'
+      description: 'Delete experience raw, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /v2/experience-raw:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      deprecated: true
+      operationId: getRawExperienceDeprecated
+      tags:
+        - experience raw v1
+      summary: 'Get  experience raw stream.'
+      description: 'Get  experience raw stream.'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rawElement'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      deprecated: true
+      operationId: createExperienceRawDeprecated
+      tags:
+        - experience raw v1
+      summary: 'Create  experience raw.'
+      description: 'Create experience raw, also send an event to Kafka topic about changes.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rawElement'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /distribution-content:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getDistributionContent
+      tags:
+        - distribution content v2
+      summary: 'Get  distribution content stream'
+      description: 'Get  distribution content stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/distributionContent'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createDistributionContent
+      tags:
+        - distribution content v2
+      summary: 'Create  distribution content'
+      description: 'Create distribution content, also send an event to Kafka topic about changes. The supplier id is not mandatory but the experience can not be sent to review without this field'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/distributionContent'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /distribution-content/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getDistributionContentByID
+      tags:
+        - distribution content v2
+      summary: 'Get distribution content by id'
+      description: 'Get  distribution content by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/distributionContent'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateDistributionContent
+      tags:
+        - distribution content v2
+      summary: 'Update distribution content.'
+      description: 'Update distribution content, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/distributionContent'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    patch:
+      operationId: partialUpdateDistributionContent
+      tags:
+        - distribution content v2
+      summary: 'Partially update distribution content'
+      description: 'Partially update fields of a distribution content entity'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/distributionContent'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteDistributionContent
+      tags:
+        - distribution content v2
+      summary: 'Delete distribution content'
+      description: 'Delete distribution content, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /raw-snapshot:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getRawSnapshot
+      tags:
+        - raw snapshot
+      summary: 'Get raw snapshot stream.'
+      description: 'Get raw snapshot stream.'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rawSnapshot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /raw-snapshot/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: findRawSnapshotById
+      tags:
+        - raw snapshot
+      summary: 'Retrieve a RawSnapshot by ID.'
+      description: 'Find a raw snapshot by Id.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rawSnapshot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /snapshot:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getSnapshot
+      tags:
+        - snapshot
+      summary: 'Get snapshot stream.'
+      description: 'Get snapshot stream.'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/snapshot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /snapshot/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: findSnapshotById
+      tags:
+        - snapshot
+      summary: 'Retrieve a Snapshot by ID.'
+      description: 'Find a snapshot by Id.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/snapshot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /translation-snapshot:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getTranslationSnapshot
+      tags:
+        - snapshot
+      summary: 'Get Translation Snapshot stream.'
+      description: 'Retrieves the translation history for a specific experience identified by its ID and language code.'
+      parameters:
+        - name: experience_id
+          in: query
+          required: true
+          description: UUID of the experience
+          schema:
+            type: string
+          example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+        - name: language_code
+          in: query
+          required: true
+          description: Language code for the translation
+          schema:
+            type: string
+          example: "en"
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/translationSnapshot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /media-snapshot:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getMediaSnapshot
+      tags:
+        - snapshot
+      summary: 'Get Media Snapshot stream.'
+      description: 'Retrieves the media history for a specific experience identified by its ID. '
+      parameters:
+        - name: experience_id
+          in: query
+          required: true
+          description: UUID of the experience
+          schema:
+            type: string
+          example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/mediaSnapshot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /download:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      summary: 'Downloads a file'
+      description: 'Downloads a file as a Flux of DataBuffer.'
+      operationId: downloadFile
+      tags:
+        - download
+      parameters:
+        - in: query
+          name: file
+          required: true
+          description: The path of the file to be downloaded
+          schema:
+            type: string
+            example: "/tmp/file.csv"
+        - name: type
+          in: query
+          description: Storage type
+          required: false
+          schema:
+            type: string
+            enum:
+              - S3
+              - LOCAL
+      responses:
+        '200':
+          description: Successfully downloaded the file
+          headers:
+            Content-Disposition:
+              description: Indication that the content should be downloaded and saved locally
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /import:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    post:
+      tags:
+        - import
+      summary: 'Create Import'
+      description: 'Imports raw data from a file part asynchronously'
+      operationId: importRaw
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file part to import
+              required:
+                - file
+      parameters:
+        - name: type
+          in: query
+          description: Storage type
+          schema:
+            $ref: "#/components/schemas/storageType"
+      responses:
+        '202':
+          description: Accepted - The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/import'
+          headers:
+            trace-id:
+              description: Used to track the request
+              schema:
+                type: string
+            location:
+              description: Import ID
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /import/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      tags:
+        - import
+      summary: 'Get Import by ID'
+      description: 'Retrieves an import entity by its ID'
+      operationId: getImportById
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/import'
+          headers:
+            trace-id:
+              description: Used to track the request
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    patch:
+      operationId: partialUpdateImport
+      tags:
+        - import
+      summary: 'Partial update import'
+      description: 'Partial update import'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/import'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /asx/experiences:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getAsxExperiences
+      tags:
+        - ASX
+      summary: 'Get ASX service codes'
+      description: 'Get ASX service codes'
+      parameters:
+        - $ref: '#/components/parameters/requiredOffsetParam'
+        - $ref: '#/components/parameters/requiredLimitParam'
+        - $ref: '#/components/parameters/containParam'
+
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/asxExperience'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experiences/{experience-code}/modalities:
+    get:
+      operationId: getAsterixModalityCodes
+      tags:
+        - ASX
+      summary: 'Get ASX modality codes'
+      description: 'Retrieve ASX modality codes for a given experience'
+      parameters:
+        - $ref: '#/components/parameters/experienceCode'
+        - $ref: '#/components/parameters/requiredOffsetParam'
+        - $ref: '#/components/parameters/requiredLimitParam'
+        - $ref: '#/components/parameters/acceptVersionParam1'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/modalityCodes'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /external-experiences:
+    get:
+      operationId: findExternalExperiences
+      tags:
+        - experience external catalog
+      summary: 'Present the list of external experiences'
+      description: 'Retrieve the list of external experiences'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceExternalCatalog'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+
+  /external-experiences/{id}/link:
+    post:
+      tags:
+        - experience external catalog
+      summary: 'Link an external experience to a Nova experience, with optional removal of a previous link'
+      description: |
+        This operation allows linking an external experience to an existing Nova experience.
+        If a previous link exists and is provided, the previous link will be removed before the new link is created.
+        The operation handles errors such as missing resources, invalid permissions, and invalid entity states, returning appropriate HTTP status codes.
+      operationId: linkExperience
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/acceptVersionParam1'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/externalCatalogLinkRequestDto'
+        required: true
+      responses:
+        '200':
+          description: OK - Experience successfully linked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceExternalCatalog'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          description: Unsupported Media Type
+          content:
+            '*/*':
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: [ ]
+
+  /external-experiences/{id}/unlink:
+    post:
+      tags:
+        - experience external catalog
+      summary: 'Remove the link between an external experience and a Nova experience'
+      description: |
+        This operation allows removing link between external experience to an existing Nova experience.
+      operationId: unlinkExperience
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/acceptVersionParam1'
+      responses:
+        '200':
+          description: OK - The external experience link was successfully removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceExternalCatalog'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          description: Unsupported Media Type
+          content:
+            '*/*':
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: [ ]
+
+  /experience-content:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getExperienceContent
+      tags:
+        - experience content
+      summary: 'Get experience content stream'
+      description: 'Get experience content stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceContent'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: sendExperienceContentMessages
+      tags:
+        - experience content
+      summary: 'Send a publish event for multiple experiences (filtered)'
+      description: 'Send a publish event for multiple experiences (filtered)'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the ids of published experiences
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/id"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-content/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam1'
+    get:
+      operationId: getExperienceContentById
+      tags:
+        - experience content
+      summary: 'Get experience content by id'
+      description: 'Get experience content by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceContent'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: sendExperienceContentMessage
+      tags:
+        - experience content
+      summary: 'Send a publish event for a single experience'
+      description: 'Send a publish event for a single experience'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceContent'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+components:
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+
+    # ---------------------------------------
+
+    experienceCreate:
+      type: object
+      required:
+        - metadata
+        - raw
+      properties:
+        metadata:
+          type: object
+          required:
+            - supplier_id
+            - experience_source
+          properties:
+            supplier_id:
+              $ref: "#/components/schemas/supplierId"
+            experience_source:
+              $ref: "#/components/schemas/experienceSource"
+        raw:
+          type: object
+          required:
+            - commercial
+          properties:
+            commercial:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  $ref: "#/components/schemas/title"
+
+    experience:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+        created_by_user:
+          $ref: "#/components/schemas/createdByUser"
+        updated_by_user:
+          $ref: "#/components/schemas/updatedByUser"
+        metadata:
+          $ref: "#/components/schemas/metadata"
+        collection_criteria:
+          $ref: "#/components/schemas/collectionCriteria"
+        legacy_adapter_information:
+          $ref: "#/components/schemas/legacyAdapterInformationV3"
+        raw:
+          $ref: "#/components/schemas/raw"
+        editorial:
+          $ref: "#/components/schemas/editorial"
+
+    metadata:
+      allOf:
+        - $ref: "#/components/schemas/metadataCreate"
+        - $ref: "#/components/schemas/metadataUpdate"
+        - type: object
+          properties:
+            reference_code:
+              $ref: "#/components/schemas/referenceCode"
+            global_status:
+              $ref: "#/components/schemas/globalStatus"
+            imported:
+              $ref: "#/components/schemas/imported"
+
+    metadataCreate:
+      type: object
+      properties:
+        reference_code:
+          $ref: "#/components/schemas/referenceCode"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        experience_source:
+          $ref: "#/components/schemas/experienceSource"
+
+    metadataUpdate:
+      type: object
+      properties:
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        external_reference_code:
+          $ref: "#/components/schemas/externalReferenceCode"
+        curation_level:
+          $ref: "#/components/schemas/curationLevel"
+        priority:
+          $ref: "#/components/schemas/priority"
+
+    collectionCriteria:
+      description: "TUI collection brand information details"
+      properties:
+        exceptional_experiences:
+          type: string
+          description: Exceptional experiences details
+          example: Discover unique and unforgettable experiences tailored for you
+        created_with_care:
+          type: string
+          description: Experiences created with care details
+          example: Handpicked selections curated with attention to detail and passion
+        best_value_guaranteed:
+          type: string
+          description: Best value guaranteed experiences details
+          example: Find the best deals and value for your money
+
+    legacyAdapterInformation:
+      type: "object"
+      properties:
+        asx_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/asxCode"
+
+    legacyAdapterInformationV3:
+      type: "object"
+      properties:
+        asx_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/asxCodeV3"
+
+    asxCodeV3:
+      type: "object"
+      properties:
+        service_code:
+          $ref: "#/components/schemas/asterixServiceCode"
+        modality_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/asterixModalityCode"
+
+    asxCode:
+      type: "object"
+      properties:
+        code:
+          $ref: "#/components/schemas/asterixServiceCode"
+        modality_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/asterixModalityCode"
+
+    raw:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: "Old raw id, needed for backward compatibility only"
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e6
+        flow_code:
+          $ref: '#/components/schemas/flowCode'
+        status_code:
+          $ref: '#/components/schemas/statusCode'
+        functional:
+          $ref: '#/components/schemas/functionalV3'
+        commercial:
+          $ref: '#/components/schemas/commercialV3'
+        media:
+          $ref: '#/components/schemas/rawMediaV3'
+        auto_publish_fields:
+          $ref: '#/components/schemas/autoPublishFields'
+        manual_publish_fields:
+          $ref: '#/components/schemas/manualPublishFields'
+
+
+    editorial:
+      type: object
+      properties:
+        media_content:
+          $ref: "#/components/schemas/mediaDistribution"
+        translations_content:
+          type: array
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/translationDistribution"
+
+    mediaDistribution:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        status:
+          $ref: '#/components/schemas/distributionStatus'
+        distribution_date:
+          $ref: '#/components/schemas/distributionDate'
+
+    translationDistribution:
+      allOf:
+        - $ref: '#/components/schemas/mediaDistribution'
+        - type: object
+          properties:
+            language_code:
+              $ref: '#/components/schemas/languageCode'
+
+    functionalV3:
+      type: object
+      description: Functional Information
+      properties:
+        premades:
+          $ref: '#/components/schemas/premades'
+        place:
+          $ref: '#/components/schemas/place'
+        booking_information:
+          $ref: '#/components/schemas/bookingInformationV3'
+
+    commercialV3:
+      type: object
+      properties:
+        title:
+          $ref: "#/components/schemas/title"
+        description:
+          $ref: "#/components/schemas/description"
+        additional_description:
+          $ref: "#/components/schemas/additionalDescription"
+        voucher_information:
+          $ref: "#/components/schemas/infoVoucher"
+        meeting_point_details:
+          $ref: "#/components/schemas/meetingPointDetails"
+        custom_highlights:
+          type: array
+          description: "Custom Highlights"
+          items:
+            $ref: "#/components/schemas/customHighlights"
+        custom_included:
+          type: array
+          description: "Custom Included"
+          items:
+            $ref: "#/components/schemas/customIncluded"
+        custom_non_included:
+          type: array
+          description: "Custom Non Included"
+          items:
+            $ref: "#/components/schemas/customNonIncluded"
+        custom_important_information:
+          type: array
+          description: "Custom Important Information"
+          items:
+            $ref: "#/components/schemas/customImportantInformation"
+
+    premades:
+      properties:
+        highlights:
+          $ref: "#/components/schemas/highlights"
+        included:
+          $ref: "#/components/schemas/included"
+        non_included:
+          $ref: "#/components/schemas/nonIncluded"
+        important_information:
+          $ref: "#/components/schemas/importantInformation"
+        brand:
+          $ref: "#/components/schemas/brand"
+        promotional:
+          $ref: "#/components/schemas/promotional"
+        classification:
+          $ref: "#/components/schemas/classification"
+        features:
+          $ref: "#/components/schemas/features"
+        durations:
+          $ref: "#/components/schemas/durations"
+        categories:
+          $ref: "#/components/schemas/categories"
+        interests:
+          $ref: "#/components/schemas/interests"
+        markets:
+          $ref: "#/components/schemas/markets"
+
+    place:
+      properties:
+        location:
+          $ref: "#/components/schemas/locationV3"
+        additional_cities:
+          $ref: "#/components/schemas/additionalCities"
+        venues:
+          $ref: "#/components/schemas/venues"
+
+    bookingInformationV3:
+      type: object
+      properties:
+        voucher_type:
+          $ref: "#/components/schemas/voucherType"
+        emergency_phone_code:
+          $ref: "#/components/schemas/countryCallingCode"
+        emergency_phone_number:
+          $ref: "#/components/schemas/phoneNumber"
+
+    rawImageV3:
+      type: object
+      properties:
+        file_name:
+          $ref: '#/components/schemas/fileName'
+        preview_url:
+          $ref: '#/components/schemas/previewUrl'
+        visualization_order:
+          $ref: '#/components/schemas/visualizationOrder'
+        image_type:
+          $ref: '#/components/schemas/imageType'
+        status:
+          $ref: "#/components/schemas/imageStatus"
+        batch_id:
+          $ref: "#/components/schemas/batchId"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+      required:
+        - file_name
+        - preview_url
+    rawMediaV3:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/rawImageV3'
+
+    commercial:
+      type: object
+      description: "Commercial information "
+      required:
+        - title
+      properties:
+        title:
+          $ref: "#/components/schemas/title"
+        description:
+          $ref: "#/components/schemas/description"
+        additional_description:
+          $ref: "#/components/schemas/additionalDescription"
+        info_voucher:
+          $ref: "#/components/schemas/infoVoucher"
+        meeting_point_details:
+          $ref: "#/components/schemas/meetingPointDetails"
+        custom_highlights:
+          type: array
+          description: "Custom Highlights"
+          items:
+            $ref: "#/components/schemas/customHighlights"
+        custom_included:
+          type: array
+          description: "Custom Included"
+          items:
+            $ref: "#/components/schemas/customIncluded"
+        custom_non_included:
+          type: array
+          description: "Custom NonIncluded"
+          items:
+            $ref: "#/components/schemas/customNonIncluded"
+        custom_important_information:
+          type: array
+          description: "Custom Important Information"
+          items:
+            $ref: "#/components/schemas/customImportantInformation"
+
+    customIncluded:
+      type: object
+      required:
+        - name
+      properties:
+        code:
+          description: Internal code for includes
+          type: string
+          example: 'local-yhwywrsp5b'
+        name:
+          description: Name of the includes
+          type: string
+          example: 'Entrance fees'
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+
+    customNonIncluded:
+      type: object
+      required:
+        - name
+      properties:
+        code:
+          description: Internal code for non includes
+          type: string
+          example: 'local-yhwywrsp5c'
+        name:
+          description: Name of the non includes
+          type: string
+          example: 'White shoes only allowed'
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+
+    customHighlights:
+      type: object
+      required:
+        - name
+      properties:
+        code:
+          description: Internal code used for custom highlights
+          type: string
+          example: 'local-yhwywrsp5a'
+        name:
+          description: Custom highlight's name
+          type: string
+          example: 'Lunch menu to keep you going all the day'
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+
+    customImportantInformation:
+      type: object
+      required:
+        - name
+      properties:
+        code:
+          description: Internal code for "things to remember"
+          type: string
+          example: 'local-yhwywrsp5d'
+        name:
+          description: Important information's name
+          type: string
+          example: 'Copy of your password'
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+
+    curationLevel:
+      type: string
+      enum:
+        - DEDICATED
+        - FULL_CURATION
+        - SOFT_CURATION
+        - SELF_MANAGEMENT
+        - TO_BE_DEDICATED
+        - TO_BE_FULL_CURATED
+        - TO_BE_SOFT_CURATED
+        - TO_BE_SELF_MANAGED
+
+    countryCallingCode:
+      type: string
+      example: "+34"
+      description: Country calling code
+    phoneNumber:
+      type: string
+      example: "600543431"
+      description: Phone number
+    imported:
+      type: boolean
+      example: true
+      description: "Flag for whether the distribution content was created by import"
+    priority:
+      type: integer
+      minimum: 0
+      description: "Priority of the content, with a minimum value of 0."
+    autoPublishFields:
+      type: boolean
+      example: false
+      description: "Flag for whether the raw should be auto published"
+    manualPublishFields:
+      type: boolean
+      example: false
+      description: "Flag for whether the raw should be manually published"
+    # -------------------------------------------
+
+
+
+    title:
+      type: string
+      description: "Experience title"
+      example : "Navigli Canals of Milan private walking tour with a local guide"
+    description:
+      type: string
+      description: "Experience description"
+      example : "This experience is part of STEP, a selection of walking tours designed as a way to discover a destination in more depth, finding hidden gems, meeting the locals and exploring off the beaten path"
+    secondDescription:
+      type: string
+      description: Translation second description.
+      example: "Translation second description"
+      format: string
+    thirdDescription:
+      type: string
+      description: Translation third description.
+      example: "Translation third description"
+      format: string
+    additionalDescription:
+      type: string
+      description: "Experience additional description"
+      example : "Walking through the park"
+    highlights:
+      type: array
+      description: "Highlights"
+      items:
+        type: string
+        example: LUNCHMENU
+    included:
+      type: array
+      description: "What's included"
+      items:
+        type: string
+        example: ENTRANCEFEES
+    nonIncluded:
+      type: array
+      description: "What's non included"
+      items:
+        type: string
+        example: TRANSPORT
+    importantInformation:
+      type: array
+      description: "What to remember"
+      items:
+        type: string
+        example: COPYPASS
+    brand:
+      type: string
+      description: "Brand"
+      example: BRAND_NONE
+    promotional:
+      type: string
+      description: "Promotional"
+      example: PROMOTIONAL_NONE
+    classification:
+      type: string
+      description: "Classification"
+      example: OWN_OFFER_TUI_DESIGNED_OPERATED
+    features:
+      type: array
+      description: "Features"
+      items:
+        type: string
+      example:
+        - FEATURE_FREE_CANCELLATION
+        - FEATURE_INSTANT_CONFIRMATION
+    durations:
+      type: array
+      description: "Durations"
+      items:
+        type: string
+      example:
+        - DURATION_6_8
+        - DURATION_2_4
+    additionalServices:
+      type: array
+      description: "Additional services"
+      items:
+        type: string
+        example: FREE_CANCELLATION
+    categories:
+      type: array
+      description: "Experience categories"
+      items:
+        type: string
+        example: GUIDED_TOURS
+    interests:
+      type: array
+      description: "Experience interests"
+      items:
+        type: string
+        example: SHOPPING
+    markets:
+      type: array
+      description: "List of experience markets codes"
+      items:
+        type: string
+        example: "es-2c"
+
+    additionalCities:
+      type: array
+      description: "List of experience additional cities codes"
+      items:
+        type: string
+        example: "ZAG"
+
+    venues:
+      type: array
+      description: "List of experience venue codes"
+      items:
+        type: string
+        example: "FTBLWANDA"
+
+    infoVoucher:
+      type: string
+      example: "Info voucher"
+
+    meetingPointDetails:
+      type: string
+      example: "Meeting point details"
+
+    option:
+      type: object
+      description: "Option"
+      required:
+        - code
+        - description
+      properties:
+        code:
+          type: string
+          description: Option code
+          example: "GENERAL"
+        description:
+          type: string
+          example: "Full day"
+
+    functionalRaw:
+      type: object
+      description: "Functional information "
+
+      properties:
+        asterix_id:
+          $ref: "#/components/schemas/asterixId"
+        external_reference_code:
+          $ref: "#/components/schemas/externalReferenceCode"
+        core_id:
+          $ref: "#/components/schemas/coreId"
+        options:
+          type: array
+          description: "Options"
+          items:
+            $ref: "#/components/schemas/option"
+        highlights:
+          $ref: "#/components/schemas/highlights"
+        included:
+          $ref: "#/components/schemas/included"
+        non_included:
+          $ref: "#/components/schemas/nonIncluded"
+        important_information:
+          $ref: "#/components/schemas/importantInformation"
+        additional_services:
+          $ref: "#/components/schemas/additionalServices"
+        categories:
+          $ref: "#/components/schemas/categories"
+        interests:
+          $ref: "#/components/schemas/interests"
+        location:
+          $ref: "#/components/schemas/location"
+        markets:
+          $ref: "#/components/schemas/markets"
+        additional_cities:
+          $ref: "#/components/schemas/additionalCities"
+        booking_information:
+          $ref: "#/components/schemas/bookingInformation"
+        venues:
+          $ref: "#/components/schemas/venues"
+    commercialRaw:
+      type: object
+      description: "Commercial information "
+      required:
+        - title
+      properties:
+        title:
+          $ref: "#/components/schemas/title"
+        description:
+          $ref: "#/components/schemas/description"
+        additional_description:
+          $ref: "#/components/schemas/additionalDescription"
+        info_voucher:
+          $ref: "#/components/schemas/infoVoucher"
+        meeting_point_details:
+          $ref: "#/components/schemas/meetingPointDetails"
+        custom_highlights:
+          type: array
+          description: "Custom Highlights"
+          items:
+            $ref: "#/components/schemas/customHighlights"
+        custom_included:
+          type: array
+          description: "Custom Included"
+          items:
+            $ref: "#/components/schemas/customIncluded"
+        custom_non_included:
+          type: array
+          description: "Custom NonIncluded"
+          items:
+            $ref: "#/components/schemas/customNonIncluded"
+        custom_important_information:
+          type: array
+          description: "Custom Important Information"
+          items:
+            $ref: "#/components/schemas/customImportantInformation"
+
+    rawElement:
+      type: object
+      required:
+        - commercial
+        - status_code
+        - flow_code
+        - experience_id
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        functional:
+          $ref: "#/components/schemas/functionalRaw"
+        commercial:
+          $ref: "#/components/schemas/commercialRaw"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        collection_criteria:
+          $ref: "#/components/schemas/collectionCriteria"
+        media:
+          $ref: "#/components/schemas/rawMedia"
+        legacy_adapter_information:
+          $ref: "#/components/schemas/rawLegacyAdapterInformation"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    rawSnapshot:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: "6ef573e9-e0fc-4185-886b-1b28a64381e9"
+          description: Experience id
+        snapshot_date:
+          $ref: "#/components/schemas/creationDate"
+        version_id:
+          type: string
+          example: "v1"
+          description: ID version
+        user_version:
+          type: string
+          example: "marco.rossi@tui.com"
+          description: User version
+        raw:
+          $ref: '#/components/schemas/rawElement'
+
+    snapshot:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        reference_code:
+          $ref: "#/components/schemas/referenceCode"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        version_id:
+          $ref: "#/components/schemas/versionId"
+        version_status:
+          $ref: "#/components/schemas/versionStatus"
+        user_version:
+          $ref: "#/components/schemas/user"
+        additional_notes:
+          type: string
+          example: "versioning notes"
+          description: Versioning notes
+        experience_commercial_information:
+          $ref: '#/components/schemas/experienceCommercialInformation'
+        experience_functional_information:
+          $ref: '#/components/schemas/experienceFunctionallInformation'
+
+    distributionContent:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        reference_code:
+          $ref: "#/components/schemas/referenceCode"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        experience_source:
+          $ref: "#/components/schemas/experienceSource"
+        media_content:
+          $ref: "#/components/schemas/mediaContent"
+        translation_content_list:
+          type: array
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/translationContent"
+        global_status:
+          $ref: "#/components/schemas/globalStatus"
+        curation_level:
+          type: string
+          enum:
+            - DEDICATED
+            - FULL_CURATION
+            - SOFT_CURATION
+            - SELF_MANAGEMENT
+            - TO_BE_DEDICATED
+            - TO_BE_FULL_CURATED
+            - TO_BE_SOFT_CURATED
+            - TO_BE_SELF_MANAGED
+          description: "The level of curation applied to the content"
+        priority:
+          type: integer
+          minimum: 0
+          description: "Priority of the content, with a minimum value of 0."
+        imported:
+          type: boolean
+          example: true
+          description: "Flag for whether the distribution content was created by import"
+        operational_content:
+          $ref: "#/components/schemas/operationalContent"
+
+    generalInformation:
+      type: object
+      properties:
+        external_reference_code:
+          $ref: "#/components/schemas/externalReferenceCode"
+        categories:
+          $ref: "#/components/schemas/categories"
+        interests:
+          $ref: "#/components/schemas/interests"
+        markets:
+          $ref: "#/components/schemas/markets"
+        features:
+          $ref: "#/components/schemas/additionalServices"
+        duration:
+          $ref: "#/components/schemas/additionalServices"
+        promotional_option:
+          $ref: "#/components/schemas/additionalServices"
+        product_brand:
+          $ref: "#/components/schemas/additionalServices"
+        emergency_contact_number:
+          $ref: "#/components/schemas/contactNumber"
+        voucher_type:
+          $ref: "#/components/schemas/voucherType"
+        location:
+          $ref: '#/components/schemas/location'
+        additional_cities:
+          $ref: "#/components/schemas/additionalCities"
+        venues:
+          $ref: "#/components/schemas/venues"
+
+    experienceContent:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        experience_source:
+          $ref: "#/components/schemas/experienceSource"
+        general_information:
+          $ref: '#/components/schemas/generalInformation'
+        media:
+          $ref: '#/components/schemas/media'
+        translations:
+          type: array
+          description: "Translations"
+          items:
+            $ref: '#/components/schemas/experienceContentTranslation'
+        version:
+          type: integer
+          format: int64
+          description: "Entity version"
+      required:
+        - id
+
+    mediaContent:
+      type: object
+      readOnly: true
+      properties:
+        distribution_date:
+          $ref: "#/components/schemas/distributionDate"
+        id:
+          $ref: "#/components/schemas/id"
+        distribution_status:
+          $ref: "#/components/schemas/distributionStatus"
+
+    image:
+      type: object
+      properties:
+        file_name:
+          $ref: '#/components/schemas/fileName'
+        preview_url:
+          $ref: '#/components/schemas/previewUrl'
+        visualization_order:
+          $ref: '#/components/schemas/visualizationOrder'
+        image_type:
+          $ref: '#/components/schemas/imageType'
+    media:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/image'
+
+    operationalContent:
+      type: object
+      readOnly: true
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        distribution_status:
+          $ref: "#/components/schemas/distributionStatus"
+        distribution_date:
+          $ref: "#/components/schemas/distributionDate"
+
+    rawMedia:
+      type: "object"
+      properties:
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/rawImage"
+    rawImage:
+      type: "object"
+      properties:
+        file_name:
+          $ref: "#/components/schemas/fileName"
+        preview_url:
+          $ref: "#/components/schemas/previewUrl"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        image_type:
+          $ref: "#/components/schemas/imageType"
+        status:
+          $ref: "#/components/schemas/imageStatus"
+        batch_id:
+          $ref: "#/components/schemas/batchId"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+    experienceContentImage:
+      type: "object"
+      properties:
+        file_name:
+          $ref: "#/components/schemas/fileName"
+        preview_url:
+          $ref: "#/components/schemas/previewUrl"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        image_type:
+          $ref: "#/components/schemas/imageType"
+        status:
+          $ref: "#/components/schemas/imageStatus"
+        batch_id:
+          $ref: "#/components/schemas/batchId"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    rawLegacyAdapterInformation:
+      type: "object"
+      properties:
+        asx_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/rawAsterixAdapterInformation"
+
+    rawAsterixAdapterInformation:
+      type: "object"
+      properties:
+        code:
+          $ref: "#/components/schemas/asterixServiceCode"
+        modality_codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/asterixModalityCode"
+
+    translationContent:
+      required:
+        - language_code
+      type: object
+      readOnly: true
+      properties:
+        distribution_date:
+          $ref: "#/components/schemas/distributionDate"
+        id:
+          $ref: "#/components/schemas/id"
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+        distribution_status:
+          $ref: "#/components/schemas/distributionStatus"
+
+    experienceCommercialInformation:
+      type: object
+      properties:
+        experience_media:
+          $ref: "#/components/schemas/experienceMedia"
+        translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/translation"
+
+    experienceMedia:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/image"
+
+    translation:
+      type: object
+      properties:
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+        experience_translation:
+          $ref: "#/components/schemas/experienceTranslation"
+        customs:
+          $ref: "#/components/schemas/customTranslations"
+        asx_service_code_translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/asxServiceCodeTranslation"
+        option_translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/optionTranslation"
+
+    optionTranslation:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        optionId:
+          type: string
+          format: uuid
+          description: UUID of the option
+          example: "5db6b730-6bb7-441a-8ff5-4ab482c73659"
+        asx_service_code_translation_id:
+          type: string
+          format: uuid
+          description: UUID of the ASX service code translation
+          example: "619f70aa-11c0-4a89-8e1c-9ce54996b657"
+        asx_modality_code:
+          type: string
+          description: Code of the ASX modality
+          example: "MOD123"
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        name:
+          $ref: "#/components/schemas/name"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    asxServiceCodeTranslation:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        code:
+          type: string
+          description: Code of the ASX
+          example: "ASX123"
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        name:
+          $ref: "#/components/schemas/name"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceTranslation:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        title:
+          $ref: "#/components/schemas/title"
+        text1:
+          $ref: "#/components/schemas/description"
+        text2:
+          $ref: "#/components/schemas/secondDescription"
+        text3:
+          $ref: "#/components/schemas/thirdDescription"
+        seo_title:
+          $ref: "#/components/schemas/title"
+        seo_description:
+          $ref: "#/components/schemas/description"
+        info_voucher:
+          $ref: "#/components/schemas/infoVoucher"
+        meeting_point_details:
+          $ref: "#/components/schemas/meetingPointDetails"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        curation_quality:
+          $ref: "#/components/schemas/curationQuality"
+        name:
+          $ref: "#/components/schemas/name"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    customTranslations:
+      type: object
+      properties:
+        custom_highlights:
+          type: array
+          items:
+            $ref: "#/components/schemas/customContent"
+        custom_included:
+          type: array
+          items:
+            $ref: "#/components/schemas/customContent"
+        custom_non_included:
+          type: array
+          items:
+            $ref: "#/components/schemas/customContent"
+        custom_important_information:
+          type: array
+          items:
+            $ref: "#/components/schemas/customContent"
+
+    experienceContentTranslation:
+      type: object
+      properties:
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+        title:
+          $ref: "#/components/schemas/title"
+        text1:
+          $ref: "#/components/schemas/description"
+        text2:
+          $ref: "#/components/schemas/secondDescription"
+        text3:
+          $ref: "#/components/schemas/thirdDescription"
+        seo_title:
+          $ref: "#/components/schemas/title"
+        seo_description:
+          $ref: "#/components/schemas/description"
+        info_voucher:
+          $ref: "#/components/schemas/infoVoucher"
+        meeting_point_details:
+          $ref: "#/components/schemas/meetingPointDetails"
+        description:
+          $ref: "#/components/schemas/description"
+        highlights:
+          $ref: "#/components/schemas/highlights"
+        included:
+          $ref: "#/components/schemas/included"
+        non_included:
+          $ref: "#/components/schemas/nonIncluded"
+        important_information:
+          $ref: "#/components/schemas/importantInformation"
+        booking_questions:
+          $ref: "#/components/schemas/bookingQuestion"
+        option_translations:
+          type: array
+          description: "Option translations associated with the experience"
+          items:
+            $ref: "#/components/schemas/optionTranslation"
+        asx_service_code_translations:
+          type: array
+          description: "ASX service code translations associated with the experience"
+          items:
+            $ref: '#/components/schemas/asxServiceCodeTranslation'
+
+    customContent:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        code:
+          $ref: "#/components/schemas/code"
+        name:
+          $ref: "#/components/schemas/name"
+        description:
+          $ref: "#/components/schemas/description"
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+
+    experienceFunctionallInformation:
+      type: object
+      properties:
+        highlights:
+          $ref: "#/components/schemas/functionalItem"
+        included:
+          $ref: "#/components/schemas/functionalItem"
+        excluded:
+          $ref: "#/components/schemas/functionalItem"
+        important_information:
+          $ref: "#/components/schemas/functionalItem"
+        additional_services:
+          $ref: "#/components/schemas/functionalItem"
+        categories:
+          $ref: "#/components/schemas/functionalItem"
+        interests:
+          $ref: "#/components/schemas/functionalItem"
+        markets:
+          $ref: "#/components/schemas/functionalItem"
+        additional_cities:
+          $ref: "#/components/schemas/functionalItem"
+        venues:
+          $ref: "#/components/schemas/functionalItem"
+        booking_information:
+          $ref: "#/components/schemas/experienceBookingInformation"
+        booking_questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/bookingQuestion"
+        location:
+          $ref: "#/components/schemas/experienceLocation"
+        external_reference_code:
+          $ref: "#/components/schemas/externalReferenceCode"
+
+    functionalItem:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        codes:
+          type: array
+          items:
+            $ref: "#/components/schemas/code"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceBookingInformation:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        information:
+          $ref: "#/components/schemas/bookingInformation"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    bookingInformation:
+      type: object
+      properties:
+        voucher_type:
+          $ref: "#/components/schemas/voucherType"
+        emergency_contact_number:
+          $ref: "#/components/schemas/contactNumber"
+
+    contactNumber:
+      type: object
+      properties:
+        country_calling_code:
+          type: string
+          example: "+34"
+          description: country calling code
+        number:
+          type: string
+          example: "600543431"
+          description: phone number
+      required:
+        - country_calling_code
+        - number
+
+    locationV3:
+      type: object
+      properties:
+        latitude:
+          type: string
+          description: Latitude is the measurement of distance north or south of the Equator.
+          example: "39.573696612860154"
+        longitude:
+          type: string
+          description: Longitude is the measurement east or west of the prime meridian.
+          example: "2.643315064536297"
+        altitude:
+          type: string
+          description: Altitude is the measurement of the height in relation to the sea level
+          example: "10.0"
+        address:
+          type: string
+          description: Direction of the address
+          example: CL Veracruz. 16. 4B
+        city:
+          type: string
+          description: Internal TUI Code of cities from masterdata
+          example: DBV
+        country:
+          type: string
+          description: Code from masterdata ISO for a country
+          example: ES
+        country_name:
+          type: string
+          description: Country name for backward compatibility
+          example: Spain
+        city_name:
+          type: string
+          description: City name
+          example: New York
+
+    location:
+      type: object
+      properties:
+        option_id:
+          $ref: "#/components/schemas/optionId"
+        latitude:
+          type: string
+          description: Latitude is the measurement of distance north or south of the Equator.
+          example: "39.573696612860154"
+        longitude:
+          type: string
+          description: Longitude is the measurement east or west of the prime meridian.
+          example: "2.643315064536297"
+        altitude:
+          type: string
+          description: Altitude is the measurement of the height in relation to the sea level
+          example: "10.0"
+        name:
+          type: string
+          description: Name of the location
+          example: New York City
+        address:
+          $ref: "#/components/schemas/address"
+
+    experienceLocation:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/id"
+            creation_date:
+              $ref: "#/components/schemas/creationDate"
+            updated_date:
+              $ref: "#/components/schemas/updatedDate"
+        - $ref: '#/components/schemas/location'
+
+    address:
+      type: object
+      properties:
+        direction:
+          type: string
+          description: Direction of the address
+          example: CL Veracruz. 16. 4B
+        city:
+          type: string
+          description: Internal TUI Code of cities
+          example: Mexico City
+        postal_code:
+          type: string
+          description: Postal code of the address
+          example: "91709"
+        country:
+          type: string
+          description: Code from masterdata ISO for a country
+          example: ESP
+
+    bookingQuestion:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        option_id:
+          $ref: "#/components/schemas/optionId"
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/question"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    question:
+      type: object
+      properties:
+        code:
+          $ref: "#/components/schemas/code"
+        is_mandatory:
+          type: boolean
+          example: true
+          description: "Flag for whether the booking question is mandatory"
+        is_apply_all:
+          type: boolean
+          example: false
+          description: "Flag for whether the booking question applies to all passengers"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+
+    import:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        status:
+          $ref: "#/components/schemas/importStatus"
+        originalFileLocation:
+          type: string
+          description: Original file location on S3 or Local directory
+          example: "somebucket/imports/6ef573e9-e0fc-4185-886b-1b28a64381e9/original.csv"
+        reportFileLocation:
+          type: string
+          description: Report file location on S3 or Local directory
+          example: "somebucket/imports/6ef573e9-e0fc-4185-886b-1b28a64381e9/report.csv"
+        errorReportFileLocation:
+          type: string
+          description: Error report file location on S3 or Local directory
+          example: "somebucket/imports/6ef573e9-e0fc-4185-886b-1b28a64381e9/error_report.csv"
+        originalFileUrl:
+          type: string
+          description: Original file download url
+          example: "http://serverurl/somebucket/imports/5a0d63b8-4d68-47e2-9ee9-5e2fe19e9955/Shorex%20extract%201%20row.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=xx&X-Amz-SignedHeaders=host&X-Amz-Expires=172800&X-Amz-Credential=xx&X-Amz-Signature=xx"
+        reportFileUrl:
+          type: string
+          description: Report file download url
+          example: "http://serverurl/somebucket/imports/5a0d63b8-4d68-47e2-9ee9-5e2fe19e9955/Shorex%20extract%201%20row.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=xx&X-Amz-SignedHeaders=host&X-Amz-Expires=172800&X-Amz-Credential=xx&X-Amz-Signature=xx"
+        errorReportFileUrl:
+          type: string
+          description: Error report file download url
+          example: "http://serverurl/somebucket/imports/5a0d63b8-4d68-47e2-9ee9-5e2fe19e9955/Shorex%20extract%201%20row.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=xx&X-Amz-SignedHeaders=host&X-Amz-Expires=172800&X-Amz-Credential=xx&X-Amz-Signature=xx"
+        storageType:
+          $ref: "#/components/schemas/storageType"
+        errorMessage:
+          type: string
+          description: Error during importing file
+          example: "File header does not contain mandatory fields[...]"
+        endDate:
+          $ref: "#/components/schemas/creationDate"
+        importHeaderMap:
+          type: object
+          description: Map relation between header and its position
+          additionalProperties:
+            type: integer
+        serverUrl:
+          type: string
+          description: Server url
+          example: "http://localhost:10300"
+        numberProcessed:
+          type: integer
+          description: Number of processed rows
+          example: 10
+        createdDate:
+          $ref: "#/components/schemas/creationDate"
+        updatedDate:
+          $ref: "#/components/schemas/updatedDate"
+    asxExperience:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique code identifier for an ASX experience
+          example: "E-AD0-ALQMATCOR"
+        incoming_office:
+          type: string
+          description: Identifier for the incoming office
+          example: "5258"
+        default_name:
+          type: string
+          description: ASX experience default name
+          example: "Rental Ski equipment."
+        reference_code:
+          type: string
+          description: Nova experience reference code in case the ASX code already linked to a nova experience
+          example: "EXP00001"
+    modalityCodes:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Modality code
+          example: "SUB12POL"
+        experience_id:
+          type: string
+          description: Unique code identifier for an ASX experience
+          example: "E-AD0-ALQMATCOR"
+        default_name:
+          type: string
+          description: Default name of the modality in ASX
+          example: "Safaris ticket only"
+        linked:
+          type: boolean
+          description: Indicates if the modality is linked with an experience in NOVA
+          example: false
+
+    languageCode:
+      type: string
+      description : Language code ISO 639-2
+      example: en
+
+    statusCode:
+      type: string
+      enum: [
+        IN_CREATION,
+        BEING_CURATED,
+        UP_TO_DATE,
+        IN_REVIEW,
+        SENT_TO_REVIEW,
+        COMPLETED
+      ]
+      readOnly: true
+
+    flowCode:
+      type: string
+      enum: [
+        BASE
+      ]
+
+    distributionStatus:
+      type: string
+      enum: [
+        NOT_READY,
+        READY,
+        SENT,
+        UNPUBLISHED
+      ]
+      default: NOT_READY
+
+    globalStatus:
+      type: string
+      readOnly: true
+      enum: [
+        NOT_READY,
+        PUBLISHED,
+        UNPUBLISHED
+      ]
+      default: NOT_READY
+
+    referenceCode:
+      type: string
+      minLength: 10
+      maxLength: 10
+      readOnly: true
+      description: Reference code
+      example: EXP0002301
+    experienceSource:
+      type: string
+      enum: [
+        SP,
+        NOVA,
+        SIP,
+        ASX,
+        NOVANET,
+        INTERNAL
+      ]
+      default: NOVA
+    supplierId:
+      type: string
+      format: uuid
+      description: Supplier internal unique code
+      example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+    id:
+      type: string
+      format: uuid
+      readOnly: true
+      description : Internal id
+      example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+    optionId:
+      type: string
+      format: uuid
+      description : Option id
+      example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+    experienceId:
+      type: string
+      format: uuid
+      description : Internal id of the experience
+      example: c8ff6bf2-9c04-42d5-996f-4e23636769f4
+    asterixId:
+      type: string
+      description : Experience identification in Asterix
+      example: 5896-absgddds
+    externalReferenceCode:
+      type: string
+      description: External reference code for the functional raw entity
+      example: CVG675-90PLJ89012
+    coreId:
+      type: string
+      description : Experience identification in the Core
+      example: "58896-325"
+    user:
+      type: string
+      example: "marco.rossi@tui.com"
+      description: User version
+    creationDate:
+      readOnly: true
+      type: string
+      description: Creation date
+      example: "2011-05-20T12:49:08.87914Z"
+      format: date-time
+    updatedDate:
+      readOnly: true
+      type: string
+      description: Last updated  date
+      example: "2011-05-20T12:49:08.87914Z"
+      format: date-time
+    createdByUser:
+      type: string
+      example: "marco.rossi"
+      description: Created By user
+    updatedByUser:
+      type: string
+      example: "marco.pantani"
+      description: Updated By user
+    distributionDate:
+      readOnly: true
+      type: string
+      description: Date when sent to distribution
+      example: "2011-05-20T12:49:08.87914Z"
+      format: date-time
+    versionStatus:
+      type: string
+      example: "ARCHIVED"
+      description: Version status
+      enum: [ARCHIVED, ACTIVE]
+    versionId:
+      type: string
+      example: "v1"
+      description: ID version
+    visualizationOrder:
+      description: Visualization Order
+      type: number
+      example: 1
+    batchId:
+      type: string
+      format: uuid
+      description : Unique identifier for a batch of raw images
+      example: 3634f03e-7c94-444b-bad3-cb815c2e3b6f
+    imageStatus:
+      type: string
+      enum:
+        - MEDIA_PENDING
+        - MEDIA_OK
+      description: "Status of the DAM linking process"
+      example: "MEDIA_OK"
+    fileName:
+      type: string
+      example: "boat_experience_image"
+      description: File name of the image
+    previewUrl:
+      type: string
+      example: "https://fotoware.com/images/boat_experience_image.jpg"
+      description: Preview URL of the image
+    imageType:
+      type: string
+      enum: [COVER, GALLERY]
+    curationQuality:
+      type: string
+      example: "TBD"
+      description: Curation quality
+    name:
+      type: string
+      example: "Entity name"
+      description: Name of the entity
+    code:
+      type: string
+      example: "LUNCH"
+      description: Code of the trnalsatable entity
+    automaticTranslation:
+      type: boolean
+      example: true
+      description: Flag for automatic translation
+
+    voucherType:
+      type: string
+      example: "MOBILE"
+      description: "Type of the voucher"
+      enum: [MOBILE, PRINTED]
+
+    storageType:
+      type: string
+      example: "LOCAL"
+      description: "Type of result files storage"
+      enum: [ S3, LOCAL ]
+    importStatus:
+      type: string
+      example: "RUNNING"
+      description: "Status of import"
+      enum: [ RUNNING, FINISHED, ERROR ]
+
+    asterixServiceCode:
+      type: string
+      description: Service identification in Asterix
+      example: E-AD0-SVC001
+
+    asterixModalityCode:
+      type: string
+      description : Modality identification in Asterix
+      example: MOD001
+
+    experienceExternalCatalog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the catalog entry
+          example: "6ef573e9-e0fc-4185-886b-1b28a64381e9"
+        sip_id:
+          type: string
+          description: Unique Identifier of the experience in SIP with the prefix e.g. 'bokun-' added
+          example: "bokun-123456"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        sip_name:
+          type: string
+          description: Name of the experience as it appears in SIP
+          example: Sunset Cruise
+        linked:
+          type: boolean
+          description: Indicates if the SIP experience is linked with an experience in NOVA
+          example: false
+        reference_code:
+          $ref: "#/components/schemas/referenceCode"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    externalCatalogLinkRequestDto:
+      required:
+        - experience_id
+        - reference_code
+      type: object
+      properties:
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        reference_code:
+          type: string
+          description: NOVA's reference code of the experience
+          example: EXP000251
+        previous_link_id_to_remove:
+          type: string
+          description: "The ID of the previous link to remove (if any)"
+          example: "5f73fa8c-2c7c-41b1-91c9-34fa4c888df9"
+          format: uuid
+
+    translationSnapshot:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "UUID of the snapshot"
+          example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        creation_date:
+          type: string
+          format: date-time
+          description: "Date when the snapshot was created"
+          example: "2023-10-05T12:34:56.789Z"
+        user_version:
+          type: string
+          description: "User version"
+          example: "test@tui.com"
+        modified_by_user:
+          type: string
+          description: "User who last modified this snapshot"
+          example: "john.doe@tui.com"
+        version_status:
+          type: string
+          enum:
+            - ARCHIVED
+            - ACTIVE
+            - DRAFT
+          description: "Status of the version"
+          example: "ARCHIVED"
+        language_code:
+          type: string
+          description: "Language code for the translation"
+          example: "en"
+        flow_code:
+          type: string
+          description: "Code of the flow of the translation"
+          example: "CURATION"
+        status_code:
+          type: string
+          description: "Code of the status of the translation"
+          example: "TO_BE_EDITED"
+        update_date:
+          type: string
+          format: date-time
+          description: "Date when the translation was last updated"
+          example: "2023-10-10T08:22:33.456Z"
+
+    mediaSnapshot:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        version_id:
+          $ref: "#/components/schemas/versionId"
+        version_status:
+          $ref: "#/components/schemas/versionStatus"
+        user_version:
+          $ref: "#/components/schemas/user"
+        creation_date:
+          type: string
+          format: date-time
+          description: "Date when the snapshot was created"
+          example: "2023-10-05T12:34:56.789Z"
+        media:
+          $ref: "#/components/schemas/experienceMedia"
+
+  parameters:
+
+    acceptVersionParam1:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.experience-raw-offer-service.v1 ]
+      example: vnd.experience-raw-offer-service.v1
+
+    acceptVersionParam2:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.experience-raw-offer-service.v2 ]
+      example: vnd.experience-raw-offer-service.v2
+
+    acceptVersionParam1and2:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.experience-raw-offer-service.v1, vnd.experience-raw-offer-service.v2 ]
+      example: vnd.experience-raw-offer-service.v2
+
+    acceptVersionParam3:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.experience-raw-offer-service.v3 ]
+      example: vnd.experience-raw-offer-service.v3
+
+    id:
+      name: id
+      in: path
+      description: Entity id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    filtersParam:
+      name: filters
+      in: query
+      description: operations to filter
+      required: false
+      schema:
+        type: string
+      example: "id==1f9d2c62-535a-11ec-bf63-0242ac130002"
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: ""
+    limitParam:
+      name: limit
+      in: query
+      description: number to limit the results by
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset for the items to retrieve
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    requiredLimitParam:
+      name: limit
+      in: query
+      description: number to limit the results by
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    requiredOffsetParam:
+      name: offset
+      in: query
+      description: offset for the items to retrieve
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    containParam:
+      name: contain
+      in: query
+      description: substring to do partial searches in codes
+      required: false
+      schema:
+        type: string
+      example: "E-AD0-AS"
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+      example: ""
+    experienceCode:
+      name: experience-code
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Experience id (service code) in ASX
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '403':
+      description: You don't have permissions to access this resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '406':
+      description: Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '409':
+      description: "Conflict - The request could not be processed because of conflict in the request"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    traceId:
+      description: Used to track the request
+      style: simple
+      schema:
+        type: string
+    location:
+      description: experience-image URI
+      schema:
+        type: string
+        example: "/experience_raw/8ed31c48-09a9-431e-bf32-06c1295ce119"

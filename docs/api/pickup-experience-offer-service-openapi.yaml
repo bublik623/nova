@@ -1,0 +1,426 @@
+openapi: 3.0.2
+info:
+  title: Pickup Experience Offer Service
+  description: |
+    API Pickup Experience Offer Service 
+    * Pickup
+      * Management
+        - Create new pickup.
+        - Update an existing pickup.
+        - Delete an existing pickup.
+      
+      * Inquiry
+        - Retrieve pickups.
+        - Retrieve a pickup from id.
+    
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+    
+servers:
+  - url: https://pickup-experience-offer.tui-mm.com
+    description: Prod server
+  - url: https://pickup-experience-offer.pre.tui-mm.com
+    description: Pre-Prod server
+  - url: https://pickup-experience-offer.test.tui-mm.com
+    description: Test server
+security:
+  - bearerAuth: []
+tags:
+  - name: Pickups
+    description: Management and inquiry operations over pickup entities.
+  
+paths:
+  /pickups:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - Pickups
+      summary: Creates a pickup into the offer.
+      description: Creates a pickup into the offer.
+      operationId: postPickUp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pickup'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'    
+    
+    get:
+      tags:
+        - Pickups
+      summary: Retrieves pickup.
+      description: Retrieves pickup availables in the system.
+      operationId: getPickUps
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Cities successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pickup'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Pickups
+      summary: Removes the Pickups given the Pickup place id.
+      description: Removes the Pickups given the Pickup place id.
+      operationId: deletePickUpsByPickupPlaceId
+      parameters:
+        - $ref: '#/components/parameters/pickupPlaceIdParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /pickups/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - Pickups
+      summary: Updates a pickup.
+      description: Updates a pickup.
+      operationId: updatePickUp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pickup'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'    
+    
+    get:
+      tags:
+        - Pickups
+      summary: Get the pickup by its id.
+      description: Get a city by its id.
+      operationId: retrievePickUpByID
+      responses:
+        '200':
+          description: OK - Pickup successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pickup'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Pickups
+      operationId: deletePickUp
+      summary: Removes the Pickup.
+      description: Removes the Pickup.
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'  
+components:
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    pickup:
+      type: object
+      required:
+        - option_id
+        - pickup_place_ids
+        - supplier_id
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-pickup-experience.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity.
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        option_id:
+          type: string
+          format: uuid
+          description: Option internal unique code given.
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        pickup_place_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: Pickup Place internal unique code given.
+            example: 0e3034f6-d1d7-48b7-a960-035276e63de3
+        tags:
+          type: array
+          items:
+            type: string
+            description: Tags for help in search.
+            example: "Beach"
+        starting_time:
+          type: string
+          description: Pickup time prior to the start of the experience.
+          example: "01:30:00"
+          format: time
+        status:
+          type: string
+          enum: [ACTIVE,PUBLISHED,DRAFT,DELETED]
+          description: Pickup status. Status available in pickup-master-data.
+          example: ACTIVE
+        contact_form:
+          $ref: '#/components/schemas/contact_form'
+        supplier_id:
+          type: string
+          format: uuid
+          description: Supplier internal unique code given.
+          example: 7a19f92c-3414-4e51-85cb-8f665e72120d
+    contact_form:
+      type: object
+      properties:
+        contact_number:
+          $ref: '#/components/schemas/contact_number'
+        contact_email:
+          type: string
+          description: Email address where the customer can contact the client about the pickup
+          example: "test@test.com"
+    contact_number:
+      type: object
+      required:
+        - country_iso_code
+        - phone_number
+        - phone_prefix
+      properties:
+        country_iso_code:
+          type: string
+          description: Iso code of the country related to the contact number
+          example: "IT"
+        phone_prefix:
+          type: string
+          description: Phone prefix to compose the full contact number where the customer can reach the client about the pickup
+          example: "+39"
+        phone_number:
+          type: string
+          description: Phone number to compose the full contact number where the customer can reach the client about the pickup
+          example: "1234567891"
+  parameters:
+    pickupPlaceIdParam:
+      name: pickup_place_id
+      in: query
+      description: The pickup place id.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: '1f9d2c62-535a-11ec-bf63-0242ac130002'
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version.
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.pickup-experience-offer-service.v1 ]
+      example: vnd.pickup-experience-offer-service.v1
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customizing the response recovering only the fields needed. It's a list of fields separated by commas without spaces between them.
+      required: false
+      schema:
+        type: string
+      example: 'id,status'
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax.
+      required: false
+      schema:
+        type: string
+      example: 'id==1f9d2c62-535a-11ec-bf63-0242ac130002;status==STATUS'
+    limitParam:
+      name: limit
+      in: query
+      description: Number to limit the results by.
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: Offset for the items to retrieve.
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    sortParam:
+      name: sort
+      in: query
+      description: Allows sorting results by a single or multiple fields (comma-separated). Prefix the field with `-` to get a descending order.
+      required: false
+      schema:
+        type: string
+      example: 'id,-status'
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '404':
+      description: Resource Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: Not Acceptable - Bad accept version header.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: Conflict - The request could not be processed because of conflict in the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    trace-id:
+      description: Used to track the request.
+      style: simple
+      schema:
+        type: string
+    location:
+      description: Slot URI.
+      schema:
+        type: string
+        example: "/pickups/8ed31c48-09a9-431e-bf32-06c1295ce119"

@@ -1,0 +1,8 @@
+// We use this tsconfig when building so we can exclude vitest tests.
+// If we were to exclude them in the normal tsconfig,
+// we would lose TS features like aliases and type checking.
+// https://jira.tuigroup.com/browse/OFF-1061
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/*.test.ts"]
+}

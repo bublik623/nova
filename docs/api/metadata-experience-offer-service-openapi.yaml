@@ -1,0 +1,2924 @@
+openapi: 3.0.2
+info:
+  title: Metadata experience offer service
+  description: API  Metadata experience
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://nova-api-gateway.tui-mm.com/metadata-experience
+    description: Prod server
+  - url: https://nova-api-gateway.pre.tui-mm.com/metadata-experience
+    description: Pre-Prod server
+  - url: https://nova-api-gateway.test.tui-mm.com/metadata-experience
+    description: Test server
+security:
+  - bearerAuth: []
+tags:
+  - name: experience-sustainability
+    description: Management and inquiry operations over experience-sustainability relations.
+  - name: experience-highlights
+    description: Management and inquiry operations over experience-highlights relations.
+  - name: experience-included
+    description: Management and inquiry operations over experience-included relations.
+  - name: experience-non-included
+    description: Management and inquiry operations over experience-non-included relations.
+  - name: experience-important-information
+    description: Management and inquiry operations over experience-important-information relations.
+  - name: experience-additional-services
+    description: Management and inquiry operations over experience-additional-service relations.
+  - name: experience-booking-questions
+    description: Management and inquiry operations over experience-booking-questions relations.
+  - name: experience-categories
+    description: Management and inquiry operations over experience-categories relations.
+  - name: experience-interests
+    description: Management and inquiry operations over experience-interests relations.
+  - name: experience-markets
+    description: Management and inquiry operations over experience-markets relations.
+  - name: experience-booking-information
+    description: Management and inquiry operations over booking-information relations.
+  - name: experience-location
+    description: Management and inquiry operations over experience-locations relations.
+  - name: experience-additional-cities
+    description: Management and inquiry operations over experience-additional-cities relations.
+
+paths:
+  /experience-sustainability:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-sustainability
+      summary: Creates a new relation experience-sustainability.
+      description: Creates a new relation experience-sustainability.
+      operationId: postExperienceSustainability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceSustainability'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-sustainability
+      summary: Get experience-sustainability relations stream
+      description: Get experience-sustainability relations stream
+      operationId: getExperienceSustainability
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-sustainability stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceSustainability'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-sustainability/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-sustainability
+      summary: Updates an experience-sustainability relation.
+      description: Updates sustainability of an experience
+      operationId: updateExperienceSustainability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceSustainability'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-sustainability
+      summary: Get experience sustainability relation
+      description: Get relation id
+      operationId: retrieveExperienceSustainabilityRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceSustainability'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-sustainability
+      operationId: deleteExperienceSustainabilityRelation
+      summary: Delete experience sustainability  relation
+      description: Delete experience sustainability  relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+  
+  /experience-highlights:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-highlights
+      summary: Creates a new relation experience-highlights.
+      description: Creates a new relation experience-highlights.
+      operationId: postExperienceHighlights
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceHighlights'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-highlights
+      summary: Get experience-highlights relations stream
+      description: Get experience-highlights relations stream
+      operationId: getExperienceHighlights
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-highlights stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceHighlights'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-highlights/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-highlights
+      summary: Updates an experience-highlights relation.
+      description: Updates highlights of an experience
+      operationId: updateExperienceHighlights
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceHighlights'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-highlights
+      summary: Get experience highlights relation
+      description: Get relation id
+      operationId: retrieveExperienceHighlightsRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceHighlights'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-highlights
+      operationId: deleteExperienceHighlightsRelation
+      summary: Delete experience highlights  relation
+      description: Delete experience highlights  relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-important-information:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-important-information
+      summary: Creates a new relation experience-important-information.
+      description: Creates a new relation experience-important-information.
+      operationId: postExperienceImportantInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceImportantInformation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-important-information
+      summary: Get experience-important-information relations stream
+      description: Get experience-important-information relations stream
+      operationId: getExperienceImportantInformation
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-important-information stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceImportantInformation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-important-information/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-important-information
+      summary: Updates an experience-important-information relation.
+      description: Updates important-information of an experience
+      operationId: updateExperienceImportantInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceImportantInformation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-important-information
+      summary: Get experience important-information relation
+      description: Get relation id
+      operationId: retrieveExperienceImportantInformationRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceImportantInformation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-important-information
+      operationId: deleteExperienceImportantInformationRelation
+      summary: Delete experience-important-information relation
+      description: Delete experience-important-information  relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-booking-information:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-booking-information
+      summary: Creates a new relation experience-booking-information.
+      description: Creates a new relation experience-booking-information.
+      operationId: postExperienceBookingInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceBookingInformation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-booking-information
+      summary: Get experience-booking-information relations stream
+      description: Get experience-booking-information relations stream
+      operationId: getExperienceBookingInformation
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-booking-information stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceBookingInformation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-booking-information/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-booking-information
+      summary: Updates an experience-booking-information relation.
+      description: Updates experience-booking-information of an experience
+      operationId: updateExperienceBookingInformation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceBookingInformation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-booking-information
+      summary: Get experience-booking-information relation
+      description: Get relation id
+      operationId: retrieveExperienceBookingInformationRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceBookingInformation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-booking-information
+      operationId: deleteExperienceBookingInformationRelation
+      summary: Delete experience-booking-information relation
+      description: Delete experience-booking-information relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-non-included:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-non-included
+      summary: Creates a new relation experience-non-included.
+      description: Creates a new relation experience-non-included.
+      operationId: postExperienceNonIncluded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceNonIncluded'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-non-included
+      summary: Get experience-non-included relations stream
+      description: Get experience-non-included relations stream
+      operationId: getExperienceNonIncluded
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-non-included stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceNonIncluded'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-non-included/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-non-included
+      summary: Updates an experience-non-included relation.
+      description: Updates included of an experience
+      operationId: updateExperienceNonIncluded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceNonIncluded'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-non-included
+      summary: Get experience non included relation
+      description: Get relation by id
+      operationId: retrieveExperienceNonIncludedRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceNonIncluded'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-non-included
+      operationId: deleteExperienceNonIncludedRelation
+      summary: Delete experience non included  relation
+      description: Delete experience non included  relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-included:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-included
+      summary: Creates a new relation experience-included.
+      description: Creates a new relation experience-included.
+      operationId: postExperienceIncluded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceIncluded'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-included
+      summary: Get experience-included relations stream
+      description: Get experience-included relations stream
+      operationId: getExperienceIncluded
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-included stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceIncluded'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-included/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-included
+      summary: Updates an experience-included relation.
+      description: Updates included of an experience
+      operationId: updateExperienceIncluded
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceIncluded'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-included
+      summary: Get experience included relation
+      description: Get relation id
+      operationId: retrieveExperienceIncludedRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceIncluded'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-included
+      operationId: deleteExperienceIncludedRelation
+      summary: Delete experience included  relation
+      description: Delete experience included  relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-booking-questions:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-booking-questions
+      summary: Creates a new relation experience-booking-questions.
+      description: Creates a new relation experience-booking-questions.
+      operationId: postExperienceBookingQuestions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceBookingQuestions'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-booking-questions
+      summary: Get experience's booking questions stream
+      description: Get experience's booking questions stream
+      operationId: getExperienceBookingQuestions
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-booking-questions stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceBookingQuestions'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-booking-questions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-booking-questions
+      summary: Updates the booking questions for an experience
+      description: Updates the booking questions for an experience
+      operationId: updateExperienceBookingQuestions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceBookingQuestions'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    
+    get:
+      tags:
+        - experience-booking-questions
+      summary: Get the booking questions for an experience
+      description: Get the booking questions for an experience
+      operationId: retrieveExperienceBookingQuestionsRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceBookingQuestions'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-booking-questions
+      operationId: deleteExperienceBookingQuestionRelation
+      summary: Delete the relation of the experience with booking questions
+      description: Delete the relation of the experience with booking questions
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-additional-services:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-additional-services
+      summary: Creates a new relation experience-additional-services.
+      description: Creates a new relation experience-additional-services.
+      operationId: postExperienceAdditionalService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceAdditionalService'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-additional-services
+      summary: Get experience-additional-service relations stream
+      description: Get experience-additional-service relations stream
+      operationId: getExperienceAdditionalService
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-additional-service stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceAdditionalService'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-additional-services/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-additional-services
+      summary: Updates an experience-additional-service relation.
+      description: Updates additional services of an experience
+      operationId: updateExperienceAdditionalService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceAdditionalService'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-additional-services
+      summary: Get experience additional services relation
+      description: Get relation id
+      operationId: retrieveExperienceAdditionalServiceRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceAdditionalService'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-additional-services
+      operationId: deleteExperienceAdditionalServiceRelation
+      summary: Delete experience additional service relation
+      description: Delete experience additional service relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-categories:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-categories
+      summary: Creates a new relation experience-categories.
+      description: Creates a new relation experience-categories.
+      operationId: postExperienceCategories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceCategories'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-categories
+      summary: Get experience-categories relations stream
+      description: Get experience-categories relations stream
+      operationId: getExperienceCategories
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-categories stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceCategories'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-categories
+      summary: Updates an experience-categories relation.
+      description: Updates the categories of an experience
+      operationId: updateExperienceCategories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceCategories'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-categories
+      summary: Get experience categories relation
+      description: Get relation id
+      operationId: retrieveExperienceCategoriesRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceCategories'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-categories
+      operationId: deleteExperienceCategoriesRelation
+      summary: Delete experience categories relation
+      description: Delete experience categories relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-interests:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-interests
+      summary: Creates a new relation experience-interests.
+      description: Creates a new relation experience-interests.
+      operationId: postExperienceInterests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceInterests'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-interests
+      summary: Get experience-interests relations stream
+      description: Get experience-interests relations stream
+      operationId: getExperienceInterests
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-interests stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceInterests'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-interests/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-interests
+      summary: Updates an experience-interests relation.
+      description: Updates the interests of an experience
+      operationId: updateExperienceInterests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceInterests'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-interests
+      summary: Get experience interests relation
+      description: Get relation id
+      operationId: retrieveExperienceInterestsRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceInterests'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-interests
+      operationId: deleteExperienceInterestsRelation
+      summary: Delete experience interests relation
+      description: Delete experience interests relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-markets:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-markets
+      summary: Creates a new relation experience-markets.
+      description: Creates a new relation experience-markets.
+      operationId: postExperienceMarkets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceMarkets'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-markets
+      summary: Get experience-markets relations stream
+      description: Get experience-markets relations stream
+      operationId: getExperienceMarkets
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-markets stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceMarkets'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-markets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-markets
+      summary: Updates an experience-markets relation.
+      description: Updates the markets of an experience
+      operationId: updateExperienceMarkets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceMarkets'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-markets
+      summary: Get experience markets relation
+      description: Get relation id
+      operationId: retrieveExperienceMarketsRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceMarkets'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    delete:
+      tags:
+        - experience-markets
+      operationId: deleteExperienceMarketsRelation
+      summary: Delete experience markets relation
+      description: Delete experience markets relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-location:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-location
+      summary: Creates a new relation experience-location.
+      description: Creates a new relation experience-location.
+      operationId: postExperienceLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceLocation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-location
+      summary: Get experience-location relations stream
+      description: Get experience-location relations stream
+      operationId: getExperienceLocation
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-locations stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceLocation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-location/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-location
+      summary: Updates an experience-location relation.
+      description: Updates the location of an experience
+      operationId: updateExperienceLocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceLocation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-location
+      summary: Get experience location relation
+      description: Get relation id
+      operationId: retrieveExperienceLocationRelation
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceLocation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-location
+      operationId: deleteExperienceLocationRelation
+      summary: Delete experience location relation
+      description: Delete experience location relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-additional-cities:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-additional-cities
+      summary: Creates a new relation experience-additional-cities.
+      description: Creates a new relation experience-additional-cities.
+      operationId: postExperienceAdditionalCities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceAdditionalCities'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-additional-cities
+      summary: Get experience-additional-cities relations stream
+      description: Get experience-additional-cities relations stream
+      operationId: retrieveExperienceAdditionalCities
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-additional-cities stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceAdditionalCities'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-additional-cities/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-additional-cities
+      summary: Updates an experience-additional-cities relation.
+      description: Updates the additional cities of an experience
+      operationId: updateExperienceAdditionalCities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceAdditionalCities'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-additional-cities
+      summary: Get experience additional cities relation
+      description: Get relation id
+      operationId: retrieveExperienceAdditionalCities
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceAdditionalCities'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-additional-cities
+      operationId: deleteExperienceAdditionalCities
+      summary: Delete experience additional cities relation
+      description: Delete experience additional cities relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-venues:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      tags:
+        - experience-venues
+      summary: Creates a new relation experience-venues.
+      description: Creates a new relation experience-venues.
+      operationId: postExperienceVenues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceVenues'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-venues
+      summary: Get experience-venues relations stream
+      description: Get experience-venues relations stream
+      operationId: retrieveExperienceVenues
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - experience-venues stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceVenues'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+  /experience-venues/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/acceptVersionParam'
+    put:
+      tags:
+        - experience-venues
+      summary: Updates an experience-venues relation.
+      description: Updates the venues of an experience
+      operationId: updateExperienceVenues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceVenues'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - experience-venues
+      summary: Get experience venues relation
+      description: Get relation id
+      operationId: retrieveExperienceVenues
+      responses:
+        '200':
+          description: OK - Relation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceVenues'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-venues
+      operationId: deleteExperienceVenues
+      summary: Delete experience venues relation
+      description: Delete experience venues relation
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '415':
+          $ref: '#/components/responses/415'
+        '500':
+          $ref: '#/components/responses/500'
+        'default':
+          $ref: '#/components/responses/500'
+
+components:
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    
+    experienceSustainability:
+      type: object
+      required:
+        - experience_id
+        - sustainability
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+        sustainability:
+          type: array
+          items:
+            type: string
+            enum:
+              - ANIMAL_WELFARE
+              - LOCAL_FOOD
+              - CHARITY
+              - ACCESSIBILITY
+              - ENVIRONMENTAL
+              - LOCAL_PRODUCTS
+              - HISTORICAL_SITE
+              - NATURAL_AREA
+              - SUSTAINABLE_TRANSPORT
+          description: Sustainability available
+    
+    experienceHighlights:
+      type : object
+      required:
+            - experience_id
+            - highlights
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+            type: string
+            format: uuid
+            description: Experience internal unique code
+            example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        highlights:
+            type: array
+            description: List of experience master data highlight codes
+            items:
+              type: string
+              example: LUNCHMENU
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceIncluded:
+      type : object
+      required:
+            - experience_id
+            - included
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+            type: string
+            format: uuid
+            description: Experience internal unique code
+            example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        included:
+          type: array
+          description: List of experience master data included codes
+          items:
+            type: string
+            example: ENTRANCEFEES
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceNonIncluded:
+      type : object
+      required:
+            - experience_id
+            - non_included
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+            type: string
+            format: uuid
+            description: Experience internal unique code
+            example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        non_included:
+          type: array
+          description: List of experience master data included codes
+          items:
+            type: string
+            example: ENTRANCEFEES
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceImportantInformation:
+      type : object
+      required:
+            - experience_id
+            - important_information
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+            type: string
+            format: uuid
+            description: Experience internal unique code
+            example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        important_information:
+          type: array
+          description: List of experience master data important information codes
+          items:
+            type: string
+            example: COPYPASS
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceBookingInformation:
+      type : object
+      required:
+        - experience_id
+        - booking_information
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        booking_information:
+          $ref: '#/components/schemas/bookingInformation'
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    bookingInformation:
+      type: object
+      required:
+        - voucher_type
+      properties:
+       emergency_contact_number:
+          $ref: '#/components/schemas/contactNumber'
+       voucher_type:
+          type: string
+          enum:
+            - "MOBILE"
+            - "PRINTED"
+    contactNumber:
+      type: object
+      required:
+        - country_calling_code
+        - number
+      properties:
+        country_calling_code:
+          type: string
+          description: country calling code
+          example: "+34"
+        number:
+          type: string
+          description: phone number
+          example: "608596254"
+
+    experienceAdditionalService:
+      type: object
+      required:
+        - experience_id
+        - additional_services
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        additional_services:
+          type: array
+          description: List of experience master data additional service codes
+          items:
+            type: string
+            example: FREE_CANCELLATION
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    bookingQuestion:
+      type: object
+      required:
+        - booking_question_code
+        - is_mandatory
+        - is_apply_all
+      properties:
+        booking_question_code:
+          type: string
+          description: Booking question code
+          example: MENUCHOICE1
+        is_mandatory:
+          type: boolean
+          description: Indicates that answering the question is mandatory.
+          example: true
+        is_apply_all:
+          type: boolean
+          description: Indicates that the question applies to all the passengers
+          example: false
+        visualization_order:
+          type: integer
+          description: The order in which the question should be displayed.
+          example: 0
+
+    experienceBookingQuestions:
+          type: object
+          required:
+            - id
+            - experience_id
+            - option_id
+            - booking_questions
+          #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-metadata-experience-booking-questionss.json
+          properties:
+            id:
+              type: string
+              readOnly: true
+              format: uuid
+              description: Internal unique code given to a new entity
+              example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+            experience_id:
+              type: string
+              format: uuid
+              description: Experience internal unique code
+              example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+            option_id:
+              type: string
+              format: uuid
+              description: Option internal unique code
+              example: eaa38c66-3344-4da0-8768-a029ee95445d
+            booking_questions:
+              type: array
+              items:
+                $ref: '#/components/schemas/bookingQuestion'
+            creation_date:
+              $ref: "#/components/schemas/creationDate"
+            updated_date:
+              $ref: "#/components/schemas/updatedDate"
+    
+    experienceCategories:
+      type : object
+      required:
+            - experience_id
+            - categories
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+            type: string
+            format: uuid
+            description: Experience internal unique code
+            example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        categories:
+            type: array
+            description: List of experience master data category codes
+            items:
+              type: string
+              example: LUNCHMENU
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceLocation:
+      type : object
+      required:
+        - experience_id
+        - address
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        option_id:
+          type: string
+          format: uuid
+          description: Option internal unique code
+          example: bd77608f-4502-435f-a85b-570c4aa4c6ac
+        latitude:
+          type: string
+          description: Latitude is the measurement of distance north or south of the Equator.
+          example: "39.573696612860154"
+        longitude:
+          type: string
+          description: Longitude is the measurement east or west of the prime meridian.
+          example: "2.643315064536297"
+        altitude:
+          type: string
+          description: Altitude is the measurement of the height in relation to the sea level
+          example: "10.0"
+        name:
+          type: string
+          description: Name of the location
+          example: New York City
+        address:
+          $ref: "#/components/schemas/address"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    address:
+      type: object
+      required:
+        - city
+        - country
+      properties:
+        direction:
+          type: string
+          description: Direction of the address
+          example: CL Veracruz. 16. 4B
+        city:
+          type: string
+          description: Internal TUI Code of cities
+          example: Mexico City
+        postal_code:
+          type: string
+          description: Postal code of the address
+          example: "91709"
+        country:
+          type: string
+          description: Code from masterdata ISO for a country
+          example: ESP
+
+    experienceInterests:
+      type : object
+      required:
+            - experience_id
+            - interests
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+            type: string
+            format: uuid
+            description: Experience internal unique code
+            example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        interests:
+            type: array
+            description: List of experience master data category codes
+            items:
+              type: string
+              example: LUNCHMENU
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceMarkets:
+      type: object
+      required:
+        - experience_id
+        - markets
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        markets:
+          type: array
+          description: List of experience markets codes
+          items:
+            type: string
+            example: "es-2c"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceAdditionalCities:
+      type : object
+      required:
+        - experience_id
+        - additional_cities
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        additional_cities:
+          type: array
+          description: List of geo master data ISO codes for a city
+          items:
+            type: string
+            example: ZAG
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceVenues:
+      type : object
+      required:
+        - experience_id
+        - venues
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          description: Internal unique code given to a new entity
+          example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+        experience_id:
+          type: string
+          format: uuid
+          description: Experience internal unique code
+          example: 7e87fdf3-e96d-4783-9dac-2ecb957cf943
+        venues:
+          type: array
+          description: Array with the codes of the venues associated with the experience
+          items:
+            type: string
+            example: FTBLWANDA
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    creationDate:
+      readOnly: true
+      type: string
+      description: Creation date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      example: "2022-04-10T10:15:66Z"
+    updatedDate:
+      readOnly: true
+      type: string
+      description: Last updated date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      example: "2022-05-20T10:15:66Z"
+  parameters:
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.metadata-experience-offer-service.v1 ]
+      example: vnd.metadata-experience-offer-service.v1
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customize the response recovering only the fields needed. It's a list of fields separated by commas without spaces between them
+      required: false
+      schema:
+        type: string
+      example: 'id,updated_date'
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: 'id==1f9d2c62-535a-11ec-bf63-0242ac130002'
+    limitParam:
+      name: limit
+      in: query
+      description: number items to
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset of items
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+      example: "-updated_date"
+
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: "Conflict - The request could not be processed because of conflict in the request"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '415':
+      description: "Unsupported media type"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    trace-id:
+      description: Used to track the request
+      style: simple
+      schema:
+        type: string
+    location:
+      description: Slot URI
+      schema:
+        type: string
+        example: "/experience-sustainability/8ed31c48-09a9-431e-bf32-06c1295ce119"

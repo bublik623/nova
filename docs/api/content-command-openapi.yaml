@@ -1,0 +1,2637 @@
+openapi: 3.0.2
+info:
+  title: Content Command Service
+  description: |
+    Full Management of experiences and categories content
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: "https://nova-api-gateway.tui-mm.com/content-command"
+    description: Prod server
+  - url: "https://nova-api-gateway.pre.tui-mm.com/content-command"
+    description: Pre-prod server
+  - url: "https://nova-api-gateway.test.tui-mm.com/content-command"
+    description: Test server
+
+security:
+  - bearerAuth: []
+tags:
+  - name: images
+    description: Management and inquiry operations over images
+  - name : copyrights
+    description: Management and inquiry operations over copyrights
+  - name: experience-media
+    description: Management and inquiry operations over experience media
+  - name : option-translations
+    description: Management and inquiry operations over option translations
+  - name : service-code-translations
+    description: Management and inquiry operations over service code from ASX
+  - name: experience-translations
+    description: Management and inquiry operations over experience translations
+  - name: flows
+    description: Manage status flows for content types
+  - name: experience-commercial-content
+    description: Manage experience relations for content
+  - name: custom-highlights
+    description: Management and inquiry operations over experience custom highlights
+  - name: custom-included
+    description: Management and inquiry operations over experience custom included
+  - name: custom-non-included
+    description: Management and inquiry operations over experience custom non-included
+  - name: custom-important-information
+    description: Management and inquiry operations over experience custom important-information
+  - name: experience
+    description: Managament over the whole experience
+paths:
+  /experience-translations:
+    post:
+      tags:
+        - experience-translations
+      summary: Creates an experience translation.
+      description: Creates an experience translation.
+      operationId: postExperienceTranslation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceTranslation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - experience-translations
+      summary: Retrieves experience translations
+      description: Retrieves experience translations available.
+      operationId: getExperienceTranslations
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - Experience translation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceTranslation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /experience-translations/{id}:
+    put:
+      tags:
+        - experience-translations
+      summary: Updates an experience translation .
+      description: Updates an experience translation .
+      operationId: updateExperienceTranslation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceTranslation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - experience-translations
+      summary: Get the experience translation detail by id .
+      description: Get an experience translation detail by id .
+      operationId: retrieveExperienceTranslationByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Experience Translation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceTranslation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-translations
+      operationId: deleteExperienceTranslation
+      summary: Removes experience translation by id.
+      description: Removes experience translation by id.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /v2/images:
+    post:
+      tags:
+        - images
+      summary: Create image.
+      description: Create image.
+      operationId: postImageV2
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/imageV2"
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - images
+      summary: Get images stream.
+      description: Get images stream.
+      operationId: getImagesV2
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Image stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/imageV2"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /v2/images/{id}:
+    put:
+      tags:
+        - images
+      summary: Update image .
+      description: Update image .
+      operationId: updateImageV2
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/imageV2"
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - images
+      summary: Get image by id .
+      description: Get image by id .
+      operationId: retrieveImageByIDV2
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Image successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/imageV2"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - images
+      operationId: deleteImageV2
+      summary: Delete image by id.
+      description: Delete image by id.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #COPYRIGHT ENTITY
+  /copyrights:
+    post:
+      tags:
+        - copyrights
+      summary: Creates copyright.
+      description: Creates copyright.
+      operationId: postCopyright
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/copyright'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - copyrights
+      summary: Retrieves experience copyrights
+      description: Retrieves experience copyrights available.
+      operationId: getCopyrights
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Experience copyrights successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/copyright'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /copyrights/{id}:
+    put:
+      tags:
+        - copyrights
+      summary: Updates an experience copyrights
+      description: Updates an experience copyrights
+      operationId: updateCopyright
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/copyright'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - copyrights
+      summary: Get copyright by id.
+      description: Get copyright by id
+      operationId: retrieveCopyrightByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Experience copyright successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/copyright'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - copyrights
+      operationId: deleteCopyright
+      summary: Delete copyright.
+      description: Delete copyright.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #OPTION TRANSLATION
+  /option-translations:
+    post:
+      tags:
+        - option-translations
+      summary: Creates an option translation.
+      description: Creates an option translation.
+      operationId: postOptionTranslation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionTranslation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - option-translations
+      summary: Retrieves option translations
+      description: Retrieves option translations available.
+      operationId: getOptionTranslations
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - Option translation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/optionTranslation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /option-translations/{id}:
+    put:
+      tags:
+        - option-translations
+      summary: Updates an option translation .
+      description: Updates an option translation .
+      operationId: updateOptionTranslation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optionTranslation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - option-translations
+      summary: Get option translation detail by id .
+      description: Get option translation detail by id .
+      operationId: retrieveOptionTranslationByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Option Translation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/optionTranslation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - option-translations
+      operationId: deleteOptionTranslation
+      summary: Removes option translation by id.
+      description: Removes option translation by id.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #ASX CODE TRANSLATION
+  /service-code-translations:
+    post:
+      tags:
+        - service-code-translations
+      summary: Creates a service code translation.
+      description: Creates a service code translation
+      operationId: postServiceCodeTranslation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/serviceCodeTranslation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - service-code-translations
+      summary: Retrieves service codes translations
+      description: Retrieves service codes translations available.
+      operationId: getServiceCodeTranslation
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - Service codes translations successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/serviceCodeTranslation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /service-code-translations/{id}:
+    put:
+      tags:
+        - service-code-translations
+      summary: Updates a service code translation.
+      description: Updates a service code translation.
+      operationId: updateServiceCodeTranslation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/serviceCodeTranslation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - service-code-translations
+      summary: Get service code translation detail by id .
+      description: Get service code translation detail by id .
+      operationId: retrieveServiceCodeTranslationByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Service Code Translation successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/serviceCodeTranslation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - service-code-translations
+      operationId: deleteServiceCodeTranslation
+      summary: Removes a service code translation by id.
+      description: Removes a service code translation by id.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #EXPERIENCE MEDIA ELEMENTS
+  /experience-media:
+    post:
+      tags:
+        - experience-media
+      summary: Related content media with an experience.
+      description: Related content media with an experience.
+      operationId: postExperienceMedia
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceMedia'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - experience-media
+      summary: Retrieves experience media elements available
+      description: Retrieves experience elements available.
+      operationId: getExperienceElements
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Experience elements successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceMedia'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /experience-media/{id}:
+    put:
+      tags:
+        - experience-media
+      summary: Updates an experience media entity .
+      description: Updates an experience media entity.
+      operationId: updateExperienceMedia
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/experienceMedia'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - experience-media
+      summary: Get experience media detail by id .
+      description: Get experience media detail by id .
+      operationId: retrieveExperienceMediaByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - experience-media successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceMedia'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - experience-media
+      operationId: deleteExperienceMedia
+      summary: Removes experience media by id.
+      description: Removes experience media by id.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #FLOW ENTITY
+  /flows:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getFlows
+      tags:
+        - flows
+      summary: 'Get flows stream'
+      description: 'Get flows stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/flow'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createStatusTransitions
+      tags:
+        - flows
+      summary: 'Create flow'
+      description: 'Create flow, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/flow'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /flows/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getFlowByID
+      tags:
+        - flows
+      summary: 'Get flow by id'
+      description: 'Get flow by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/flow'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateFlow
+      tags:
+        - flows
+      summary: 'Update flow'
+      description: 'Update flow, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/flow'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteFlow
+      tags:
+        - flows
+      summary: 'Delete flow'
+      description: 'Delete flow, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #COMMERCIAL CONTENT ENTITY
+  /experience-commercial-content:
+    get:
+      tags:
+        - experience-commercial-content
+      summary: Retrieves experience commercial content available.
+      description: Retrieves experience commercial content available.
+      operationId: getExperienceCommercialContent
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Experience commercial content stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/experienceCommercialContent'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /experience-commercial-content/{id}:
+    get:
+      tags:
+        - experience-commercial-content
+      summary: Get experience commercial content by id .
+      description: Get experience commercial content by id .
+      operationId: retrieveExperienceCommercialContentByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Experience commercial content successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/experienceCommercialContent'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #CUSTOM HIGHLIGHT ENTITY
+  /custom-highlights:
+    post:
+      tags:
+        - custom-highlights
+      summary: Creates a new custom highlights for commercial content.
+      description: Creates a new custom highlights for commercial content.
+      operationId: postCustomHighlights
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customHighlights'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-highlights
+      summary: Retrieves custom highlights available.
+      description: Retrieves custom highlights available.
+      operationId: getCustomHighlights
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Custom highlights stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customHighlights'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /custom-highlights/{id}:
+    put:
+      tags:
+        - custom-highlights
+      summary: Updates a custom highlights.
+      description: Updates a custom highlights.
+      operationId: updateCustomHighlights
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customHighlights'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-highlights
+      summary: Get custom highlights by id.
+      description: Get custom highlights by id.
+      operationId: getCustomHighlightsByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Custom highlights successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customHighlights'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - custom-highlights
+      summary: Removes custom highlights by id.
+      description: Removes custom highlights by id.
+      operationId: deleteCustomHighlights
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #CUSTOM INCLUDED ENTITY
+  /custom-included:
+    post:
+      tags:
+        - custom-included
+      summary: Creates a new custom included for commercial content.
+      description: Creates a new custom included for commercial content.
+      operationId: postCustomIncluded
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customIncluded'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-included
+      summary: Retrieves custom included available.
+      description: Retrieves custom included available.
+      operationId: getCustomIncluded
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Custom included stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customIncluded'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /custom-included/{id}:
+    put:
+      tags:
+        - custom-included
+      summary: Updates a custom included.
+      description: Updates a custom included.
+      operationId: updateCustomIncluded
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customIncluded'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-included
+      summary: Get custom included by id.
+      description: Get custom included by id.
+      operationId: getCustomIncludedByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Custom included successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customIncluded'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - custom-included
+      summary: Removes custom included by id.
+      description: Removes custom included by id.
+      operationId: deleteCustomIncluded
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #CUSTOM NON-INCLUDED ENTITY
+  /custom-non-included:
+    post:
+      tags:
+        - custom-non-included
+      summary: Creates a new custom non-included for commercial content.
+      description: Creates a new custom non-included for commercial content.
+      operationId: postCustomNonIncluded
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customNonIncluded'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-non-included
+      summary: Retrieves custom non-included available.
+      description: Retrieves custom non-included available.
+      operationId: getCustomNonIncluded
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Custom non-included stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customNonIncluded'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /custom-non-included/{id}:
+    put:
+      tags:
+        - custom-non-included
+      summary: Updates a custom non-included.
+      description: Updates a custom non-included.
+      operationId: updateCustomNonIncluded
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customNonIncluded'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-non-included
+      summary: Get custom non-included by id.
+      description: Get custom non-included by id.
+      operationId: getCustomNonIncludedByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Custom included successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customNonIncluded'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - custom-non-included
+      summary: Removes custom non-included by id.
+      description: Removes custom non-included by id.
+      operationId: deleteCustomNonIncluded
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  #CUSTOM IMPORTANT-INFORMATION ENTITY
+  /custom-important-information:
+    post:
+      tags:
+        - custom-important-information
+      summary: Creates a new custom important-information for commercial content.
+      description: Creates a new custom important-information for commercial content.
+      operationId: postCustomImportantInformation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customImportantInformation'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-important-information
+      summary: Retrieves custom important-information available.
+      description: Retrieves custom important-information available.
+      operationId: getCustomImportantInformation
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/acceptVersionParam'
+      responses:
+        '200':
+          description: OK - Custom important-information stream successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customImportantInformation'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /custom-important-information/{id}:
+    put:
+      tags:
+        - custom-important-information
+      summary: Updates a custom important-information.
+      description: Updates a custom important-information.
+      operationId: updateCustomImportantInformation
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customImportantInformation'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - custom-important-information
+      summary: Get custom important-information by id.
+      description: Get custom important-information by id.
+      operationId: getCustomImportantInformationByID
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: OK - Custom important-information successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/traceId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customImportantInformation'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - custom-important-information
+      summary: Removes custom important-information by id.
+      description: Removes custom important-information by id.
+      operationId: deleteCustomImportant
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /experiences/{experience_id}/translate:
+    post:
+      tags:
+        - experience
+      summary: Creates the translation entities for the experience.
+      description: Creates the translation entities for the experience.
+      operationId: postTranslateExperience
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/experienceId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/translationRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /experiences/{experience_id}/publish:
+    post:
+      tags:
+        - experience
+      summary: Publishes the experience for the language on the query.
+      description: Publishes the experience for the language on the query. If the param "force" is true, it wil remove "unpublish" status if exists. If "en" is republished, all ready languages will be republished
+      operationId: postPublishExperience
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/experienceId'
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/forceParam'
+
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /experiences/{experience_id}/unpublish:
+    post:
+      tags:
+        - experience
+      summary: Unpublishes the whole experience or just a translation.
+      description: If the language is "en" (Master file) the whole experience will be unpublished. Otherwise just the specified language will be unpublished.
+      operationId: postUnpublishExperience
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/experienceId'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /experiences/{experience_id}/publish-media:
+    post:
+      tags:
+        - experience
+      summary: Publishes experience media
+      description: Will update the media status_code to READY
+      operationId: postPublishExperienceMedia
+      parameters:
+        - $ref: '#/components/parameters/experienceId'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    #RESPONSES
+
+    statusAllowed:
+      type: array
+      readOnly: true
+      items:
+        $ref: "#/components/schemas/statusId"
+
+    transitionFlow:
+      type: object
+      properties:
+        statuses_backward_allowed:
+          $ref: "#/components/schemas/transitionsArray"
+        statuses_forward_allowed:
+          $ref: "#/components/schemas/transitionsArray"
+
+    # OBJECTS FLAVOR MEDIA
+    flow:
+      type: object
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-flow.json
+      required:
+        - id
+        - code
+        - init_status
+        - end_status
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        code:
+          $ref: "#/components/schemas/code"
+        status_allowed:
+          $ref: "#/components/schemas/statusAllowed"
+        init_status:
+          $ref: "#/components/schemas/initStatus"
+        end_status:
+          $ref: "#/components/schemas/endStatus"
+        alternative_status:
+          $ref: "#/components/schemas/alternativeStatus"
+
+    experienceMedia:
+      type: object
+      required:
+        - flow_code
+        - status_code
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        images_v2:
+          $ref: "#/components/schemas/imageV2Ids"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+    endStatus:
+      type: string
+      description : Final status that indicates that a flow is complete and the content is ready for published
+      example: READY
+    alternativeStatus:
+      type: string
+      format: uuid
+      description : Alternative end status that indicates that a  flow is completed but the content can't be published still
+      example: 91b677a7-7733-4452-bb81-8501e073c45f
+    initStatus:
+      type: string
+      description : First status that acquire a content element when it's created
+      example: TO_BE_EDITED
+    transitionsArray:
+      type: array
+      items:
+        $ref: "#/components/schemas/statusId"
+
+    # OBJECTS TRANSLATION
+    translationElement:
+      type: object
+      required:
+        - language_code
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+        name:
+          $ref: "#/components/schemas/name"
+        text1:
+          $ref: "#/components/schemas/description"
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+    optionTranslation:
+      type: object
+      required:
+        - experience_id
+        - name
+        - language_code
+        - to_be_translated
+        - flow_code
+        - status_code
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        option_id:
+          $ref: "#/components/schemas/optionId"
+        asx_service_code_translation_id:
+          $ref: "#/components/schemas/asxServiceCodeTranslationId"
+        asx_modality_code:
+          $ref: "#/components/schemas/asxModalityCode"
+        name:
+          type: string
+          description: Option name
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    serviceCodeTranslation:
+      type: object
+      required:
+        - experience_id
+        - code
+        - language_code
+        - name
+        - status_code
+        - to_be_translated
+        - flow_code
+
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+        code:
+          type: string
+          description: Code in ASX
+          example: X-LMO-ITLGCOSMO
+        name:
+          type: string
+          description: Name to be translated
+          example: Milano Cosmopolita
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    experienceTranslation:
+      allOf:
+        - $ref: '#/components/schemas/translationElement'
+      type: object
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-experience-translation.json
+      required:
+        - experience_id
+        - title
+        - flow_code
+        - status_code
+      properties:
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        title:
+          $ref: "#/components/schemas/title"
+        text2:
+          $ref: "#/components/schemas/secondDescription"
+        text3:
+          $ref: "#/components/schemas/thirdDescription"
+        seo_title:
+          $ref: "#/components/schemas/seoTitle"
+        seo_description:
+          $ref: "#/components/schemas/seoDescription"
+        info_voucher:
+          $ref: "#/components/schemas/infoVoucher"
+        meeting_point_details:
+          $ref: "#/components/schemas/meetingPointDetails"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        curation_quality:
+          $ref: "#/components/schemas/curationQuality"
+        unpublish_date:
+          $ref: "#/components/schemas/unpublishDate"
+
+    # OBJECTS MEDIA
+    imageV2Ids:
+      type: array
+      items:
+        $ref: "#/components/schemas/mediaItemV2"
+    mediaItem:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/idMediaItem"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        is_cover:
+          $ref: "#/components/schemas/isCover"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+    mediaItemV2:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/idMediaItem"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        image_type:
+          $ref: "#/components/schemas/imageType"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+    copyright:
+      type: object
+      required:
+        - owner
+        - name
+        - signature
+        - supplier_id
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-copyright.json
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        owner:
+          $ref: "#/components/schemas/owner"
+        name:
+          $ref: "#/components/schemas/name"
+        datetime:
+          $ref: "#/components/schemas/datetime"
+        signature:
+          $ref: "#/components/schemas/signature"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+    experienceCommercialContent:
+      type: object
+      required:
+        - experience_id
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        supplier_id:
+          $ref: "#/components/schemas/supplierId"
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        experience_translations:
+          type: array
+          items:
+            $ref: "#/components/schemas/experienceTranslationItem"
+        experience_media_id:
+          $ref: "#/components/schemas/experienceMediaId"
+
+    experienceTranslationItem:
+      type: object
+      required:
+        - id
+        - language_code
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        language_code:
+          $ref: "#/components/schemas/languageCode"
+
+    customIncluded:
+      type: object
+      required:
+        - id
+        - experience_id
+        - language_code
+        - name
+        - flow_code
+        - status_code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          example: '7c531efc-ec15-45e2-a9be-3e9a2fbe0864'
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        code:
+          description: Internal code for includes
+          type: string
+          example: 'ENTRANCEFEES'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        name:
+          description: Name of the includes
+          type: string
+          example: 'Entrance fees'
+        description:
+          description: Description of the includes
+          type: string
+          example: 'Description if it needs'
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    customNonIncluded:
+      type: object
+      required:
+        - id
+        - experience_id
+        - language_code
+        - name
+        - flow_code
+        - status_code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          example: '7c531efc-ec15-45e2-a9be-3e9a2fbe0864'
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        code:
+          description: Internal code for non includes
+          type: string
+          example: 'ENTRANCEFEES'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        name:
+          description: Name of the non includes
+          type: string
+          example: 'Entrance fees'
+        description:
+          description: Description of the non includes
+          type: string
+          example: 'Description if it needs'
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    customHighlights:
+      type: object
+      required:
+        - id
+        - experience_id
+        - language_code
+        - name
+        - flow_code
+        - status_code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          example: '32d06ab9-dcd7-4cef-8ea3-cf989799f4a9'
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        code:
+          description: Internal code used for custom highlights
+          type: string
+          example: 'LUNCHMENU'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        name:
+          description: Custom highlight's name
+          type: string
+          example: 'Lunch menu to keep you going all the day'
+        description:
+          description: Custom highlight's description
+          type: string
+          example: 'Description if it needs'
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    imageV2:
+      type: object
+      required:
+        - id
+        - file_name
+        - preview_URL
+      properties:
+        id:
+          $ref: "#/components/schemas/idReadonly"
+        file_name:
+          $ref: "#/components/schemas/fileName"
+        preview_url:
+          $ref: "#/components/schemas/previewUrl"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    customImportantInformation:
+      type: object
+      required:
+        - id
+        - experience_id
+        - language_code
+        - name
+        - flow_code
+        - status_code
+      properties:
+        id:
+          type: string
+          readOnly: true
+          format: uuid
+          example: '32d06ab9-dcd7-4cef-8ea3-cf989799f4a9'
+        experience_id:
+          $ref: "#/components/schemas/experienceId"
+        code:
+          description: Internal code for "things to remember"
+          type: string
+          example: 'COPYPASS'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+        name:
+          description:  Important information's name
+          type: string
+          example: 'Copy of your password'
+        description:
+          description: Object's description
+          type: string
+          example: 'Description if it needs'
+        automatic_translation:
+          $ref: "#/components/schemas/automaticTranslation"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        visualization_order:
+          $ref: "#/components/schemas/visualizationOrder"
+        flow_code:
+          $ref: "#/components/schemas/flowCode"
+        status_code:
+          $ref: "#/components/schemas/statusCode"
+        creation_date:
+          $ref: "#/components/schemas/creationDate"
+        updated_date:
+          $ref: "#/components/schemas/updatedDate"
+
+    translationRequest:
+      type: object
+      required:
+        - language_list
+      properties:
+        language_list:
+          type: array
+          items:
+            $ref: "#/components/schemas/languageTranslation"
+
+    languageTranslation:
+      type: object
+      required:
+        - language_code
+        - to_be_translated
+        - automatic_review
+      properties:
+        language_code:
+          $ref: "#/components/schemas/languageCodeEs"
+        to_be_translated:
+          $ref: "#/components/schemas/toBeTranslated"
+        automatic_review:
+          $ref: "#/components/schemas/automaticReview"
+
+    # SIMPLES
+    previewUrl:
+      type: string
+      description: Preview URL
+      example: "https://fotoware.com/images/boat_experience_image.jpg"
+    fileName:
+      type: string
+      description: File name
+      example: "boat_experience_image"
+    visualizationOrder:
+      type: number
+      description: Visualization order
+    width:
+      type: number
+      description: Specifies de width of an image in pixels
+      example : 80
+    height:
+      type: number
+      description: Specifies de height of an image in pixels
+      example : 15
+    size:
+      type: string
+      enum: [ SMALL, MEDIUM, BIG, EXTRA_LARGE, LPP, DYNAMIC ]
+      description: Measure of space a file takes up on a storage medium. It's categorized in internal codes .
+      example : SMALL
+    contentFile:
+      type: string
+      format: binary
+      writeOnly: true
+    isCover:
+      type: boolean
+      description: Item is cover
+      example :  true
+    mediaType:
+      type: string
+      description: Media type
+      example :  "image/png,audio/mpeg..."
+    imageType:
+      type: string
+      enum: [ COVER, GALLERY, THUMB ]
+      description: Media type
+      example: "GALLERY"
+    description:
+      type: string
+      description: Translation description.
+      example: "Translation description"
+      format: string
+    secondDescription:
+      type: string
+      description: Translation second description.
+      example: "Translation second description"
+      format: string
+    thirdDescription:
+      type: string
+      description: Translation third description.
+      example: "Translation third description"
+      format: string
+    seoTitle:
+      type: string
+      description: Seo meta title.
+      example: "Seo meta title"
+      format: string
+    seoDescription:
+      type: string
+      description: Seo meta description.
+      example: "Seo meta description"
+      format: string
+    infoVoucher:
+      type: string
+      example: "Info voucher"
+    meetingPointDetails:
+      type: string
+      example: "Meeting point details"
+    name:
+      type: string
+      description: Entity name.
+      example: "Entity name"
+      format: string
+    owner:
+      type: string
+      description: Creator of the item in the first instance.
+      example: "LORD BYRON"
+      format: string
+    datetime:
+      type: string
+      description: Creation date
+      example: "2022-02-18"
+      format: date
+    unpublishDate:
+      readOnly: true
+      type: string
+      description: Unpublish date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      example: "2022-04-10T10:15:66Z"
+    creationDate:
+      readOnly: true
+      type: string
+      description: Creation date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      example: "2022-04-10T10:15:66Z"
+    updatedDate:
+      readOnly: true
+      type: string
+      description: Last updated date in UTC(ISO_8601) format (YYYY-MM-DDTHH:MM:SSZ)
+      example: "2022-05-20T10:15:66Z"
+    signature:
+      type: boolean
+      description: Item has been signed
+      example: true
+    experienceId:
+      type: string
+      description: "Experience id to which the entity belongs"
+      example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+      format: uuid
+    code:
+      type: string
+      description: "Internal code"
+      example: "MEDIA"
+    optionId:
+      type: string
+      description: "Option for the Operational Information"
+      example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+      format: uuid
+    asxServiceCodeTranslationId:
+      type: string
+      description: "This field only will be filled up when the experience in NOVA is related with service/modalities from ASX"
+      example: "5281000c-952f-4ed0-9ca5-a63d1b653041"
+      format: uuid
+    asxModalityCode:
+      type: string
+      description: "This field only will be filled up when the experience in NOVA is related with service/modalities from ASX"
+      example: "MOD1-123"
+    statusId:
+      type: string
+      description: Status id.
+      example: "fc2e9c6b-8f9e-4bc4-b669-f10623a39740"
+      format: uuid
+    statusCode:
+      type: string
+      description: Status code.
+      enum: ["IN_REVIEW", "TO_BE_EDIT", "READY"]
+      example: "IN_REVIEW"
+    automaticTranslation:
+      type: boolean
+      description: Was the entity automatically translated?
+      readOnly: true
+      example: true
+    toBeTranslated:
+      type: boolean
+      description: Should the entity be translated automatically?
+      writeOnly: true
+      example: true
+    automaticReview:
+      type: boolean
+      description: Should need a manual translation?
+      writeOnly: true
+      example: true
+    curationQuality:
+      type: boolean
+      description: Human review
+      example: true
+    title:
+      type: string
+      description: Product title
+      example: Product title
+    idReadonly:
+      type: string
+      format: uuid
+      readOnly: true
+      description : Entity internal unique code
+      example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+    idMediaItem:
+      type: string
+      format: uuid
+      description : Media element internal unique code
+      example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+    flowId:
+      type: string
+      format: uuid
+      description: Flow internal unique code associated with content type
+      example: 075343be-aa67-435b-bab3-9b1f5818b649
+    flowCode:
+      type: string
+      description : Flow internal unique code associated with content type
+      enum: [ "CURATION", "MANUAL_TRANSLATION", "MEDIA", "AUTOTRANSLATION" ]
+      example: CURATION
+    languageCode:
+      type: string
+      format: string
+      description : Language code
+      example: en
+    languageCodeEs:
+      type: string
+      format: string
+      description : Language code
+      example: es
+    id:
+      type: string
+      format: uuid
+      description : Entity internal unique code
+      example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+    supplierId:
+      type: string
+      format: uuid
+      description : Supplier id media owner
+      example: 6ef573e9-e0fc-4185-886b-1b28a64381e9
+    copyrightId:
+      type: string
+      format: uuid
+      description : Copyright media id
+      example: 7fe266bf-24ff-4008-8a7a-622a4514eb47
+    experienceMediaId:
+      type: string
+      format: uuid
+      description: Experience media id
+      example: 2b9a5553-394d-4ef8-8908-a5ff5cad1e5f
+    optionCode:
+      type: string
+      description: Option code
+      example: GENERAL
+    optionDescription:
+      type: string
+      example: "Full day"
+  parameters:
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.content-command-offer-service.v1,  vnd.content-command-offer-service.v2  ]
+      example: vnd.content-command-offer-service.v1
+    languageCodeParam:
+      name: language_code
+      in: query
+      description: Language code
+      required: true
+      schema:
+        type: string
+      example: en
+    id:
+      name: id
+      in: path
+      description: Entity id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    experienceId:
+      name: experience_id
+      in: path
+      description: Entity id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    filtersParam:
+      name: filters
+      in: query
+      description: operations to filter
+      required: false
+      schema:
+        type: string
+      example: "id==1f9d2c62-535a-11ec-bf63-0242ac130002;name==NAME"
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: ""
+    limitParam:
+      name: limit
+      in: query
+      description: number to limit the results by
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset for the items to retrieve
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+      example: ""
+    forceParam:
+      name: force
+      in: query
+      description: force operation
+      schema:
+        type: boolean
+      example: true
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '406':
+      description: Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '409':
+      description: "Conflict - The request could not be processed because of conflict in the request"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    traceId:
+      description: Used to track the request
+      style: simple
+      schema:
+        type: string
+    location:
+      description: experience-image URI
+      schema:
+        type: string
+        example: "/images/8ed31c48-09a9-431e-bf32-06c1295ce119"

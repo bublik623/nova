@@ -1,0 +1,6 @@
+# CODEOWNERS file
+# https://docs.gitlab.com/ee/user/project/code_owners.html
+
+* @dario.castiglione
+* @gabriele.fazio
+* @tommaso.bartolucci

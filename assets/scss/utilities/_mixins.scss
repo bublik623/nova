@@ -1,0 +1,38 @@
+// Fonts
+@mixin font-regular($size) {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: rem($size);
+}
+
+@mixin font-semibold($size) {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: rem($size);
+}
+
+@mixin font-bold($size) {
+  font-family: var(--font-family);
+  font-weight: 900;
+  font-size: rem($size);
+}
+
+$desktop-sm: 1280px;
+$desktop-md: 1440px;
+$desktop-lg: 1920px;
+
+@mixin start-from($size) {
+  @if $size == desktop-md {
+    @media (min-width: $desktop-md) {
+      @content;
+    }
+  } @else if $size == desktop-lg {
+    @media (min-width: $desktop-lg) {
+      @content;
+    }
+  } @else if $size == desktop-sm {
+    @media (min-width: $desktop-sm) {
+      @content;
+    }
+  }
+}

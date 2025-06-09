@@ -1,0 +1,28 @@
+import { Country } from "@/types/Country";
+
+export const COUNTRIES: Country[] = [
+  { code: "BE", prefix: "+32", name: "Belgium" },
+  { code: "BR", prefix: "+55", name: "Brasil" },
+  { code: "DE", prefix: "+49", name: "Germany" },
+  { code: "DK", prefix: "+45", name: "Denmark" },
+  { code: "EN", prefix: "+44", name: "United Kingdom" },
+  { code: "ES", prefix: "+34", name: "Spain" },
+  { code: "FI", prefix: "+358", name: "Finland" },
+  { code: "FR", prefix: "+33", name: "France" },
+  { code: "GI", prefix: "+350", name: "Gibraltar" },
+  { code: "GR", prefix: "+30", name: "Greece" },
+  { code: "HR", prefix: "+385", name: "Croatia" },
+  { code: "IT", prefix: "+39", name: "Italy" },
+  { code: "MA", prefix: "+212", name: "Morocco" },
+  { code: "ME", prefix: "+382", name: "Montenegro" },
+  { code: "MT", prefix: "+356", name: "Malta" },
+  { code: "NL", prefix: "+31", name: "Netherlands" },
+  { code: "NO", prefix: "+47", name: "Norway" },
+  { code: "PL", prefix: "+48", name: "Poland" },
+  { code: "PT", prefix: "+351", name: "Portugal" },
+  { code: "RU", prefix: "+7", name: "Russia" },
+  { code: "SE", prefix: "+46", name: "Sweden" },
+  { code: "SI", prefix: "+386", name: "Slovenia" },
+  { code: "TR", prefix: "+90", name: "Türkiye" },
+  { code: "US", prefix: "+1", name: "United States of America" },
+];

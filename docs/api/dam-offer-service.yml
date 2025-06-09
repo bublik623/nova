@@ -1,0 +1,252 @@
+openapi: 3.0.2
+info:
+  title: Dam Offer Service
+  description: Digital Asset Management Offer Solution
+  version: 1.0.0
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: "https://dam-offer-service.tui-dx.com"
+    description: Prod server
+  - url: "https://dam-offer-service.pre.tui-dx.com"
+    description: Pre-prod server
+  - url: "https://dam-offer-service.test.tui-dx.com"
+    description: Test server
+tags:
+  - name: experiences-images
+    description: Experiences images methods.
+  - name: images
+    description: Images methods
+paths:
+  /experiences/{experience_id}/images:
+    get:
+      operationId: getImagesByExperienceId
+      tags:
+        - experiences-images
+      summary: 'Gets the images related to an experience in the DAM'
+      description: 'Gets the images related to an experience in the DAM'
+      parameters:
+        - $ref: '#/components/parameters/experienceId'
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/acceptEncoding'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/Images'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/accessControlAllowOrigin'
+            Content-Encoding:
+              $ref: '#/components/headers/contentEncoding'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /images/publish:
+    post:
+      operationId: publishImages
+      tags:
+        - images
+      summary: 'Publish fotoware ready to process images'
+      description: 'It will retrieve fotoware images with ready to process metadata, then it will publish them and update its public url'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/acceptEncoding'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains a report describing the operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicationReport'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/accessControlAllowOrigin'
+            Content-Encoding:
+              $ref: '#/components/headers/contentEncoding'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+
+components:
+  headers:
+    trace-id:
+      description: Operation trace identifier
+      schema:
+        type: string
+        example: "95a56db71f007f49"
+    accessControlAllowOrigin:
+      description: Access Control Allow Origin
+      schema:
+        type: string
+    contentEncoding:
+      description: Content Encoding
+      schema:
+        type: string
+  parameters:
+    experienceId:
+      name: experience_id
+      in: path
+      description: Experience id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    acceptVersionParam:
+      name: Accept-Version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.dam-offer-service.v1 ]
+      example: vnd.dam-offer-service.v1
+    acceptEncoding:
+      name: Accept-Encoding
+      in: header
+      description: Accept Encoding
+      required: false
+      schema:
+        type: string
+    accept:
+      name: Accept
+      in: header
+      description: Accept
+      required: false
+      schema:
+        type: string
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    Images:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/Image"
+    Image:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: Image name
+          example: Generic_Wine_Wine_Tasting_09.jpg
+        preview_url:
+          type: string
+          format: uri
+          description: Public url of the image
+          example: https://tuigroup.fotoware.cloud/fotoweb/embed/2023/05/45dac52404b547ad8d416c917f53720c.jpg
+    PublicationReport:
+      type: object
+      properties:
+        ready_to_process:
+          type: integer
+          description: Number of images found in ready to process status (817)=yes
+          example: 10
+        successfully_processed:
+          type: integer
+          description: Number of images that have been successfully published
+          example: 9
+        failures:
+          type: array
+          description: Failing images
+          items:
+            $ref: "#/components/schemas/PublicationFailure"
+    PublicationFailure:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Image id that failed when processed
+          example: "file.jpg"
+        error_message:
+          type: string
+          description: Error message
+          example: "Error updating the image public url"
+  responses:
+    '401':
+      description: 'Unauthorized - The supplied credentials, if any, are not sufficient to access the resource'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        Access-Control-Allow-Origin:
+          $ref: '#/components/headers/accessControlAllowOrigin'
+        Content-Encoding:
+          $ref: '#/components/headers/contentEncoding'
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        Access-Control-Allow-Origin:
+          $ref: '#/components/headers/accessControlAllowOrigin'
+        Content-Encoding:
+          $ref: '#/components/headers/contentEncoding'
+    '406':
+      description: 'Not Acceptable - Bad accept version header'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        Access-Control-Allow-Origin:
+          $ref: '#/components/headers/accessControlAllowOrigin'
+        Content-Encoding:
+          $ref: '#/components/headers/contentEncoding'
+    '500':
+      description: 'Internal Server Error. Please try again.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        Access-Control-Allow-Origin:
+          $ref: '#/components/headers/accessControlAllowOrigin'
+        Content-Encoding:
+          $ref: '#/components/headers/contentEncoding'
+  securitySchemes:
+    bearerAuth:  # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

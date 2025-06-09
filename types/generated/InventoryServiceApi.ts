@@ -1,0 +1,61 @@
+"use strict";
+export type Error = { code: string; message?: string };
+export type Slot = {
+  id?: string;
+  experience_id?: string;
+  timeslice_id?: string;
+  aggregation_id?: string;
+  creation_date?: string;
+  date?: string;
+  language?: string;
+  type: string;
+  confirmation_time?: string;
+  cutoff_time?: string;
+  supplier?: string;
+  option?: {
+    id?: string;
+    name: string;
+    duration?: string;
+    validity_days?: number;
+    multilanguage?: boolean;
+    capacity_type: "unlimited" | "language" | "pax" | "shared";
+    pricing_type_allowed: PricingType;
+  };
+  cancellation_policy?: Array<unknown>;
+  pricing?: {
+    id: string;
+    name: string;
+    holder: string;
+    age_range: IntRange;
+    tiers: Tiers;
+    currency: Currency;
+    pricing_type: PricingType;
+  };
+  total_capacity?: number;
+  remaining_capacity?: number;
+  bookings?: number;
+  time?: string;
+  expiration_date?: string;
+  expiration_days?: number;
+  name?: string;
+  enabled?: boolean;
+  status?: "ACTIVE" | "DELETED";
+};
+export type Currency = string;
+export type Tiers = Array<Tier>;
+export type Tier = {
+  from: number;
+  to: number;
+  retail_price: number;
+  commission: number;
+  net_price: number;
+};
+export type IntRange = { from?: number; to?: number };
+export type EnablingRq = {
+  ids?: Array<string>;
+  timeslice_ids?: Array<string>;
+  enabled?: boolean;
+};
+export type BookingRq = { id?: string; bookings?: number };
+export type UpdateCapacityRq = { id?: string; total_capacity?: number };
+export type PricingType = "person" | "group";

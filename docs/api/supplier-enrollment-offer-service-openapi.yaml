@@ -1,0 +1,902 @@
+openapi: 3.0.2
+info:
+  title: Supplier Enrollment Offer Service
+  version: 1.0.0
+  description: Supplier Enrollment Offer Service
+  termsOfService: 'https://tui-dx.com/terms/'
+  contact:
+    name: Supplier Team
+    email: supplierteam@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  -
+    url: 'https://nova-api-gateway.test.tui-mm.com/supplier-enrollment'
+    description: Test environment
+  -
+    url: 'http://localhost:8080'
+    description: Local environment
+paths:
+  /enrollment-requests:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/enrollmentRequestPost'
+      tags:
+        - supplier
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      operationId: createNewEnrollmentsRequest
+      summary: Create new enrollments request
+      description: Create new enrollments request
+    parameters:
+      -
+        $ref: '#/components/parameters/acceptVersionParam'
+  /configurations/active:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - configurations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/activeConfiguration'
+          description: ''
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      operationId: getActiveEnrollmentConfigurations
+      summary: Get Active enrollment configurations
+      description: >-
+        Get the active enrollment configurations. This endpoint isn't under Authentication and can be
+        used by 
+        
+        Front-end to get the active configuration.
+        
+        The response contains the configuration and the last configuration applied.
+  /configurations/last:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - configurations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/completeEnrollmentConfiguration'
+          description: ''
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: getLastEnrollmentConfigurations
+      summary: Get Last enrollment configurations
+      description: |-
+        Get Last enrollment configurations posted. This endpoint is under authentication and used by 
+        User with `contract-EDIT` authorities to check the last configuration applied.
+  /configurations/rejection-reasons:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - configurations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rejectionReasons'
+          description: ''
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: [ ]
+      operationId: getRejectionReasons
+      summary: Get all rejection reasons
+      description: |-
+        Get enrollment request rejection request. This endpoint is under authentication and used by 
+        User with `contract-EDIT` authorities.
+  /configurations:
+    get:
+      tags:
+        - configurations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/completeEnrollmentConfiguration'
+          description: ''
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: getAllEnrollmentConfigurations
+      summary: Get All enrollment configurations
+      description: >-
+        Get the last 10 enrollment configurations posted. This endpoint is under authentication and
+        used by 
+        
+        User with `contract-EDIT` authorities to view the history of the configuration applied.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/enrollmentConfiguration'
+      tags:
+        - configurations
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: postEnrollmentConfiguration
+      summary: Apply new Configuration
+      description: |-
+        Post a new enrollment configuration. This endpoint is under authentication and used by 
+        User with `contract-EDIT` authorities.
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+  '/enrollment-requests/{id}/approve':
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/approve'
+      tags:
+        - supplier
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: approveEnrollmentsRequest
+      summary: Approve the enrollment request.
+      description: |-
+        Approve the selected Supplier request.
+        Starting the on-boarding process for the new Supplier.
+    parameters:
+      -
+        name: id
+        description: 'Enrollment request id '
+        schema:
+          format: uuid
+          type: string
+        in: path
+        required: true
+      -
+        $ref: '#/components/parameters/acceptVersionParam'
+  '/enrollment-requests/{id}/reject':
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rejectionReasons'
+      tags:
+        - supplier
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: rejectEnrollmentsRequest
+      summary: Reject the enrollment request.
+      description: |-
+        Reject the selected Supplier request.
+        An information email will be sent to the rejected Supplier.
+    parameters:
+      -
+        name: id
+        description: 'Enrollment request id '
+        schema:
+          format: uuid
+          type: string
+        in: path
+        required: true
+      -
+        $ref: '#/components/parameters/acceptVersionParam'
+  /enrollment-requests/approved:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - supplier
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/enrollmentRequest'
+          description: List of Approved Request
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: getApprovedRequests
+      summary: Get Approved Requests
+      description: |-
+        Get all enrollment requests that are in APPROVED status. A request has status APPROVED when a 
+        Supplier Manager approved it from the UI. Once the request is approved data are sent to contract-master-data 
+        and the supplier's profile is created. A valid token is required
+  /enrollment-requests/pending:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - supplier
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/enrollmentRequest'
+          description: List of Pending Request
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: getPendingRequests
+      summary: Get Pending Request
+      description: |-
+        Get all enrollment requests that are in TO_BE_APPROVED status. A request has status TO_BE_APPROVED when a 
+        Supplier Manager approved or reject it from the UI. A valid token is required
+  /enrollment-requests/rejected:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - supplier
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/enrollmentRequest'
+          description: List of Rejected Request
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/500'
+      security:
+        -
+          bearerAuth: []
+      operationId: getRejectedRequests
+      summary: Get Rejected Request
+      description: |-
+        Get all enrollment requests that are in REJECTED status. A request has status REJECTED when a 
+        Supplier Manager reject it from the UI. Once the request is rejected data are sent to contract-master-data 
+        and the supplier's is notify with an email. A valid token is required
+components:
+  schemas:
+    ProblemDetails:
+      required:
+        - title
+      type: object
+      properties:
+        type:
+          format: uri
+          description: A URI reference that identifies the problem type.
+          maxLength: 1024
+          type: string
+        status:
+          format: int32
+          description: >-
+            The HTTP status code generated by the origin server for this occurrence of the
+            problem.
+          maximum: 599
+          minimum: 100
+          type: integer
+        title:
+          description: >-
+            A short, human-readable summary of the problem type. It should not change from
+            occurrence to occurrence of the problem, except for purposes of localization.
+          maxLength: 1024
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          maxLength: 4096
+          type: string
+        instance:
+          description: >-
+            A URI reference that identifies the specific occurrence of the problem. It may or may
+            not yield further information if dereferenced.
+          maxLength: 1024
+          type: string
+        code:
+          description: >-
+            An API specific error code aiding the provider team understand the error based on
+            their own potential taxonomy or registry.
+          maxLength: 50
+          type: string
+        errors:
+          $ref: '#/components/schemas/Errors'
+    Errors:
+      description: An array of error details to accompany a problem details response.
+      maxItems: 1000
+      type: array
+      items:
+        $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      description: An object to provide explicit details on a problem towards an API consumer.
+      required:
+        - detail
+      type: object
+      properties:
+        detail:
+          description: >-
+            A granular description on the specific error related to a body property, query
+            parameter, path parameters, and/or header.
+          maxLength: 4096
+          type: string
+        pointer:
+          description: A JSON Pointer to a specific request body property that is the source of error.
+          maxLength: 1024
+          type: string
+        parameter:
+          description: The name of the query or path parameter that is the source of error.
+          maxLength: 1024
+          type: string
+        header:
+          description: The name of the header that is the source of error.
+          maxLength: 1024
+          type: string
+        code:
+          description: A string containing additional provider specific codes to identify the error context.
+          maxLength: 50
+          type: string
+    plainError:
+      required:
+        - status
+      type: object
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    activeConfiguration:
+      title: activeConfiguration
+      description: Object containing the active configuration specific designed for the FE application.
+      type: object
+      properties:
+        registration_open:
+          description: Flag to enable/disable the registration form for new suppliers.
+          type: boolean
+        integrations:
+          description: List of all possible supplier integrations for the registration form.
+          type: array
+          items:
+            type: string
+        experiences_intervals:
+          description: List of supplier experiences cardinality intervals for the registration form.
+          type: array
+          items:
+            type: string
+        experiences_types:
+          description: List of supplier experiences types for the registration form.
+          type: array
+          items:
+            type: string
+      example:
+        registration_open: true
+        integrations:
+          - Bokun
+          - Fareharbor
+          - TourCMS
+          - PORTA
+        experiences_intervals:
+          - 1-10
+          - 11-30
+          - 31-50
+          - 50+
+        experiences_types:
+          - 'Experiences (Day tours, guided tours etc)'
+          - Tickets and events
+          - Transfers
+          - Other
+    enrollmentConfiguration:
+      title: enrollmentConfiguration
+      required:
+        - registration
+        - general_notification
+        - notification_mapping
+        - integrations
+        - experiences_intervals
+        - experiences_types
+      type: object
+      properties:
+        registration:
+          $ref: '#/components/schemas/registrationStatus'
+        general_notification:
+          description: Fallback email to notify when a ne supplier registration request is received.
+          type: string
+        notification_mapping:
+          description: >-
+            Mapping of country code to email to notify when a new supplier registration request is
+            received.
+          type: object
+          additionalProperties:
+            type: string
+        integrations:
+          description: List of all possible supplier integrations.
+          type: array
+          items:
+            type: string
+        experiences_intervals:
+          description: List of supplier experiences cardinality intervals.
+          type: array
+          items:
+            type: string
+        experiences_types:
+          description: List of supplier experiences types.
+          type: array
+          items:
+            type: string
+      example:
+        registration: ENABLED
+        general_notification: user@email.com
+        notification_mapping:
+          IT: user@email.com
+          ES: user@email.com
+        integrations:
+          - Bokun
+          - Fareharbor
+          - TourCMS
+          - PORTA
+        experiences_intervals:
+          - 1-10
+          - 11-30
+          - 31-50
+          - 50+
+        experiences_types:
+          - 'Experiences (Day tours, guided tours etc)'
+          - Tickets and events
+          - Transfers
+          - Other
+    completeEnrollmentConfiguration:
+      title: completeEnrollmentConfiguration
+      type: object
+      properties:
+        configurations:
+          $ref: '#/components/schemas/enrollmentConfiguration'
+        created_by:
+          type: string
+        created_at:
+          type: string
+      example:
+        configurations:
+          registration: ENABLED
+          general_notification: user@email.com
+          notification_mapping:
+            IT: user@email.com
+            ES: user@email.com
+          integrations:
+            - Bokun
+            - Fareharbor
+            - TourCMS
+            - PORTA
+          experiences_intervals:
+            - 1-10
+            - 11-30
+            - 31-50
+            - 50+
+          experiences_types:
+            - 'Experiences (Day tours, guided tours etc)'
+            - Tickets and events
+            - Transfers
+            - Other
+        created_by: 8e880b44-1544-45db-8230-0776a04cd196
+        created_at: '2025-01-31T11:23:08.946846'
+    registrationStatus:
+      title: registrationStatus
+      description: ENABLED/DISABLED new suppliers registration request acceptance.
+      enum:
+        - ENABLED
+        - DISABLED
+    enrollmentRequestPost:
+      required:
+        - company_name
+        - company_legal_name
+        - based_in
+        - countries_code_operate_in
+        - number_of_activities_offered
+        - commission
+        - type_of_activities_offered
+        - has_tui_employee_relationships
+        - is_tui_employee
+        - email_for_communication
+        - phone_number
+        - website_socialmedia_url
+        - has_api_integration
+        - agreement
+      type: object
+      properties:
+        company_name:
+          description: The name of the company.
+          type: string
+        company_legal_name:
+          description: The legal name of the company.
+          type: string
+        based_in:
+          description: Country the supplier is based in. Send an code from `GET /countries` endpoint.
+          type: string
+        countries_code_operate_in:
+          description: Countries the supplier operates in.
+          type: array
+          items:
+            description: . Send an code from `GET /countries` endpoint.
+            type: string
+        number_of_activities_offered:
+          type: string
+        type_of_activities_offered:
+          type: array
+          items:
+            type: string
+        commission:
+          type: string
+        has_tui_employee_relationships:
+          type: boolean
+        is_tui_employee:
+          type: boolean
+        email_for_communication:
+          type: string
+        phone_number:
+          type: string
+        website_socialmedia_url:
+          type: string
+        has_api_integration:
+          type: boolean
+        list_of_api_integrations_used:
+          type: array
+          items:
+            type: string
+        free_comment:
+          maxLength: 500
+          type: string
+        agreement:
+          type: boolean
+      example:
+        company_name: 'My Company'
+        company_legal_name: 'My company legal name'
+        based_in: 'IT'
+        countries_code_operate_in:
+          - 'IT'
+          - 'FR'
+        number_of_activities_offered: '1-10'
+        type_of_activities_offered:
+          - 'Type-1'
+          - 'Type-2'
+        commission: '5%'
+        has_tui_employee_relationships: true
+        is_tui_employee: true
+        email_for_communication: 'name.email@example.com'
+        phone_number: '+39712839287'
+        website_socialmedia_url: 'https://www.example.com'
+        has_api_integration: true
+        list_of_api_integrations_used:
+          - 'FOO-provider'
+          - 'BAR-provider'
+        free_comment: 'This is a test'
+        agreement: true
+    enrollmentRequest:
+      type: object
+      allOf:
+        -
+          $ref: '#/components/schemas/enrollmentRequestPost'
+        -
+          required:
+            - id
+            - created_at
+            - updated_at
+          properties:
+            id:
+              format: uuid
+              description: Unique identifier of the enrollment request.
+              type: string
+            created_at:
+              format: date-time
+              type: string
+            updated_at:
+              format: date-time
+              type: string
+    rejectionReasons:
+      title: rejectionReasons
+      type: object
+      properties:
+        reasons:
+          description: List of all possible rejection reasons.
+          type: array
+          items:
+            type: string
+      example:
+        reasons:
+          - "Supplier operates in countries we don't offer experiences"
+          - "Supplier already has an account - DUPLICATE"
+          - "Supplier doesn't want to work with our commission"
+    approve:
+      title: Approve
+      type: object
+      properties:
+        commission:
+          description: The accepted commission.
+          type: number
+        assignee:
+          description: List of all assigned supplier managers.
+          type: array
+          items:
+            $ref: '#/components/schemas/assignee'
+      example:
+        commission: 20.05
+        assignee:
+          - {name: 'username.assignee',
+             email: 'name.email@example.com'}
+    assignee:
+      title: Assignee
+      type: object
+      properties:
+        username:
+          description: The Assignee username.
+          type: string
+        email:
+          description: The Assignee email.
+          type: string
+      example:
+        name: 'name assignee'
+        email: 'name.email@example.com'
+  responses:
+    '204':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            type: object
+      description: Status was changed.
+    '400':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            wrongEmail:
+              value:
+                type: 'http://invalid-body-property-format'
+                status: 400
+                title: Invalid Body Property
+                detail: The request body contains a malformed property.
+                code: 400-04
+                errors:
+                  -
+                    detail: Emails is not valid
+                    pointer: /email
+            emailAndName:
+              value:
+                type: 'http://invalid-body-property-format'
+                status: 400
+                title: Invalid Body Property
+                detail: The request body contains a malformed property.
+                code: 400-04
+                errors:
+                  -
+                    detail: Emails is not valid
+                    pointer: /email
+                  -
+                    detail: Name cannot be empty
+                    pointer: /name
+      description: Bad Request. Inspect the response body for details.
+    '401':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/plainError'
+      description: 'Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.'
+    '403':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/plainError'
+      description: You don't have permissions to access this resource
+    '404':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/plainError'
+      description: Resource Not found
+    '406':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/plainError'
+      description: Not Acceptable - Bad accept version header
+    '409':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/plainError'
+      description: Conflict. The enrollment request cannot move to the status specied in the request.
+    '500':
+      headers:
+        trace-id:
+          $ref: '#/components/headers/traceId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/plainError'
+          examples:
+            Example1:
+              value:
+                status: '100'
+                message: An unexpected error occurred. Please try again later.
+      description: 'Internal Server Error. The application '
+  parameters:
+    acceptVersionParam:
+      example: vnd.supplier-enrollment-offer-service.v1
+      name: accept-version
+      description: API version
+      schema:
+        enum:
+          - vnd.supplier-enrollment-offer-service.v1
+        type: string
+      in: header
+      required: true
+  headers:
+    traceId:
+      style: simple
+      schema:
+        type: string
+      description: Used to track the request
+  securitySchemes:
+    bearerAuth:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+security:
+  -
+    bearerAuth: []
+tags:
+  -
+    name: supplier
+    description: Supplier.
+  -
+    name: configurations
+    description: configurations.

@@ -1,0 +1,819 @@
+openapi: 3.0.2
+
+info:
+  title: Internal Product Inventory Experience Offer Service
+  description: API to get and set information about the inventory
+  version: 1.0.0
+
+  termsOfService: 'http://tui-dx.com/terms/'
+  contact:
+    name: Javier Gutierrez
+    email: jgutierrez@vectoritcgroup.com
+    url: 'http://inventory-service.test.tui-dx.com'
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: https://prod.api.tui/inventory
+    description: Prod server
+  - url: https://pre-prod.api.tui/inventory
+    description: Pre-Prod server
+  - url: https://test.api.tui/inventory
+    description: Test server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Slots
+
+paths:
+  /slots:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getSlotsCollection
+      tags:
+        - Slots
+      summary: 'Retrieves the stream of Slots resources.'
+      description: 'Retrieves the stream of Slots resources.'
+      parameters:
+        - name: experience_id
+          in: query
+          description: Experience id
+          schema:
+            type: string
+            format: uuid
+        - name: start_date
+          in: query
+          description: Start date
+          schema:
+            type: string
+            format: date
+            pattern: "YYYY-MM-DD"
+        - name: end_date
+          in: query
+          description: End date
+          schema:
+            type: string
+            format: date
+            pattern: "YYYY-MM-DD"
+        - name: start_time
+          in: query
+          description: Start Time
+          schema:
+            type: string
+            format: time
+            pattern: "HH:MM"
+        - name: end_time
+          in: query
+          description: End Time
+          schema:
+            type: string
+            format: time
+            pattern: "HH:MM"
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/slot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /slots/enabling:
+    post:
+      operationId: enabling
+      tags:
+        - Slots
+      summary: 'Allow to enable/disable selected slots'
+      description: 'Allow to enable/disable selected slots. You can use list of ids or list of timeslice ids, but not both together'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/enabling_rq'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /slots/booking:
+    post:
+      operationId: booking
+      tags:
+        - Slots
+      summary: 'Add/Subtract bookings to a slot'
+      description: 'Add/Subtract bookings to a slot, also update the reaming capacity. The booked and remaining capacity of the shared capacities slots will also be updated.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking_rq'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /slots/update-capacity:
+    post:
+      operationId: updateCapacity
+      tags:
+        - Slots
+      summary: 'Updates the total capacity of the selected slot'
+      description: 'Updates the total capacity and ramaining capacity (total capacity - booked) of the selected slot. The total capacity and remaining capacity of the shared capacities slots will also be updated.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateCapacity_rq'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /internal/slots:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getSlotsCollectionInternal
+      tags:
+        - Slots
+      summary: 'Retrieves the stream of Slots resources without security restrictions'
+      description: 'Retrieves the stream of Slots resources without security restrictions'
+      parameters:
+        - name: experience_id
+          in: query
+          description: Experience id
+          schema:
+            type: string
+            format: uuid
+        - name: start_date
+          in: query
+          description: Start date
+          schema:
+            type: string
+            format: date
+            pattern: "YYYY-MM-DD"
+        - name: end_date
+          in: query
+          description: End date
+          schema:
+            type: string
+            format: date
+            pattern: "YYYY-MM-DD"
+        - name: start_time
+          in: query
+          description: Start Time
+          schema:
+            type: string
+            format: time
+            pattern: "HH:MM"
+        - name: end_time
+          in: query
+          description: End Time
+          schema:
+            type: string
+            format: time
+            pattern: "HH:MM"
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/slot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /internal/slots/enabling:
+    post:
+      operationId: enablingInternal
+      tags:
+        - Slots
+      summary: 'Allow to enable/disable selected slots without security restrictions'
+      description: 'Allow to enable/disable selected slots without security restrictions. You can use list of ids or list of timeslice ids, but not both together'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/enabling_rq'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /internal/slots/booking:
+    post:
+      operationId: bookingInteral
+      tags:
+        - Slots
+      summary: 'Add/Substract booking to a slot without security restrictions without security restrictions'
+      description: 'Add/Substract booking to a slot, also update the reaming capacity. The booked and remaining capacity of the shared capacities slots will also be updated.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking_rq'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /internal/slots/update-capacity:
+    post:
+      operationId: internalUpdateCapacity
+      tags:
+        - Slots
+      summary: 'Updates the total capacity of the selected slot'
+      description: 'Updates the total capacity and ramaining capacity (total capacity - booked) of the selected slot. The total capacity and remaining capacity of the shared capacities slots will also be updated.'
+      parameters:
+        - $ref: '#/components/parameters/acceptVersionParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateCapacity_rq'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /slots/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getSlot
+      tags:
+        - Slots
+      summary: 'Retrieves a Slot resource.'
+      description: 'Retrieves a Slot resource.'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/slot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteSlot
+      tags:
+        - Slots
+      summary: 'Removes the Slot resource.'
+      description: 'Removes the Slot resource.'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /internal/slots/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getSlotInternal
+      tags:
+        - Slots
+      summary: 'Retrieves a Slot resource without security restrictions'
+      description: 'Retrieves a Slot resource without security restrictions'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/slot'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteSlotInternal
+      tags:
+        - Slots
+      summary: 'Removes the Slot resource without security restrictions'
+      description: 'Removes the Slot resource without security restrictions'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  headers:
+    trace-id:
+      description: Operation trace identifier
+      schema:
+        type: string
+        example: "95a56db71f007f49"
+    location:
+      description: Slot URI
+      schema:
+        type: string
+        example: "/slots/8ed31c48-09a9-431e-bf32-06c1295ce119"
+  parameters:
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.inventory.v1 ]
+      example: vnd.inventory.v1
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      schema:
+        type: string
+      example: ""
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customize the response recovering only the fields needed. It's a list of fields separated by commas without spaces between them
+      schema:
+        type: string
+      example: "id,experienceId"       
+    limitParam:
+      name: limit
+      in: query
+      description: number items to
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset of items
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      schema:
+        type: string
+      example: ""
+  schemas:
+    error:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    slot:
+      type: object
+      required:
+        - type
+        - instant_confirmation
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: ef19a658-df3a-4257-99fa-43ad00f6ba9f
+        experience_id:
+          type: string
+          format: uuid
+          example: 6356ce64-1740-49a1-be38-e1c2fd563cc3
+        timeslice_id:
+          type: string
+          format: uuid
+          description: "Identifier a time slice to allow grouping slots by: experience, option, date and time"
+          example: 47c92df0-1c08-4d46-acf9-81bdf83cf95a
+        agregation_id:
+          type: string
+          format: uuid
+          description: "Identifier aggregated to allow grouping slots by: experience, option, date, time and the limited capacity fields (if applied)"
+          example: 27f9e6c0-7bef-4d6a-a53a-377fd5acc862
+        date:
+          type: string
+          format: date
+        language:
+          type: string
+          example: en
+        type:
+          type: string
+          example: DATE
+        confirmation_time:
+          description: time the supplier has to manually confirm a booking, before it gets cancelled. Format ISO_8601
+          type: string
+          example: P10DT2H30M
+        cutoff_time:
+          description: time in advance needed to accept the booking before the start of the activity. Format ISO_8601
+          type: string
+          example: P10DT2H30M
+        supplier:
+          type: string
+          format: uuid
+          description: Supplier Code
+          example: 27f9e6c0-7bef-4d6a-a53a-377fd5acc862
+        option:
+          required:
+            - name
+            - language_dependency
+            - capacity_type
+            - pricing_type_allowed
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: fffbc13f-1246-44b4-9916-a816b87520d1
+            name:
+              description: The "feature" in mm, this will appear in the front-end. this is something like "tour", "guided tour", "skip the line ticket"
+              type: string
+              example: Full day trip to Venice
+            duration:
+              description: Duration of the options when it has a starting time Format ISO_8601
+              type: string
+              example: P10DT2H30M
+            validity_days:
+              description: Validity of the ticket, not the experience. for date only implicitly 1 day, open might vary
+              type: number
+            multilanguage:
+              description: the option is offered in different languages or no
+              type: boolean
+            capacity_type:
+              type: string
+              description: Capacity Type
+              example: unlimited
+              enum:
+                - unlimited
+                - language
+                - pax
+                - shared
+            pricing_type_allowed:
+              $ref: '#/components/schemas/pricing_type'
+        pricing:
+          type: object
+          required:
+            - id
+            - name
+            - holder
+            - age_range
+            - tiers
+            - currency
+            - pricing_type
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 60443932-9e52-424d-927d-b33b8028bae8
+            name:
+              type: string
+              example: High season
+            holder:
+              type: string
+              example: ADULT
+            age_range:
+              $ref: '#/components/schemas/int_range'
+            tiers:
+              $ref: '#/components/schemas/tiers'
+            currency:
+              $ref: '#/components/schemas/currency'
+            pricing_type:
+              $ref: '#/components/schemas/pricing_type'
+        total_capacity:
+                type: integer
+        remaining_capacity:
+                type: integer
+        bookings:
+                type: integer
+        time:
+              type: string
+              format: time
+              example: '10:00:00'
+        expiration_date:
+              type: string
+              format: date
+        expiration_days:
+              type: integer
+              format: number
+              example: 30
+        name:
+          type: string
+          example: "name"
+        enabled:
+          type: boolean
+        status:
+          type: string
+          enum: [ACTIVE,DELETED]
+          description: Logical deletion
+          example: ACTIVE 
+    currency:
+          readOnly: true
+          type: string
+          description: Currency code following ISO 4217 standard
+          example: EUR
+    tiers:
+      type: array
+      items:
+        $ref: '#/components/schemas/tier'
+    tier:
+      type: object
+      required:
+        - from
+        - to
+        - retail_price
+        - commission
+        - net_price
+      properties:
+          from:
+            type: integer
+            example: 1
+            description: "Purchasable amount per booking lower limit"
+          to:
+            type: integer
+            example: 10
+            description: "Purchasable amount per booking upper limit"
+          retail_price:
+            type: number
+            example: 20.00
+            description: "Retail price"
+          commission:
+            type: number
+            example: 25.00
+            description: "Commission percentage"
+          net_price:
+            type: number
+            example: 15.00
+            description: "Net price"
+    int_range:
+      type: object
+      properties:
+        from:
+          type: integer
+        to:
+          type: integer
+    enabling_rq:
+      type: object
+      required:
+        - enable
+      properties:
+        ids:
+          description: List of ids to enable or disable
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: "fd58d9dc-b69f-48d5-b6ae-4168035a5478"
+        timeslice_ids:
+          description: List of time slice ids to enable or disable
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: [2cd66e05-1281-49d4-8e4d-bad3cbd0609a,8f2ccfc4-94a9-42e5-9285-48096ed706d8]
+        enabled:
+          description: Slot status
+          type: boolean
+    booking_rq:
+      type: object
+      properties:
+        id:
+          description: Slot id
+          type: string
+          format: uuid
+        bookings:
+          description: Number of bookings. Could be positive to add bookings or negative to subtract bookings
+          type: integer
+    updateCapacity_rq:
+      type: object
+      properties:
+        id:
+          description: Slot id
+          type: string
+          format: uuid
+        total_capacity:
+          description: Number of bookings. It can be incremental or absolute depending on the value of capacity_change
+          type: integer
+    pricing_type:
+      description: The pricing type
+      type: string
+      example: person
+      enum:
+        - person
+        - group
+    
+  responses:
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: Bad Request. Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: Not Acceptable - Bad accept version header
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: "Conflict - The request could not be processed because of conflict in the request"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: Internal Server Error. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

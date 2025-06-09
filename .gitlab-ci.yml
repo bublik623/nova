@@ -1,0 +1,357 @@
+---
+# Include appsec pipeline
+include:
+  - project: templates/security/preflight-pipeline
+    ref: v1.0.0
+    file: main.yml
+  - project: dx/platform/ci-cd/component-templates/code-analysis/sonarscanner
+    ref: v1.2.1
+    file: templates/sonarscanner.yml
+  - project: dx/security/dast/dast-scan
+    ref: v0.0.9
+    file: templates/front-end-scan-zap.yaml
+
+variables:
+  QA_E2E_REPO: dx/qa/offer-factory/nova-qa
+  ZAP_TARGET: https://nova.test.tui-mm.com
+
+.default_node_jobs:
+  image: tui-docker.bin.source.tui/node:23-alpine
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  before_script:
+    - npm config set @dx:registry https://source.tui/api/v4/packages/npm/
+    - npm config set '//source.tui/api/v4/packages/npm/:_authToken' "${CI_JOB_TOKEN}"
+    - npm ci --prefer-offline --cache .npm
+
+workflow:
+  rules:
+    # don't create a pipeline if it's a commit pipeline, on a branch and that branch has open merge requests (we will get an MR build instead)
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+.common_rules:
+  master-release:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*$/'
+  feature:
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*$/'
+  master-qa-e2e:
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $QA_E2E_REPO"
+
+default:
+  tags:
+    - onesource-shared
+
+stages:
+  - build (test)
+  - test
+  - sonarscanner # Sonar must run after the tests to check the code coverage.
+  - security-code-analysis
+  - deploy (test)
+  - security-owasp-fe
+  - quality-e2e-test
+  - build (pre)
+  - deploy (pre)
+  - quality-e2e-pre
+  - build (prod)
+  - deploy (prod)
+  - build (int)
+  - deploy (int)
+  - cleanup
+
+# =============================BUILD===========================================
+
+build-app-test:
+  interruptible: true
+  stage: build (test)
+  artifacts:
+    paths:
+      - .output/public
+      - .nuxt/tsconfig.json
+  script:
+    - CI_PIPELINE_ID=$CI_PIPELINE_ID npm run build:env:test
+    - npm run typescript:check
+    - npm prune --production
+    - echo "---> build-app-test"
+    - ls .output/public/_nuxt | grep entry
+  extends: .default_node_jobs
+
+build-app-pre:
+  interruptible: true
+  stage: build (pre)
+  artifacts:
+    paths:
+      - .output/public
+      - .nuxt/tsconfig.json
+  script:
+    - CI_PIPELINE_ID=$CI_PIPELINE_ID npm run build:env:pre
+  extends: .default_node_jobs
+
+build-app-int:
+  interruptible: true
+  stage: build (int)
+  artifacts:
+    paths:
+      - .output/public
+      - .nuxt/tsconfig.json
+  script:
+    - CI_PIPELINE_ID=$CI_PIPELINE_ID npm run build:env:int
+  extends: .default_node_jobs
+
+build-app-prod:
+  interruptible: true
+  stage: build (prod)
+  artifacts:
+    paths:
+      - .output/public
+      - .nuxt/tsconfig.json
+  script:
+    - CI_PIPELINE_ID=$CI_PIPELINE_ID npm run build:env:prod
+  extends: .default_node_jobs
+
+# remove this when refactoring OFF-3664
+pages:
+  interruptible: true
+  when: manual
+  stage: build (test)
+  artifacts:
+    paths:
+      - ./public
+  script:
+    - CI_PIPELINE_ID=$CI_PIPELINE_ID npm run build:env:test
+    - npm prune --production
+    - rm -rf ./public
+    - mv ./.output/public/ ./
+  extends: .default_node_jobs
+  variables:
+    SSO_PROXY: true
+
+feature-branch:deploy:
+  interruptible: true
+  stage: build (test)
+  artifacts:
+    paths:
+      - ./public
+  script:
+    - CI_PIPELINE_ID=$CI_PIPELINE_ID npm run build:env:test
+    - npm prune --production
+    - rm -rf ./public
+    - mv ./.output/public/ ./
+  extends: .default_node_jobs
+  environment:
+    name: preview/${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}
+    url: https://dx.pages.devops.tui/-/offer/content/${CI_PROJECT_NAME}/-/jobs/${CI_JOB_ID}/artifacts/public/index.html
+    on_stop: feature-branch:stop
+    auto_stop_in: 1 week
+  variables:
+    PUBLIC_PATH: "/-/offer/content/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
+
+feature-branch:stop:
+  stage: cleanup
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+      when: manual
+  allow_failure: true
+  environment:
+    name: preview/${CI_PROJECT_NAME}/${CI_COMMIT_REF_NAME}
+    action: stop
+  script:
+    - echo "✅ environment deleted"
+
+# =============================TEST============================================
+
+test-unit:
+  interruptible: true
+  stage: test
+  coverage: /All\sfiles.*?\s+(\d+.\d+)/
+  artifacts:
+    when: always
+    paths:
+      - unit.xml
+      - coverage
+    reports:
+      junit: unit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+  script:
+    - npm run test:unit:coverage
+  extends: .default_node_jobs
+
+test-integration:
+  interruptible: true
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.35.1-focal
+  artifacts:
+    when: always
+    paths:
+      - integration.xml
+    reports:
+      junit: integration.xml
+  script:
+    - node -v
+    - npx playwright install --with-deps
+    - npm run build:env:playwright
+    - npm run test:integration
+  extends: .default_node_jobs
+
+preflight-sast:
+  stage: test
+
+# =============================SONAR==========================================
+
+sonar:
+  allow_failure: true # https://jira.tuigroup.com/browse/OFF-2522
+  stage: sonarscanner
+  variables:
+    SONARSCANNER_LANGUAGE: typescript
+    SONARSCANNER_SERVER_TOKEN: $SONAR_MUSEMENT_ANALYSIS_TOKEN
+    SONARSCANNER_HOST_URL: $SONAR_HOST_URL
+    SONARSCANNER_API_TOKEN: $SONAR_MUSEMENT_TOKEN
+    SONARSCANNER_EXCLUSIONS: types/generated/**,**.test.ts,dist,public,coverage,.nuxt,.output,nuxt.config.ts,pages/**,public/**
+    SONARSCANNER_COVERAGE_EXCLUSIONS: types/generated/**,**.test.ts,dist,public,coverage,.nuxt,.output,test/integration/**,pages/**,public/**
+  extends:
+    - .sonarscanner
+
+# =============================DEPLOY==========================================
+
+deploy-test:
+  image: registry.source.tui/dx/base-docker-images/deploybasetools:v0.2.3
+  stage: deploy (test)
+  dependencies:
+    - build-app-test
+  script:
+    - export AWS_ACCESS_KEY_ID=${TUIDS_TEST_AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${TUIDS_TEST_AWS_SECRET_ACCESS_KEY}
+    - export AWS_REGION=eu-central-1
+    - export S3_BUCKET=tuimm-test-s3-frontend-cms
+    #
+    - echo "---> deploy-test"
+    - ls .output/public/_nuxt|grep entry
+    - aws s3 sync .output/public s3://$S3_BUCKET/ --exact-timestamps --delete --cache-control max-age=0
+  only:
+    - master
+    - /^release\/.*$/
+
+deploy-pre:
+  image: registry.source.tui/dx/base-docker-images/deploybasetools:v0.2.3
+  stage: deploy (pre)
+  dependencies:
+    - build-app-pre
+  script:
+    - export AWS_ACCESS_KEY_ID=${TUIDS_PRE_AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${TUIDS_PRE_AWS_SECRET_ACCESS_KEY}
+    - export AWS_REGION=eu-central-1
+    - export S3_BUCKET=tuimm-pre-s3-frontend-cms
+    #
+    - aws s3 sync .output/public s3://$S3_BUCKET/ --exact-timestamps --delete --cache-control max-age=0
+  when: manual
+  only:
+    - master
+    - /^release\/.*$/
+
+deploy-prod:
+  image: registry.source.tui/dx/base-docker-images/deploybasetools:v0.2.3
+  stage: deploy (prod)
+  dependencies:
+    - build-app-prod
+  script:
+    - export AWS_ACCESS_KEY_ID=${TUIDS_PROD_AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${TUIDS_PROD_AWS_SECRET_ACCESS_KEY}
+    - export AWS_REGION=eu-central-1
+    - export S3_BUCKET=tuimm-prod-s3-frontend-cms
+    #
+    - aws s3 sync .output/public s3://$S3_BUCKET/ --exact-timestamps --delete --cache-control max-age=0
+  when: manual
+  only:
+    - master
+    - /^release\/.*$/
+
+deploy-int:
+  id_tokens:
+    MY_OIDC_TOKEN:
+      aud: https://source.tui
+  image: registry.source.tui/dx/base-docker-images/deploybasetools:v0.2.3
+  stage: deploy (int)
+  dependencies:
+    - build-app-int
+  needs:
+    - job: build-app-int
+    - job: deploy-prod
+  script:
+    - export AWS_WEB_IDENTITY_TOKEN_FILE=~/.aws-oid-token
+    - export AWS_ROLE_ARN=arn:aws:iam::654654163003:role/svc-onesource-deployer
+    - export AWS_ROLE_SESSION_NAME=nova-frontend-deploy
+    - export AWS_REGION=eu-west-1
+    - export S3_BUCKET=tuimm-int-s3-bucket-nova-frontend-01
+    #
+    - echo "$MY_OIDC_TOKEN" > $AWS_WEB_IDENTITY_TOKEN_FILE
+    - aws s3 sync .output/public s3://$S3_BUCKET/ --exact-timestamps --delete --cache-control max-age=0
+  only:
+    - master
+    - /^release\/.*$/
+
+# ===============================QA============================================
+
+# Qa job to perform ec2 tests on test envrironment. This job triggers a QA pipeline and the required variables are sent.
+qa-e2e-test:
+  stage: quality-e2e-test
+  needs:
+    - job: deploy-test
+      artifacts: false
+  inherit:
+    variables:
+      - QA_E2E_REPO
+  variables:
+    environment: test
+    commit: $CI_COMMIT_SHA
+    project: $CI_PROJECT_NAME
+    timeout: 10
+  trigger:
+    project: $QA_E2E_REPO
+    branch: master
+    strategy: depend
+  rules:
+    - !reference [.common_rules, master-qa-e2e]
+
+# =============================================================================
+
+# Qa job to perform ec2 tests on pre envrironment. This job triggers a QA pipeline and the required variables are sent.
+qa-e2e-pre:
+  stage: quality-e2e-pre
+  needs:
+    - job: deploy-pre
+      artifacts: false
+  inherit:
+    variables:
+      - QA_E2E_REPO
+  variables:
+    environment: pre
+    commit: $CI_COMMIT_SHA
+    project: $CI_PROJECT_NAME
+    timeout: 10
+  trigger:
+    project: $QA_E2E_REPO
+    branch: master
+    strategy: depend
+  rules:
+    - !reference [.common_rules, master-qa-e2e]
+
+# ===========================================================================
+
+security-front-end-scan:
+  stage: security-owasp-fe
+  needs:
+    - job: deploy-test
+      artifacts: false
+  only:
+    - master
+    - /^release\/.*$/
+  allow_failure: true

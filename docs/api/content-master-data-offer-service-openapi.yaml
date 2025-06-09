@@ -1,0 +1,833 @@
+openapi: 3.0.2
+
+info:
+  title: Content Master Data Offer Service
+  description: API to get and set Content Master Data
+  version: 1.0.0
+
+  termsOfService: https://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: content-master-data-offer.tui-mm.com
+    description: Prod server
+  - url: content-master-data-offer.pre.tui-mm.com
+    description: Pre-Prod server
+  - url: content-master-data-offer.test.tui-mm.com
+    description: Test server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: content-statuses
+  - name: content-media-types
+  - name: size-types
+  - name: content-types
+
+paths:
+  /content-statuses:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getContentStatusCollection
+      tags:
+        - content-statuses 
+      summary: 'Get content status stream'
+      description: 'Get content status stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/content_status'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createContentStatus
+      tags:
+        - content-statuses
+      summary: 'Create content status'
+      description: 'Create a content status, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content_status'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /content-statuses/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getContentStatus
+      tags:
+        - content-statuses
+      summary: 'Get content status by id'
+      description: 'Get content status by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content_status'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateContentStatus
+      tags:
+        - content-statuses
+      summary: 'Update content status'
+      description: 'Update the content status, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content_status'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteContentStatus
+      tags:
+        - content-statuses
+      summary: 'Delete content status '
+      description: 'Delete the content status, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /content-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getContentTypeCollection
+      tags:
+        - content-types
+      summary: 'Get content types stream'
+      description: 'Get content types stream'
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/content_type'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createContentType
+      tags:
+        - content-types
+      summary: 'Create content type'
+      description: 'Create a content type, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content_type'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /content-types/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getContentType
+      tags:
+        - content-types
+      summary: 'Get content type resource by id'
+      description: 'Get content type resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content_type'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateContentType
+      tags:
+        - content-types
+      summary: 'Update content type'
+      description: 'Update the content type, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content_type'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteContentType
+      tags:
+        - content-types
+      summary: 'Delete content type '
+      description: 'Delete the content type resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  /size-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getSizeTypeCollection
+      tags:
+        - size-types
+      summary: 'Get size types stream'
+      description: 'Get size types stream'
+      parameters:
+        - $ref: '#/components/parameters/languageCodeParam'
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/size_type'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createSizeType
+      tags:
+        - size-types
+      summary: 'Create size type'
+      description: 'Create a size type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/size_type'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /size-types/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getSizeType
+      tags:
+        - size-types
+      summary: 'Get size type by id'
+      description: 'Get size type resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/size_type'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateSizeType
+      tags:
+        - size-types
+      summary: 'Update size type'
+      description: 'Update the size type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/size_type'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteSizeType
+      tags:
+        - size-types
+      summary: 'Delete size type resource'
+      description: 'Delete the size type resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+  
+  /content-media-types:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getMediaTypeCollection
+      tags:
+        - content-media-types
+      summary: 'Get media types stream'
+      description: 'Get media types stream'
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/languageCodeParam'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/media_type'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: createMediaType
+      tags:
+        - content-media-types
+      summary: 'Create media type'
+      description: 'Create a media type resource, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/media_type'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /content-media-types/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      operationId: getMediaType
+      tags:
+        - content-media-types
+      summary: 'Get media type resource by id'
+      description: 'Get media type resource by id'
+      responses:
+        '200':
+          description: OK - The request was successful and the response body contains the representation requested.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/media_type'
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateMediaType
+      tags:
+        - content-media-types
+      summary: 'Update media type'
+      description: 'Update the media type, also send an event to Kafka topic about changes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/media_type'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteMediaType
+      tags:
+        - content-media-types
+      summary: 'Delete media type'
+      description: 'Delete media type resource, also send an event to Kafka topic about changes'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  headers:
+    trace-id:
+      description: Operation trace identifier
+      schema:
+        type: string
+        example: "95a56db71f007f49"
+    location:
+      description: URI for operation
+      schema:
+        type: string
+        example: "/content-types/f9a1e5c3-d35c-4c9b-b708-1661770da5ed"
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Entity id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.content-master-data-offer-service.v1 ]
+      example: vnd.content-master-data-offer-service.v1
+    languageCodeParam:
+      name: language_code
+      in: query
+      description: Lenguage code
+      required: true
+      schema:
+        type: string
+      example: 'es'
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customize the response recovering only the fields needed. It's a comma-separated list of fields without spaces between them
+      required: false
+      schema:
+        type: string
+      example: 'id,name'
+    filtersParam:
+      name: filters
+      in: query
+      description: Allow filtering by dynamic parameters using RSQL syntax
+      required: false
+      schema:
+        type: string
+      example: 'id==1f9d2c62-535a-11ec-bf63-0242ac130002;name==NAME'
+    limitParam:
+      name: limit
+      in: query
+      description: number to limit the results by
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset for the items to retrieve
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 10
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example: GenericApiException
+        message:
+          type: string
+          example: Error message description
+    content_status:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-status.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '2dbb4da1-3bf3-4e54-875e-1e66c615903c'
+        code:
+          description: Code of content status
+          type: string
+          example: 'DRAFT'
+        name:
+          description: Name of content status
+          type: string
+          example: 'Draft'
+        description:
+          description: Description of content status
+          type: string
+          example: 'Status for not published content'
+        language_code:
+          description: Language code
+          type: string
+          example: 'en'
+    content_type:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-type.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '521d8daa-5358-11ec-bf63-0242ac130002'
+        code:
+          description: Code of content type
+          type: string
+          example: 'IMAGE'
+        name:
+          description: Name of content type
+          type: string
+          example: 'Image'
+        description:
+          description: Description of content type
+          type: string
+          example: 'Image content'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+    size_type:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-size-type.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '521d8daa-5358-11ec-bf63-0242ac130002'
+        code:
+          description: Code of size type
+          type: string
+          example: 'SMALL'
+        name:
+          description: Name of size type
+          type: string
+          example: 'Small'
+        description:
+          description: Description of size type
+          type: string
+          example: 'Files which size is between 0 an 1024Kb'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+    
+    media_type:
+      type: object
+      required:
+        - id
+        - code
+        - name
+        - language_code
+      #x-event-source: https://source.tui/dx/architecture/tuimm-events/-/blob/master/offer-and-sourcing-domain/offer/event-offer-content-masterdata-media-types.json
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 'dd4f32b2-a7cc-40d7-8927-2fb87d01a074'
+        code:
+          description: Code
+          type: string
+          example: 'image/png'
+        name:
+          description: Name of media type
+          type: string
+          example: 'Png images'
+        description:
+          description: Description of media type
+          type: string
+          example: 'General category of data content'
+        language_code:
+          type: string
+          description: Language Code
+          example: en
+  
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/location'
+    '204':
+      description: The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: 'Bad Request. Inspect the response body for details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+      headers:
+        trace-id:
+          $ref: "#/components/headers/trace-id"
+    '404':
+      description: "Resource Not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: 'Not Acceptable - Bad accept version header'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: 'Conflict - The request could not be processed because of conflict in the request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: 'Internal Server Error. Please try again.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

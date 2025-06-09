@@ -1,0 +1,764 @@
+openapi: 3.0.2
+info:
+  title: Contract Master Data Service
+  description: Contract Master Data Service API definition in Contract Master Data Offer Service
+  version: 1.0.0
+  termsOfService: http://tui-dx.com/terms/
+  contact:
+    name: Contact TUI Content team
+    email: content_team@TUIGroup.onmicrosoft.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: "https://nova-api-gateway.tui-mm.com/contract-master-data"
+    description: Prod server
+  - url: "https://nova-api-gateway.pre.tui-mm.com/contract-mater-data"
+    description: Pre-prod server
+  - url: "https://nova-api-gateway.test.tui-mm.com/contract-master-data"
+    description: Test server
+security:
+  - bearerAuth: []
+tags:
+  - name: Languages
+    description: Languages operations
+  - name: Currencies
+    description: Currencies operations
+  - name: Suppliers
+    description: Suppliers operations
+paths:
+  /languages:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Languages
+      summary: Retrieves the languages.
+      description: Retrieves the languages.
+      operationId: getLanguageCollection
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Languages successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postLanguage
+      tags:
+        - Languages
+      summary: Creates a language.
+      description: Creates a language.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /languages/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Languages
+      summary: Gets a language by its id.
+      description: Gets a language by its id.
+      operationId: retrieveLanguageByID
+      responses:
+        '200':
+          description: OK - language successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Language'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteLanguage
+      tags:
+        - Languages
+      summary: Removes a language.
+      description: Removes a language.
+      responses:
+        '204':
+          description: OK - Deleted, the request was successful.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateLanguage
+      tags:
+        - Languages
+      summary: Updates a language.
+      description: Updates a language.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /currencies:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Currencies
+      summary: Retrieves the currencies.
+      description: Retrieves the currencies.
+      operationId: getCurrencyCollection
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Currencies successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postCurrency
+      tags:
+        - Currencies
+      summary: Creates a currency.
+      description: Creates a currency.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /currencies/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Currencies
+      summary: Gets a currency by its id.
+      description: Gets a currency by its id.
+      operationId: retrieveCurrencyByID
+      responses:
+        '200':
+          description: OK - Currency successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteCurrency
+      tags:
+        - Currencies
+      summary: Removes a currency.
+      description: Removes a currency.
+      responses:
+        '204':
+          description: Deleted - The request was successful.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateCurrency
+      tags:
+        - Currencies
+      summary: Updates a currency.
+      description: Update a currency.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /suppliers:
+    parameters:
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Suppliers
+      summary: Retrieves the suppliers.
+      description: Retrieves the suppliers.
+      operationId: getSupplierCollection
+      parameters:
+        - $ref: '#/components/parameters/filtersParam'
+        - $ref: '#/components/parameters/fieldsParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK - Suppliers successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/x-ndjson:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supplier'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      operationId: postSupplier
+      tags:
+        - Suppliers
+      summary: Creates a supplier.
+      description: Creates a supplier.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+  /suppliers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/acceptVersionParam'
+    get:
+      tags:
+        - Suppliers
+      summary: Gets a supplier by its id.
+      description: Gets a supplier by its id.
+      operationId: retrieveSupplierByID
+      responses:
+        '200':
+          description: OK - Supplier successfully retrieved.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      operationId: deleteSupplier
+      tags:
+        - Suppliers
+      summary: Removes a supplier.
+      description: Removes a supplier.
+      responses:
+        '204':
+          description: Deleted - The request was successful.
+          headers:
+            trace-id:
+              $ref: '#/components/headers/trace-id'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      operationId: updateSupplier
+      tags:
+        - Suppliers
+      summary: Updates a supplier.
+      description: Update a supplier.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+      responses:
+        '204':
+          $ref: '#/components/responses/204'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '406':
+          $ref: '#/components/responses/406'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  schemas:
+    error:
+      type: object
+      required:
+        - status
+      properties:
+        code:
+          type: string
+          example:  Contract Master Data Offer Service - ERROR-000500
+        message:
+          type: string
+          example: Error message description
+    Language:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Universally Unique IDentifier
+        code:
+          type: string
+          description: Code, see ref. [List_of_ISO_639-1_codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+          example: en
+        name:
+          type: string
+          description: Name
+          example: English
+        description:
+          type: string
+          description: Description
+          example: English
+    Currency:
+      type: object
+      required:
+        - code
+        - name
+        - symbol
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Universally Unique IDentifier
+        code:
+          type: string
+          description: Code, see ref. [ISO_4217](https://en.wikipedia.org/wiki/ISO_4217)
+          example: GBP
+        name:
+          type: string
+          description: Name
+          example: United Kingdom Pound
+        language_code:
+          type: string
+          description: Language code of format [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) in which name and description are represented
+          example: en
+        description:
+          type: string
+          description: Description
+          example: United Kingdom Pound
+        symbol:
+          type: string
+          description: Currency symbol
+          example: £
+        precision:
+          type: integer
+          description: Number of digits after the decimal separator, see ref [ISO_4217](https://en.wikipedia.org/wiki/ISO_4217)
+          default: 2
+          example: 2
+    Supplier:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Universally Unique IDentifier
+        core_id:
+          type: string
+          format: uuid
+          description: The core UUID of the supplier
+        olp_id:
+          type: string
+          format: uuid
+          description: The olp UUID of the supplier
+        source:
+          type: string
+          description: The source platform
+          enum: [NOVA, BP, ASX, CORE]
+          example: BP
+        name:
+          type: string
+          description: Name of the supplier
+          example: Mussement
+        email:
+          type: string
+          description: Email of the supplier
+          example: Mussement@tui.com
+        commission:
+          type: number
+          example: 25.20
+          default: 0
+          description: "Commission percentage"
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Entity id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 7517605a-522b-4356-8aba-621163d585e5
+    acceptVersionParam:
+      name: accept-version
+      in: header
+      description: API version
+      required: true
+      schema:
+        type: string
+        enum: [ vnd.contract-master-data-offer-service.v1 ]
+      example: vnd.contract-master-data-offer-service.v1
+    filtersParam:
+      name: filters
+      in: query
+      description: operations to filter
+      required: false
+      schema:
+        type: string
+      example: ""
+    fieldsParam:
+      name: fields
+      in: query
+      description: Allow customize the response recovering only the fields needed. It's a list of fields separated by commas without spaces between them
+      required: false
+      schema:
+        type: string
+      example: 'id,name'
+    limitParam:
+      name: limit
+      in: query
+      description: number items to
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 50
+    offsetParam:
+      name: offset
+      in: query
+      description: offset of items
+      required: false
+      schema:
+        type: integer
+        format: int64
+      example: 0
+    sortParam:
+      name: sort
+      in: query
+      description: sort query
+      required: false
+      schema:
+        type: string
+      example: ""
+  responses:
+    '201':
+      description: Created - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+        location:
+          $ref: '#/components/headers/Location'
+    '204':
+      description: No content - The request was successful.
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '400':
+      description: Bad Request - Inspect the response body for details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '401':
+      description: Unauthorized - The supplied credentials, if any, are not sufficient to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '403':
+      description: Forbidden - The user, if any, does not have the right permission to access the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '404':
+      description: Not found - The request resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '406':
+      description: Not Acceptable - Bad accept version header.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '409':
+      description: Conflict - The request could not be processed because of conflict in the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+    '500':
+      description: Internal Server Error - Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+      headers:
+        trace-id:
+          $ref: '#/components/headers/trace-id'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  headers:
+    trace-id:
+      description: Used to track the request
+      style: simple
+      schema:
+        type: string
+    Location:
+      description: Slot URI
+      schema:
+        type: string
+        example: "/slots/8ed31c48-09a9-431e-bf32-06c1295ce119"

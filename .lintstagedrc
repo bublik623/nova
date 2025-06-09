@@ -1,0 +1,5 @@
+{
+  "*.{js,jsx,ts,tsx,vue}": "eslint",
+  "*.{css,scss,vue}": "stylelint",
+  "!**/*.{js,ts,jsx,tsx,vue}": "prettier --check --ignore-unknown"
+}
